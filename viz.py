@@ -13,6 +13,7 @@ class viz:
         self.cell = n.empty((self.dim, self.dim), dtype=object)
         self.__setup_grid__()
 
+    def draw_frame(self):
 
 
     def __setup_grid__(self):
