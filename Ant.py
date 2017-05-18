@@ -6,19 +6,20 @@ ANT_WOULD_LIKE_EAT = 0.9  # food level at which ANT would like to eat
 FRACTION_WATER = 0.6  # fraction of prey that is water
 AMT_MIN_INIT = 0.88  # minimum initial ANT energy and water values
 INIT_RANGE = .12  # range of initial ANT energy and water values
-MAY_Fight = 0.5 #probability of entering combat if not thirsty or hungry
+MAY_FIGTH = 0.5 #probability of entering combat if not thirsty or hungry
+MAY_CRAWL = 0.5
 DESICCATE = 0.6 #level at which desiccation occurs
 STARVE = 0.6 #level at which starvation occurs
 NUMBER_OF_FIGHTS_STARTED = 0
 
-ENERGY_COMBAT = 0.02 #maximum energy used by ant in combat
-WATER_COMBAT = 0.02 #maximum water used by ant in combat
+ENERGY_COMBAT = 0.05 #maximum energy used by ant in combat
+WATER_COMBAT = 0.05 #maximum water used by ant in combat
 SITTING_ENERGY = .01 #maximum energy used by ant inside of Hive
-SITTING_ANT = .01 # max energy used by ant stationary in desert
+SITTING_WATER = .01 #maximum water used by ant inside of Hive
+WATER_CRAWL = .03 #maximum water used by ant when crawling
+ENERGY_CRAWL = .03 #maximum energy used by ant when crawling
 
 class ANT:
-
-
     def __init__(self,x,y):
         self.AMT_DRINK = .05
         self.AMT_EAT = 0.01
@@ -27,7 +28,7 @@ class ANT:
         global AMT_MIN_INIT, INIT_RANGE
         self.energy = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
         self.water = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
-        self.IsInHive = true 
+        self.IsInHive = True
 
 
     def getPos(self):
@@ -60,21 +61,19 @@ class ANT:
 
     def ANTMayEat(self,spotAt):
         
-        water = spotAt.getWater()
-        global WOULD_LIKE_EAT
-        if self.energy < WOULD_LIKE_EAT:
+        self.water = spotAt.getWater()
+        if self.energy < ANT_WOULD_LIKE_EAT:
             self.eat(spotAt.getFood())
         else:
             self.AMT_EAT = 0
 
 
     def ANTCRAWL(self, grid, padding):
-        global WOULD_LIKE_DRINK, WOULD_LIKE_EAT, MAY_CRAWL
         rand = r.uniform(0,1)
 
-        if self.water < WOULD_LIKE_DRINK:
+        if self.water < ANT_WOULD_LIKE_DRINK:
             self.thirsty(grid,padding)
-        elif self.energy < WOULD_LIKE_EAT:
+        elif self.energy < ANT_WOULD_LIKE_EAT:
             self.lookForFood(grid, padding)
 
         elif rand < MAY_CRAWL:
@@ -84,7 +83,6 @@ class ANT:
         return  grid[2:-2, 2:-2]
 
     def stayHere(self):
-        global SITTING_ENERGY,SITTING_WATER
         self.water = self.water - SITTING_WATER
         self.energy = self.energy - SITTING_ENERGY
 
