@@ -1,28 +1,21 @@
 import random as r
-from enum import Enum
-
-class State(Enum):
-    DESERT = 0
-    FOOD = 1
-    WATER = 2
-    HIVE = 3
 
 class DesertAgent:
 
-    def __init__(self, food,ant,fenced,water):
+    def __init__(self, food,frog, fenced, water):
         self.food = food
-        self.ant = ant
+        self.frog = frog
         self.fenced = fenced
         self.water = water
 
         # state cannot be inited to 3 since the hives are set by hand
         selection_rand = r.random()
         if(selection_rand < .009):
-            self.state = State.WATER
+            self.state = 2
         elif ( selection_rand < .03):
-            self.state = State.FOOD
+            self.state = 1
         else:
-            self.state = State.DESERT
+            self.state = 0
         #print self.state
 
     #subtract the food
@@ -36,35 +29,45 @@ class DesertAgent:
             self.food = 0
 
     def getState(self):
-        return self.state        
+        return self.state
     def setState(self, state):
         self.state = state
-        
-    def getAnt(self):
-        return self.ant
-    def setAnt(self,ant):
-        self.ant = ant
-        
-    def getWater(self):
-        return self.water
+    def hasFrog(self):
+        return self.frog
+    def getType(self):
+        return self.state
+    def getFrog(self):
+
+        return self.frog
+
     def setWater(self,water):
         self.water = water
-        
-    def getFenced(self):
-        return self.fenced
-    def setFenced(self,fenced):
-        self.fenced = fenced
-        
+
+    def getWater(self):
+        return self.water
+
     def getFood(self):
         return self.food
+
+    def setFenced(self,fenced):
+        self.fenced = fenced
+    def getFenced(self):
+        return self.fenced
     def setFood(self,food):
         self.food = food
 
+    def setFrog(self,frog):
+        self.frog = frog
+
     def __float__(self):
         return float(self.food)
+
     def __str__(self):
         return str(self.state)
 
-def make_Desert(food,ant,fenced,water):
-    desert = DesertAgent(food,ant,fenced,water)
+        #return self.frog
+
+
+def make_Desert(food,frog, fenced, water):
+    desert = DesertAgent(food,frog, fenced, water)
     return desert
