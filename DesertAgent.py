@@ -1,6 +1,4 @@
-# Where there is a frog:
-#         # availableFood, availableMoisture,food, and water = -1
-
+import random as r
 
 class DesertAgent:
 
@@ -9,6 +7,16 @@ class DesertAgent:
         self.frog = frog
         self.fenced = fenced
         self.water = water
+
+        # state cannot be inited to 3 since the hives are set by hand
+        selection_rand = r.random()
+        if(selection_rand < .009):
+            self.state = 2
+        elif ( selection_rand < .03):
+            self.state = 1
+        else:
+            self.state = 0
+        #print self.state
 
     #subtract the food
     def updateFood(self, d_food, d_water):
@@ -20,9 +28,14 @@ class DesertAgent:
         if self.food < 0:
             self.food = 0
 
+    def getState(self):
+        return self.state
+    def setState(self, state):
+        self.state = state
     def hasFrog(self):
         return self.frog
-
+    def getType(self):
+        return self.state
     def getFrog(self):
 
         return self.frog
@@ -50,7 +63,7 @@ class DesertAgent:
         return float(self.food)
 
     def __str__(self):
-        return "(" + self.food.__str__() + ", " + self.frog.__str__() + str(self.fenced) + " " + str(float(self.water)) + " )"
+        return str(self.state)
 
         #return self.frog
 
