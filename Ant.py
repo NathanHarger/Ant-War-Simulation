@@ -30,6 +30,13 @@ class ANT:
         self.water = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
         self.IsInHive = True
 
+    def move():
+        #TODO
+        return
+        
+    def consume():
+        #TODO
+        return
 
     def getPos(self):
         return [self.x,self.y]
