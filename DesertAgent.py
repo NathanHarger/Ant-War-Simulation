@@ -7,6 +7,8 @@ class State(Enum):
     WATER = 2
     HIVE = 3
 
+# This class represents a tile on the grid
+# Somebody needs to refactor this to work with our model
 class DesertAgent:
 
     def __init__(self, food,ant,fenced,water):
