@@ -58,7 +58,7 @@ class Desert:
                 current_season_length = 1
                 self.remove_leaves(delta_leaf)
 
-
+    #TODO Does not return when there is not 10 leaves
     def add_leaves(self, delta_leaf):
         while delta_leaf != 0:
             rand_x = r.randint(0, self.size - 1)
