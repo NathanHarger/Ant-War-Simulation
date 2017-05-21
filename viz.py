@@ -4,6 +4,7 @@ import Desert as d
 from DesertAgent import State as state
 import random as r
 from Desert import *
+import Ant as a
 
 SIM_LENGTH = 1         #How many ticks in a simulation
 DESSICATION_LEVEL = 1  #Level an ant dies of thirst
@@ -24,7 +25,7 @@ class viz:
         self.cell = n.empty((self.dim, self.dim), dtype=object)
         self.__setup_grid__()
         self.delay = delay
-        self.running = True;
+        self.running = True
 
     # the enviorment is a grid of DesertAgent
     # 0: desert
@@ -32,7 +33,7 @@ class viz:
     # 2: water
     # 3: hive
     # function that is called by the tkinter canvas that updates ojects in sim every frame
-    def update_frame(self,enviornment):
+    def update_frame(self,enviornment, ant):
         for i in range(self.dim):
             for j in range(self.dim):
                 enviornment_type = enviornment.getItem(j,i).getState()
@@ -46,7 +47,9 @@ class viz:
                 else:
                     self.canvas.itemconfig(self.cell[i,j], fill="brown")
 
-
+            #TODO Ants are not placed in the correct place
+            for i in range(len(ant)):
+                self.canvas.create_oval(self.dim * i , self.dim*i,self.dim * i, self.dim*i)
                     # self.canvas.move(self.testCircle, 5, 5)
         # self.draw_colors_test()
 
@@ -69,69 +72,64 @@ class viz:
     def dispViz(self):
         self.root.mainloop()
 
-    def draw_frame(self,enviorment):
+    def draw_frame(self,enviorment, Ants):
 
-        self.update_frame(enviorment)
+        self.update_frame(enviorment,Ants)
 
         if self.running:
-            self.canvas.after(self.delay,self.Run_Sim, enviorment )
+            self.canvas.after(self.delay,self.Run_Sim, enviorment, Ants )
         else:
             self.dispViz()
-        # Runs a simulation. Initialize all values based on keywords if passed in.
-        # For each time tick, run phase 1-3. When the simulation runs to the
-        # variable sim_length, end it.
 
-    def Run_Sim(self, enviorment):
-        enviorment.add_leaves(2)
+    # Runs a simulation. Initialize all values based on keywords if passed in.
+    # For each time tick, run phase 1-3. When the simulation runs to the
+    # variable sim_length, end it.
+    def Run_Sim(self, enviornment, Ants):
         self.Phase_One()
         self.Phase_Two()
-        self.Phase_Three()
-        self.draw_frame(enviorment)
+        self.Phase_Three(enviornment)
+        self.draw_frame(enviornment, Ants)
         # TODO
         return
 
-        # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
-
-
-        # The queen lays eggs based on amount of food in nest.
-
+    # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
+    # The queen lays eggs based on amount of food in nest.
     def Phase_One(self):
-        print "P1"
         # TODO
         return
 
-        # First - execute combat for the entire desert. Remove all ants destroyed.
-
-
-        # Second - move all ants based on caste, current job,
-        # and pheromones of neighbor cells.
-
+    # First - execute combat for the entire desert. Remove all ants destroyed.
+    # Second - move all ants based on caste, current job,
+    # and pheromones of neighbor cells.
     def Phase_Two(self):
-        print "p2"
         # TODO
         return
 
-        # Kill all dessicated and starving ants. Update desert (add/remove food
-
-
-        # and moisture based on season, remove hives with no ants, and update season)
-
-    def Phase_Three(self):
-
-        rand = r.random
-        if rand < .3:
-            self.running = False
+    # Kill all dessicated and starving ants. Update desert (add/remove food
+    # and moisture based on season, remove hives with no ants, and update season)
+    def Phase_Three(self,enviornment):
+        enviornment.update_seasons()
+        rand = r.random()
+        #if rand < .01:
+        # self.running = False
         # TODO
         return
 
-
+def create_ants(testAnts):
+    for i in n.arange(n.alen(testAnts)):
+        testAnts[i] = a.ANT(i, 0)
 # viz class demo
 if __name__ == '__main__':
     dim = 10
     testEnviorment = Desert(dim,2)
+    testAnts = n.empty(10, dtype=object)
 
+    create_ants(testAnts)
+    print testAnts
     vizTest = viz(dim,500,500, 100)
 
-    vizTest.Run_Sim(testEnviorment)
+    vizTest.Run_Sim(testEnviorment,testAnts)
 
     vizTest.dispViz()
+
+
