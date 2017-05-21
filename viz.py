@@ -1,8 +1,9 @@
 import Tkinter as tk
 import numpy as n
-import DesertAgent as da
+import Desert as d
 from DesertAgent import State as state
 import random as r
+from Desert import *
 
 SIM_LENGTH = 1         #How many ticks in a simulation
 DESSICATION_LEVEL = 1  #Level an ant dies of thirst
@@ -23,6 +24,7 @@ class viz:
         self.cell = n.empty((self.dim, self.dim), dtype=object)
         self.__setup_grid__()
         self.delay = delay
+        self.running = True;
 
     # the enviorment is a grid of DesertAgent
     # 0: desert
@@ -30,10 +32,10 @@ class viz:
     # 2: water
     # 3: hive
     # function that is called by the tkinter canvas that updates ojects in sim every frame
-    def draw_frame(self,enviornment):
+    def update_frame(self,enviornment):
         for i in range(self.dim):
             for j in range(self.dim):
-                enviornment_type = enviornment[i,j].getState()
+                enviornment_type = enviornment.getItem(j,i).getState()
                 #print enviornment_type
                 if enviornment_type == state.DESERT:
                     self.canvas.itemconfig(self.cell[i,j], fill="yellow")
@@ -44,9 +46,9 @@ class viz:
                 else:
                     self.canvas.itemconfig(self.cell[i,j], fill="brown")
 
-        # self.canvas.move(self.testCircle, 5, 5)
+
+                    # self.canvas.move(self.testCircle, 5, 5)
         # self.draw_colors_test()
-        self.canvas.after( self.delay, self.draw_frame, enviornment)
 
 
     def __setup_grid__(self):
@@ -66,57 +68,70 @@ class viz:
       #  self.canvas.itemconfig(self.testCircle, fill=mycolor)
     def dispViz(self):
         self.root.mainloop()
-     
-    #Runs a simulation. Initialize all values based on keywords if passed in. 
-    #For each time tick, run phase 1-3. When the simulation runs to the 
-    #variable sim_length, end it.       
-    def Run_Sim():       
-        #TODO 
-        return        
-    
-    #Ants eat and drink. Eggs turn into pupae. Pupae grow up. 
-    #The queen lays eggs based on amount of food in nest.
-    def Phase_One():
-        #TODO 
-        return 
-        
-    #First - execute combat for the entire desert. Remove all ants destroyed.
-    #Second - move all ants based on caste, current job, 
-    #and pheromones of neighbor cells.   
-    def Phase_Two():
-        #TODO 
-        return 
-     
-    #Kill all dessicated and starving ants. Update desert (add/remove food 
-    #and moisture based on season, remove hives with no ants, and update season)      
-    def Phase_Three():
-        #TODO 
-        return 
 
-def make_test_enviorment(size):
-    test_env = n.empty((size,size), dtype=object)
-    for i in range(size):
-        for j in range(size):
-            test_env[i,j] = da.DesertAgent(0,0, 0, 0)
-   # print test_env
-    place_anthills(test_env, 2, size)
-    return test_env
-    
-def place_anthills(test_env, num_hives, size):
-    while num_hives != 0:
-        rand_x = r.randint(0, size-1)
-        rand_y =  r.randint(0, size-1)
+    def draw_frame(self,enviorment):
 
-        # a hive cannot be placed in water, or ontop an existing hive
-        if test_env[rand_y,rand_x].getState() != 2 and test_env[rand_y,rand_x].getState() != 3:
-            test_env[rand_y,rand_x].setState(3)
-            num_hives = num_hives -1
-            
+        self.update_frame(enviorment)
+
+        if self.running:
+            self.canvas.after(self.delay,self.Run_Sim, enviorment )
+        else:
+            self.dispViz()
+        # Runs a simulation. Initialize all values based on keywords if passed in.
+        # For each time tick, run phase 1-3. When the simulation runs to the
+        # variable sim_length, end it.
+
+    def Run_Sim(self, enviorment):
+        enviorment.add_leaves(2)
+        self.Phase_One()
+        self.Phase_Two()
+        self.Phase_Three()
+        self.draw_frame(enviorment)
+        # TODO
+        return
+
+        # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
+
+
+        # The queen lays eggs based on amount of food in nest.
+
+    def Phase_One(self):
+        print "P1"
+        # TODO
+        return
+
+        # First - execute combat for the entire desert. Remove all ants destroyed.
+
+
+        # Second - move all ants based on caste, current job,
+        # and pheromones of neighbor cells.
+
+    def Phase_Two(self):
+        print "p2"
+        # TODO
+        return
+
+        # Kill all dessicated and starving ants. Update desert (add/remove food
+
+
+        # and moisture based on season, remove hives with no ants, and update season)
+
+    def Phase_Three(self):
+
+        rand = r.random
+        if rand < .3:
+            self.running = False
+        # TODO
+        return
+
+
 # viz class demo
 if __name__ == '__main__':
-    dim = 50
-    testEnviorment = make_test_enviorment(dim)
-    #print testEnviorment.__str__()
-    vizTest = viz(dim,900,900, 100)
-    vizTest.draw_frame(testEnviorment)
+    dim = 10
+    testEnviorment = Desert(dim,2)
+
+    vizTest = viz(dim,500,500, 100)
+
+    vizTest.Run_Sim(testEnviorment)
+
     vizTest.dispViz()
