@@ -105,7 +105,7 @@ class Desert:
         
     #create a random desert 
     def random_desert_init(self, num_hives):
-        desert = n.empty((self.dim, self.dim), dtype=object)
+        desert = n.empty((self.size, self.size), dtype=object)
         for i in range(self.size):
             for j in range(self.size):
 
@@ -123,3 +123,5 @@ class Desert:
             if test_env[rand_y, rand_x].getState() != 2 and test_env[rand_y, rand_x].getState() != 3:
                 test_env[rand_y, rand_x].setState(3)
                 num_hives = num_hives - 1
+    def getItem(self, x , y):
+        return self.grid[y,x]
