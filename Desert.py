@@ -58,14 +58,13 @@ class Desert:
                 current_season_length = 1
                 self.remove_leaves(delta_leaf)
 
-    #TODO Does not return when there is not 10 leaves
     def add_leaves(self, delta_leaf):
         while delta_leaf != 0:
             rand_x = r.randint(0, self.size - 1)
             rand_y = r.randint(0, self.size - 1)
 
             # a hive cannot be placed in water, or ontop an existing hive
-            if self.grid[rand_y, rand_x].getState() == State.DESERT:
+            if self.grid[rand_y, rand_x].getState() == State.DESERT or self.grid[rand_y, rand_x].getState() == State.FOOD:
                 self.grid[rand_y, rand_x].setState(State.FOOD)
                 delta_leaf = delta_leaf - 1
 
