@@ -52,7 +52,7 @@ class Desert:
         rainy = Season.getSeasonResults(SEASON)
 
         delta_leaf = r.randint(0, 50)
-        print SEASON
+        #print SEASON
         SEASON = Season.getNextSeason(SEASON)
 
         if rainy:

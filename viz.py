@@ -84,6 +84,7 @@ class viz:
     # For each time tick, run phase 1-3. When the simulation runs to the
     # variable sim_length, end it.
     def Run_Sim(self, enviornment, Ants):
+
         self.Phase_One()
         self.Phase_Two(Ants)
         self.Phase_Three(enviornment)
@@ -92,11 +93,12 @@ class viz:
         return
 
     def ant_movement(self, ants):
-        for i in range(len(ants)):
+        #print ants[1]
 
-            [x,y] = ants[i].move()
-            print str(x) + " " + str(y)
-            self.canvas.move(ants[i].getShape(), self.size_ratio*x, self.size_ratio*y)
+        for i in range(len(ants)):
+            [x,y] = ants[i].move(self.size_ratio/self.dim, self.dim)
+            #print str(x) + " " + str(y)
+            self.canvas.move(ants[i].getShape(), x, y)
 
     # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
     # The queen lays eggs based on amount of food in nest.
@@ -125,8 +127,8 @@ class viz:
 
     def create_ants(self, testAnts):
         for i in n.arange(n.alen(testAnts)):
-            testAnts[i] = a.ANT(i, 0,
-                                self.canvas.create_line(i*self.size_ratio ,0 ,(i*self.size_ratio),self.size_ratio,
+            testAnts[i] = a.ANT(i, 0,0,0,
+                                self.canvas.create_rectangle(i*self.size_ratio ,0 ,(i*self.size_ratio),self.size_ratio/self.dim,
                                                                                 fill = "black"))
         #print testAnts
 
@@ -139,7 +141,7 @@ if __name__ == '__main__':
     testAnts = n.empty(dim, dtype=object)
 
 
-    vizTest = viz(dim,500,500, 900)
+    vizTest = viz(dim,500,500, 1)
     vizTest.create_ants(testAnts)
 
     #print testAnts

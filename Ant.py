@@ -20,11 +20,14 @@ WATER_CRAWL = .03 #maximum water used by ant when crawling
 ENERGY_CRAWL = .03 #maximum energy used by ant when crawling
 
 class ANT:
-    def __init__(self,x,y, shape):
+    def __init__(self,x,y, i_x, i_y, shape):
         self.AMT_DRINK = .05
         self.AMT_EAT = 0.01
-        self.x = x
-        self.y = y
+        self.outer_x = x
+        self.outer_y = y
+        self.inner_x = i_x
+        self.inner_y = i_y
+
         global AMT_MIN_INIT, INIT_RANGE
         self.energy = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
         self.water = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
@@ -32,26 +35,40 @@ class ANT:
         self.shape = shape
 
     # determine the next change in x and change in y
-    def move(self):
-
+    def move(self, factor, dim):
         rand_x = r.randint(-1,1)
         rand_y = r.randint(-1,1)
-        self.x += rand_x
-        self.y += rand_y
-        return [rand_x,rand_y]
+        self.outer_x += (rand_x* factor)
+        self.outer_y += (rand_y * factor)
+
+        self.inner_x += rand_x
+        self.inner_y += rand_y
+
+        if self.inner_x > dim:
+            self.inner_x = 0
+        elif self.inner_x < 0:
+            self.inner_x = dim
+
+        if self.inner_y > dim:
+            self.inner_y = 0
+        elif self.inner_y < 0:
+            self.inner_y = dim
+
+
+        return [rand_x * factor,rand_y * factor]
     def getShape(self):
         return self.shape
     def consume():
         #TODO
         return
     def getX(self):
-        return self.x
+        return self.outer_x
 
     def getY(self):
-        return self.y
+        return self.outer_y
 
     def getPos(self):
-        return [self.x,self.y]
+        return [self.outer_x, self.outer_y]
     def eat(self, availableFood):
         self.AMT_EAT = min(self.energy, availableFood,  1 - self.energy)
         self.energy = self.energy + self.energy
@@ -68,10 +85,10 @@ class ANT:
 
 
     def __repr__(self):
-        return str(self.x) + " " + str(self.y) + " " + str(self.getFood()) + " " + str(self.getWater())
+        return str(self.outer_x) + " " + str(self.outer_y) + " (" + str(self.inner_x()) + ", " + str(self.inner_y() + " ) ")
 
     def __str__(self):
-       return str(self.x) + " " + str(self.y) + " " + str(self.getFood()) + " " + str(self.getWater())
+        return str(self.outer_x) + " " + str(self.outer_y) + " (" + str(self.inner_x) + ", " + str(self.inner_y) + " ) "
     def __float__(self):
         return 0.0
 
@@ -104,23 +121,23 @@ class ANT:
 
 
     def thirsty(self, grid,padding):
-        if grid[self.y+padding, self.x+padding].getWater() != 0:
+        if grid[self.outer_y+padding, self.outer_x+padding].getWater() != 0:
             self.stayHere()
-        elif grid[self.y+1 +padding, self.x+padding].getWater() ==0: #the ANT is above another desert agent could fail if ANT is at last row
+        elif grid[self.outer_y+1 +padding, self.outer_x+padding].getWater() ==0: #the ANT is above another desert agent could fail if ANT is at last row
             self.lookForMoisture(grid, padding)
-        elif self.x == (len(grid)-padding*2) and grid[self.y+padding, self.x -1+padding].getWater() ==0 and not grid[self.y+padding, self.x -1+padding].hasANT():
+        elif self.outer_x == (len(grid)-padding*2) and grid[self.outer_y+padding, self.outer_x -1+padding].getWater() ==0 and not grid[self.outer_y+padding, self.outer_x -1+padding].hasANT():
             self.CRAWLW()
-        elif self.x == (len(grid)-padding*2):
+        elif self.outer_x == (len(grid)-padding*2):
            self.stayHere()
            
     def CRAWLW(self,grid,padding):
         
-        grid[self.y + padding, self.x + padding].setANT(False)
+        grid[self.outer_y + padding, self.outer_x + padding].setANT(False)
         
-        grid[self.y + padding,self.x-1+padding].setANT(True)
+        grid[self.outer_y + padding, self.outer_x - 1 + padding].setANT(True)
 
 
-        self.x = self.x - 1
+        self.outer_x = self.outer_x - 1
 
 
         self.water = self.water - WATER_CRAWL
@@ -128,13 +145,13 @@ class ANT:
 
 
     def getX(self):
-        return self.x
+        return self.outer_x
 
     def getY(self):
-        return self.y
+        return self.outer_y
     def getFreeNeighbors(self,grid,padding):
-        y = self.y + padding
-        x = self.x + padding
+        y = self.outer_y + padding
+        x = self.outer_x + padding
         neigbors = n.array([grid[y -1, x].hasANT(),
 
         grid[y-1, x +1].hasANT(),
@@ -153,7 +170,7 @@ class ANT:
     def CRAWLForFun(self, grid,padding):
         desertNeighbors = self.getFreeNeighbors(grid,padding)
 
-        if not grid[self.y+padding, self.x -1 +padding].getANT():
+        if not grid[self.outer_y+padding, self.outer_x -1 +padding].getANT():
             self.CRAWLW(grid,padding)
         elif len(desertNeighbors) == 0:
             self.stayHere()
@@ -169,11 +186,11 @@ class ANT:
         self.CRAWLForFun(grid, padding)
 
     def CRAWLHere(self, delta_x, delta_y,grid,padding):
-        grid[self.y + padding, self.x+padding].setANT(False)
+        grid[self.outer_y + padding, self.outer_x + padding].setANT(False)
 
-        grid[self.y + delta_y +padding, self.x +delta_x+padding].setANT(True)
-        self.x = self.x + delta_x
-        self.y = self.y + delta_y
+        grid[self.outer_y + delta_y + padding, self.outer_x + delta_x + padding].setANT(True)
+        self.outer_x = self.outer_x + delta_x
+        self.outer_y = self.outer_y + delta_y
 
         self.water = self.water - WATER_CRAWL
         self.energy = self.energy - ENERGY_CRAWL
@@ -183,7 +200,7 @@ class ANT:
         return self.water < DESICCATE or self.energy < STARVE
 
     def migrated(self):
-        return self.x <= 1
+        return self.outer_x <= 1
 
     def isInHive(self):
         return self.IsInHive
