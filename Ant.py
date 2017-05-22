@@ -31,11 +31,14 @@ class ANT:
         self.IsInHive = True
         self.shape = shape
 
+    # determine the next change in x and change in y
+    def move(self):
 
-    def move(self, delta_x, delta_y):
-        self.x += delta_x
-        self.y += delta_y
-
+        rand_x = r.randint(-1,1)
+        rand_y = r.randint(-1,1)
+        self.x += rand_x
+        self.y += rand_y
+        return [rand_x,rand_y]
     def getShape(self):
         return self.shape
     def consume():

@@ -50,7 +50,6 @@ class viz:
                 else:
                     self.canvas.itemconfig(self.cell[i,j], fill="brown")
 
-        self.test_ant_movement(ant)
                     # self.canvas.move(self.testCircle, 5, 5)
         # self.draw_colors_test()
 
@@ -86,17 +85,18 @@ class viz:
     # variable sim_length, end it.
     def Run_Sim(self, enviornment, Ants):
         self.Phase_One()
-        self.Phase_Two()
+        self.Phase_Two(Ants)
         self.Phase_Three(enviornment)
         self.draw_frame(enviornment, Ants)
         # TODO
         return
 
-    def test_ant_movement(self, ants):
+    def ant_movement(self, ants):
         for i in range(len(ants)):
-            self.canvas.move(ants[i].getShape(), 0, self.size_ratio)
 
-            ants[i].move(0, self.size_ratio)
+            [x,y] = ants[i].move()
+            print str(x) + " " + str(y)
+            self.canvas.move(ants[i].getShape(), self.size_ratio*x, self.size_ratio*y)
 
     # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
     # The queen lays eggs based on amount of food in nest.
@@ -108,7 +108,8 @@ class viz:
     # First - execute combat for the entire desert. Remove all ants destroyed.
     # Second - move all ants based on caste, current job,
     # and pheromones of neighbor cells.
-    def Phase_Two(self):
+    def Phase_Two(self,ants):
+        self.ant_movement(ants)
         # TODO
         return
 
@@ -127,22 +128,21 @@ class viz:
             testAnts[i] = a.ANT(i, 0,
                                 self.canvas.create_oval(i*self.size_ratio ,0 ,(i*self.size_ratio)+self.size_ratio,self.size_ratio,
                                                                                 fill = "black"))
-        print testAnts
+        #print testAnts
 
 
 
 # viz class demo
 if __name__ == '__main__':
-    dim = 15
+    dim = 10
     testEnviorment = Desert(dim,2)
     testAnts = n.empty(dim, dtype=object)
 
 
-    vizTest = viz(dim,500,500, 100)
+    vizTest = viz(dim,500,500, 900)
     vizTest.create_ants(testAnts)
 
-    print testAnts
-    vizTest.test_ant_movement(testAnts)
+    #print testAnts
     vizTest.Run_Sim(testEnviorment,testAnts)
 
     vizTest.dispViz()
