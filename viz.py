@@ -30,7 +30,6 @@ class viz:
         self.delay = delay
         self.running = True
 
-
     # the enviorment is a grid of DesertAgent
     # 0: desert
     # 1: food
@@ -51,12 +50,7 @@ class viz:
                 else:
                     self.canvas.itemconfig(self.cell[i,j], fill="brown")
 
-            for i in range(len(ant)):
-                print str(self.dim * ant[i].getX()) + " " + str(self.dim*ant[i].getY())
-                self.canvas.create_oval(self.size_ratio * i, self.size_ratio * ant[i].getY(),
-                                                               self.size_ratio * i+ self.size_ratio,
-                                                                self.size_ratio * ant[i].getY() + self.size_ratio,
-                                                                                                        fill="black")
+        self.test_ant_movement(ant)
                     # self.canvas.move(self.testCircle, 5, 5)
         # self.draw_colors_test()
 
@@ -83,7 +77,7 @@ class viz:
         self.update_frame(enviorment,Ants)
 
         if self.running:
-            self.canvas.after(self.delay,self.Run_Sim, enviorment, Ants )
+            self.canvas.after(self.delay,self.Run_Sim, enviorment, Ants)
         else:
             self.dispViz()
 
@@ -100,7 +94,9 @@ class viz:
 
     def test_ant_movement(self, ants):
         for i in range(len(ants)):
-            ants[i].move(0, 1)
+            self.canvas.move(ants[i].getShape(), 0, self.size_ratio)
+
+            ants[i].move(0, self.size_ratio)
 
     # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
     # The queen lays eggs based on amount of food in nest.
@@ -126,23 +122,27 @@ class viz:
         # TODO
         return
 
-def create_ants(testAnts):
-    for i in n.arange(n.alen(testAnts)):
-        testAnts[i] = a.ANT(i, 0)
+    def create_ants(self, testAnts):
+        for i in n.arange(n.alen(testAnts)):
+            testAnts[i] = a.ANT(i, 0,
+                                self.canvas.create_oval(i*self.size_ratio ,0 ,(i*self.size_ratio)+self.size_ratio,self.size_ratio,
+                                                                                fill = "black"))
+        print testAnts
 
 
 
 # viz class demo
 if __name__ == '__main__':
-    dim = 80
+    dim = 15
     testEnviorment = Desert(dim,2)
     testAnts = n.empty(dim, dtype=object)
 
-    create_ants(testAnts)
-    print testAnts
 
     vizTest = viz(dim,500,500, 100)
+    vizTest.create_ants(testAnts)
 
+    print testAnts
+    vizTest.test_ant_movement(testAnts)
     vizTest.Run_Sim(testEnviorment,testAnts)
 
     vizTest.dispViz()
