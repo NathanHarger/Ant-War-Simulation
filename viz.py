@@ -58,7 +58,7 @@ class viz:
         for i in range(self.dim):
             for j in range(self.dim):
                 self.cell[i, j] = self.canvas.create_rectangle(self.size_ratio * i, self.size_ratio * j,
-                                                               self.size_ratio * i+ self.size_ratio, self.size_ratio * j + self.size_ratio)
+                                                               self.size_ratio * i+ self.size_ratio, self.size_ratio * j + self.size_ratio, outline="")
 
     # test that shows animation of object moving and changing color
     #def draw_colors_test(self):
@@ -126,7 +126,7 @@ class viz:
     def create_ants(self, testAnts):
         for i in n.arange(n.alen(testAnts)):
             testAnts[i] = a.ANT(i, 0,
-                                self.canvas.create_oval(i*self.size_ratio ,0 ,(i*self.size_ratio)+self.size_ratio,self.size_ratio,
+                                self.canvas.create_line(i*self.size_ratio ,0 ,(i*self.size_ratio),self.size_ratio,
                                                                                 fill = "black"))
         #print testAnts
 
