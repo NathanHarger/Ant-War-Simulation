@@ -20,7 +20,7 @@ WATER_CRAWL = .03 #maximum water used by ant when crawling
 ENERGY_CRAWL = .03 #maximum energy used by ant when crawling
 
 class ANT:
-    def __init__(self,x,y):
+    def __init__(self,x,y, shape):
         self.AMT_DRINK = .05
         self.AMT_EAT = 0.01
         self.x = x
@@ -29,14 +29,23 @@ class ANT:
         self.energy = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
         self.water = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
         self.IsInHive = True
+        self.shape = shape
 
-    def move():
-        #TODO
-        return
-        
+
+    def move(self, delta_x, delta_y):
+        self.x += delta_x
+        self.y += delta_y
+
+    def getShape(self):
+        return self.shape
     def consume():
         #TODO
         return
+    def getX(self):
+        return self.x
+
+    def getY(self):
+        return self.y
 
     def getPos(self):
         return [self.x,self.y]
@@ -56,10 +65,7 @@ class ANT:
 
 
     def __repr__(self):
-        if self.x == -1:
-            return "N"
-        else:
-            return "F"
+        return str(self.x) + " " + str(self.y) + " " + str(self.getFood()) + " " + str(self.getWater())
 
     def __str__(self):
        return str(self.x) + " " + str(self.y) + " " + str(self.getFood()) + " " + str(self.getWater())

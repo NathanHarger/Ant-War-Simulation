@@ -16,14 +16,20 @@ class Season(Enum):
     @staticmethod
     def getSeasonResults( season):
         return season == 2 or season == 3
-
+    @staticmethod
+    def getNextSeason(season):
+        season += 1
+        if season == 4:
+            return 0
+        else:
+            return season
 
 SIZE = (50,50)          #A tuple of the x,y coordinates
 SEASON = Season.SPRING  #Either rainy or dry
 
 season_length_rainy = 1    #Number of time ticks the rainy season lasts
 season_length_dry = 1      #Number of ticks the dry season lasts
-current_season_length = 1  #How many ticks the current season has lasted. 
+current_season_length = 1  #How many ticks the current season has lasted.
 
 
 #The desert class will have an n x n sized grid of desert cells.
@@ -45,18 +51,17 @@ class Desert:
         global SEASON, current_season_length
         rainy = Season.getSeasonResults(SEASON)
 
-        delta_leaf = r.randint(1, 5)
+        delta_leaf = r.randint(0, 50)
+        print SEASON
+        SEASON = Season.getNextSeason(SEASON)
 
         if rainy:
             if current_season_length == season_length_rainy:
-                SEASON  += 1
-                current_season_length = 1
                 self.add_leaves(delta_leaf)
         else:
             if current_season_length == season_length_dry:
-                SEASON += 1
-                current_season_length = 1
                 self.remove_leaves(delta_leaf)
+        current_season_length = 1
 
     def add_leaves(self, delta_leaf):
         while delta_leaf != 0:
@@ -76,7 +81,7 @@ class Desert:
             rand_y = r.randint(0, self.size - 1)
 
             # a hive cannot be placed in water, or ontop an existing hive
-            if self.grid[rand_y, rand_x].getState() == State.FOOD:
+            if self.grid[rand_y, rand_x].getState() == State.FOOD or self.grid[rand_y, rand_x].getState() == State.DESERT:
                 self.grid[rand_y, rand_x].setState(State.DESERT)
                 delta_leaf = delta_leaf - 1
 
