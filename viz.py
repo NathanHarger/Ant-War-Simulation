@@ -86,7 +86,7 @@ class viz:
     def Run_Sim(self, enviornment, Ants):
         self.Phase_One()
         self.Phase_Two(Ants)
-        self.Phase_Three(enviornment)
+        #self.Phase_Three(enviornment)
         self.draw_frame(enviornment, Ants)
         # TODO
         return
