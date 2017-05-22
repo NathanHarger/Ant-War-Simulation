@@ -51,7 +51,7 @@ class Desert:
         global SEASON, current_season_length
         rainy = Season.getSeasonResults(SEASON)
 
-        delta_leaf = r.randint(0, 1)
+        delta_leaf = r.randint(0, 50)
         print SEASON
         SEASON = Season.getNextSeason(SEASON)
 

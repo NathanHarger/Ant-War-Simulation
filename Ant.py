@@ -30,13 +30,19 @@ class ANT:
         self.water = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
         self.IsInHive = True
 
-    def move():
-        #TODO
-        return
+    def move(self, delta_x, delta_y):
+        self.x += delta_x
+        self.y += delta_y
+
         
     def consume():
         #TODO
         return
+    def getX(self):
+        return self.x
+
+    def getY(self):
+        return self.y
 
     def getPos(self):
         return [self.x,self.y]
@@ -56,10 +62,7 @@ class ANT:
 
 
     def __repr__(self):
-        if self.x == -1:
-            return "N"
-        else:
-            return "F"
+        return str(self.x) + " " + str(self.y) + " " + str(self.getFood()) + " " + str(self.getWater())
 
     def __str__(self):
        return str(self.x) + " " + str(self.y) + " " + str(self.getFood()) + " " + str(self.getWater())

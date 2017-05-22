@@ -16,16 +16,20 @@ MOISTURE_FROM_FOOD = 1 #Moisture gained from eating
 class viz:
 
     def __init__(self, dim, window_width, window_height, delay):
+        self.wWidth = window_width
+        self.dim = dim
+
         self.root=tk.Tk()
         self.canvas= tk.Canvas(self.root,width=window_width,height=window_height)
         self.canvas.pack()
-        self.dim = dim
+        self.size_ratio = self.wWidth / self.dim
+
         self.wHeight = window_height
-        self.wWidth = window_width
         self.cell = n.empty((self.dim, self.dim), dtype=object)
         self.__setup_grid__()
         self.delay = delay
         self.running = True
+
 
     # the enviorment is a grid of DesertAgent
     # 0: desert
@@ -47,19 +51,21 @@ class viz:
                 else:
                     self.canvas.itemconfig(self.cell[i,j], fill="brown")
 
-            #TODO Ants are not placed in the correct place
             for i in range(len(ant)):
-                self.canvas.create_oval(self.dim * i , self.dim*i,self.dim * i, self.dim*i)
+                print str(self.dim * ant[i].getX()) + " " + str(self.dim*ant[i].getY())
+                self.canvas.create_oval(self.size_ratio * i, self.size_ratio * ant[i].getY(),
+                                                               self.size_ratio * i+ self.size_ratio,
+                                                                self.size_ratio * ant[i].getY() + self.size_ratio,
+                                                                                                        fill="black")
                     # self.canvas.move(self.testCircle, 5, 5)
         # self.draw_colors_test()
 
 
     def __setup_grid__(self):
-        size_ration = self.wWidth / self.dim
         for i in range(self.dim):
             for j in range(self.dim):
-                self.cell[i, j] = self.canvas.create_rectangle(size_ration * i, size_ration * j,
-                                                               size_ration * i+ size_ration, size_ration * j + size_ration)
+                self.cell[i, j] = self.canvas.create_rectangle(self.size_ratio * i, self.size_ratio * j,
+                                                               self.size_ratio * i+ self.size_ratio, self.size_ratio * j + self.size_ratio)
 
     # test that shows animation of object moving and changing color
     #def draw_colors_test(self):
@@ -92,9 +98,14 @@ class viz:
         # TODO
         return
 
+    def test_ant_movement(self, ants):
+        for i in range(len(ants)):
+            ants[i].move(0, 1)
+
     # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
     # The queen lays eggs based on amount of food in nest.
     def Phase_One(self):
+
         # TODO
         return
 
@@ -118,14 +129,18 @@ class viz:
 def create_ants(testAnts):
     for i in n.arange(n.alen(testAnts)):
         testAnts[i] = a.ANT(i, 0)
+
+
+
 # viz class demo
 if __name__ == '__main__':
-    dim = 10
+    dim = 80
     testEnviorment = Desert(dim,2)
-    testAnts = n.empty(10, dtype=object)
+    testAnts = n.empty(dim, dtype=object)
 
     create_ants(testAnts)
     print testAnts
+
     vizTest = viz(dim,500,500, 100)
 
     vizTest.Run_Sim(testEnviorment,testAnts)
