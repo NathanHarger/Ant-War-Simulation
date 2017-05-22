@@ -14,18 +14,19 @@ class Season(Enum):
     # static method that determines if a season is a rainy season
     #  returns if  season == FALL or WINTER
     @staticmethod
-    def getSeasonResults( season):
-        return season == 2 or season == 3
+    def getSeasonResults(season):
+        if ( season == Season.WINTER):
+            return season == 2 or season == 3
+        
     @staticmethod
     def getNextSeason(season):
-        season += 1
-        if season == 4:
-            return 0
+        if season is Season.WINTER:
+            return Season.SPRING
         else:
-            return season
+            season = Season(season.value + 1)
 
-SIZE = (50,50)          #A tuple of the x,y coordinates
-SEASON = Season.SPRING  #Either rainy or dry
+#SIZE = (50,50)          #A tuple of the x,y coordinates
+#SEASON = Season.SPRING  #Either rainy or dry
 
 season_length_rainy = 1    #Number of time ticks the rainy season lasts
 season_length_dry = 1      #Number of ticks the dry season lasts
@@ -38,9 +39,12 @@ current_season_length = 1  #How many ticks the current season has lasted.
 #The desert class will keep track of the season
 class Desert:
 
+    #SIZE = (50,50)          #A tuple of the x,y coordinates
+    #SEASON = Season.SPRING  #Either rainy or dry
+
     #Initialize a new desert using desert agents. Allows keywords to change variables.
     def __init__(self, size, num_hives):
-
+        self.season = Season.SPRING  #Either rainy or dry
         self.size = size
         self.grid = self.random_desert_init(num_hives)
         
@@ -48,12 +52,15 @@ class Desert:
     #otherwise remove it). Then, if the current season length is equal to 
     #that season’s length, change seasons and set season length to zero.
     def update_seasons(self):
-        global SEASON, current_season_length
-        rainy = Season.getSeasonResults(SEASON)
+        #global SEASON, 
+        current_season_length = 0
+        rainy = Season.getSeasonResults(self.season)
 
         delta_leaf = r.randint(0, 50)
+
         #print SEASON
-        SEASON = Season.getNextSeason(SEASON)
+        self.season = Season.getNextSeason(self.season)
+
 
         if rainy:
             if current_season_length == season_length_rainy:
