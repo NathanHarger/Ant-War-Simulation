@@ -85,7 +85,7 @@ class ANT:
 
 
     def __repr__(self):
-        return str(self.outer_x) + " " + str(self.outer_y) + " (" + str(self.inner_x()) + ", " + str(self.inner_y() + " ) ")
+        return str(self.outer_x) + " " + str(self.outer_y) + " (" + str(self.inner_x) + ", " + str(self.inner_y )+ " ) "
 
     def __str__(self):
         return str(self.outer_x) + " " + str(self.outer_y) + " (" + str(self.inner_x) + ", " + str(self.inner_y) + " ) "

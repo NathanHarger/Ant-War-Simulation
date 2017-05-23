@@ -50,7 +50,6 @@ class viz:
                 else:
                     self.canvas.itemconfig(self.cell[i,j], fill="brown")
 
-                    # self.canvas.move(self.testCircle, 5, 5)
         # self.draw_colors_test()
 
 
@@ -87,6 +86,7 @@ class viz:
         self.Phase_One()
         for i in enviornment.getHives():
             ants = i.getAnts()
+            print ants
             self.Phase_Two(ants)
             self.draw_frame(enviornment, ants)
         #self.Phase_Three(enviornment)
@@ -98,8 +98,8 @@ class viz:
 
         for i in range(len(ants)):
             [x,y] = ants[i].move( self.dim)
-            #print str(x) + " " + str(y)
-            self.canvas.move(ants[i].getShape(), self.size_ratio/self.dim* x, self.size_ratio/self.dim* y)
+            print str(x) + " " + str(y)
+            self.canvas.move(ants[i].getShape(), self.size_ratio* x, self.size_ratio* y)
 
     # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
     # The queen lays eggs based on amount of food in nest.
@@ -128,14 +128,12 @@ class viz:
 
     def create_ants(self, testAnts, loc):
         for i in n.arange(n.alen(testAnts)):
-            testAnts[i] = a.ANT(loc[1],loc[0],0,0,
-                                self.canvas.create_rectangle(i*self.size_ratio ,0 ,(i*self.size_ratio),self.size_ratio/self.dim,
+            print loc
+            testAnts[i] = a.ANT(loc[1],loc[0],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
                                                                                 fill = "black"))
                                                                                 
     def create_hive(self, myHive, location):
-        myHive = hive.Hive(location[1], location[0], 
-                                self.canvas.create_oval(location[0]*self.size_ratio ,location[1]*self.size_ratio ,(i*self.size_ratio)
-                                +self.size_ratio,self.size_ratio, fill = "brown"))
+        myHive = hive.Hive((location[1], location[0]))
         return myHive
 
 # viz class demo
