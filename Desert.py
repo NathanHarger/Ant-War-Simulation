@@ -3,7 +3,7 @@ import random as r
 import numpy as n
 from enum import Enum
 from DesertAgent import DesertAgent, State
-from HiveClass import Hive, HiveState
+from HiveClass import hive
 
 # this class in in charge of controlling seasons and its effect on the desert agents
 class Season(Enum):
@@ -127,18 +127,18 @@ class Desert:
 
                 desert[i, j] = DesertAgent(0, None, 0)
                 # print test_env
-        self.place_anthills(desert, num_hives, self.size)
+        self.place_anthills(desert, num_hives)
         return desert
 
-    def place_anthills(self, test_env, num_hives, size):
+    def place_anthills(self, test_env, num_hives):
         while num_hives != 0:
-            rand_x = r.randint(0, size - 1)
-            rand_y = r.randint(0, size - 1)
+            rand_x = r.randint(0, self.size - 1)
+            rand_y = r.randint(0, self.size - 1)
 
             # a hive cannot be placed in water, or ontop an existing hive
             if test_env[rand_y, rand_x].getState() != 2 and test_env[rand_y, rand_x].getState() != 3:
                 test_env[rand_y, rand_x].setState(3)
-                self.setHive(Hive((rand_y, rand_x)))
+                self.setHive(hive.Hive((rand_y, rand_x)))
                 num_hives = num_hives - 1
                 
     def getItem(self, x , y):

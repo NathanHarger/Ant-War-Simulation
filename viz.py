@@ -1,10 +1,10 @@
 import Tkinter as tk
 import numpy as n
-import Desert as d
+import Desert as des
 from DesertAgent import State as state
 import random as r
-import Desert as des
 import Ant as a
+import HiveClass as hive
 
 SIM_LENGTH = 1         #How many ticks in a simulation
 DESSICATION_LEVEL = 1  #Level an ant dies of thirst
@@ -123,28 +123,29 @@ class viz:
         # TODO
         return
 
-    def create_ants(self, testAnts, i):
-        for i in n.arange(n.alen(testAnts)):
-            testAnts[i] = a.ANT(i, 0,
-                                self.canvas.create_oval(i*self.size_ratio ,0 ,(i*self.size_ratio)+self.size_ratio,self.size_ratio,
+    def create_ants(self, testAnts, loc):
+        for j in n.arange(n.alen(testAnts)):
+            testAnts[j] = a.ANT(loc[0], loc[1],
+                                self.canvas.create_oval(j*self.size_ratio ,0 ,(j*self.size_ratio)+self.size_ratio,self.size_ratio,
                                                                                 fill = "black"))
                                                                                 
-    def create_hive(self, hive, location):
-        hive = a.ANT(i, 0, self.canvas.create_oval(location[0]*self.size_ratio ,location[1]*self.size_ratio ,(i*self.size_ratio)+self.size_ratio,self.size_ratio, fill = "brown"))
-        #print testAnts
-
-
+    def create_hive(self, myHive, location):
+        myHive = hive.Hive(location[0], location[1], 
+                                self.canvas.create_oval(location[0]*self.size_ratio ,location[1]*self.size_ratio ,(i*self.size_ratio)
+                                +self.size_ratio,self.size_ratio, fill = "brown"))
+        return myHive
 
 # viz class demo
 if __name__ == '__main__':
     dim = 50
     vizTest = viz(dim,500,500, 900) 
-    testEnviorment = des.Desert(dim,2)
+    testEnviorment = des.Desert(dim,1)
     hives = testEnviorment.getHives()
     
     for i in hives:
         myAnts = n.empty(5, dtype=object)
-        vizTest.create_ants(myAnts, i)
+        print(i)
+        vizTest.create_ants(myAnts, i.getLocation())
         i.setAnts(myAnts)  
     
     #print testAnts
