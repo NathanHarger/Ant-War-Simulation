@@ -34,7 +34,7 @@ class Hive:
     def __init__(self, location):
         self.list_ants = n.array([])
         self.my_location = location
-        self.foodLevel = 10
+        self.foodLevel = 50
         #TODO 
 
     def getAnts(self):
@@ -45,7 +45,14 @@ class Hive:
         
     def getLocation(self):
         return self.my_location
-        
+       
+    def eatFood(self, howMuchRequested):
+        if(self.foodLevel > 0):
+            self.foodLevel -= howMuchRequested
+            return howMuchRequested
+        else:
+            return 0       
+
     #Add/remove food based on season. (If it is a rainy season, add food, 
     #otherwise remove it). Then, if the current season length is equal to 
     #that season’s length, change seasons and set season length to zero.

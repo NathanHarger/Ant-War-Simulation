@@ -20,7 +20,9 @@ WATER_CRAWL = .03 #maximum water used by ant when crawling
 ENERGY_CRAWL = .03 #maximum energy used by ant when crawling
 
 class ANT:
-    def __init__(self,x,y, i_x, i_y, shape):
+    def __init__(self,x,y, i_x, i_y, shape, myHive):
+        self.my_hive = myHive
+        self.foodLevel = 1
         self.AMT_DRINK = .05
         self.AMT_EAT = 0.01
         self.outer_x = x
@@ -36,10 +38,41 @@ class ANT:
 
     # determine the next change in x and change in y
     def move(self, dim):
-        rand_x = r.randint(-1,1)
-        rand_y = r.randint(-1,1)
+        self.foodLevel -= self.AMT_EAT
+
+        myHiveX = self.my_hive.getLocation()[1]
+        myHiveY = self.my_hive.getLocation()[0]
+
+        # is at hive and will request the food he needs
+        if(myHiveY == self.outer_y and myHiveX == self.outer_x and self.foodLevel < .5):
+            print("Eating")
+            self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
+
+        print(self.foodLevel)
+        print(str(myHiveY) + " " +str(self.outer_y))
+        print(str(myHiveX) + " " +str(self.outer_x))
+        print( self.foodLevel < .5 )
+        # they need to go twards hive
+        if(self.foodLevel < .5):
+            if(myHiveY < self.outer_y):
+                 rand_y = -1
+            elif(myHiveY > self.outer_y):
+                 rand_y = 1
+            else:
+                rand_y = 0
+
+            if(myHiveX < self.outer_x):
+                 rand_x = -1
+            elif(myHiveX > self.outer_x):
+                 rand_x = 1
+            else:
+                rand_x = 0  
+        else:
+            rand_x = r.randint(-1,1)
+            rand_y = r.randint(-1,1)        
+
         self.outer_x += (rand_x)
-        self.outer_y += (rand_y )
+        self.outer_y += (rand_y)
 
         self.inner_x += rand_x
         self.inner_y += rand_y
