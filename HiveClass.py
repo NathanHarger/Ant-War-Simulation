@@ -32,7 +32,7 @@ class Hive:
     
     #Initialize the hive with a certain amount of starting ants.
     def __init__(self, location):
-        self.list_ants = []
+        self.list_ants = n.array([])
         self.my_location = location
         self.foodLevel = 10
         #TODO 
@@ -41,7 +41,7 @@ class Hive:
         return self.list_ants
         
     def setAnts(self, ants):
-        self.list_ants = ants
+        self.list_ants = n.append(self.list_ants, ants)
         
     def getLocation(self):
         return self.my_location

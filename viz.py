@@ -70,7 +70,7 @@ class viz:
     def dispViz(self):
         self.root.mainloop()
 
-    def draw_frame(self,enviorment, Ants):
+    def draw_frame(self,enviorment):
 
         self.update_frame(enviorment)
 
@@ -84,11 +84,12 @@ class viz:
     # variable sim_length, end it.
     def Run_Sim(self, enviornment):
         self.Phase_One()
+        #print enviornment.getHives()
         for i in enviornment.getHives():
             ants = i.getAnts()
-            print ants
+           # print ants
             self.Phase_Two(ants)
-            self.draw_frame(enviornment, ants)
+        self.draw_frame(enviornment)
         #self.Phase_Three(enviornment)
         # TODO
         return
@@ -98,7 +99,7 @@ class viz:
 
         for i in range(len(ants)):
             [x,y] = ants[i].move( self.dim)
-            print str(x) + " " + str(y)
+            #print str(x) + " " + str(y)
             self.canvas.move(ants[i].getShape(), self.size_ratio* x, self.size_ratio* y)
 
     # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
@@ -128,7 +129,7 @@ class viz:
 
     def create_ants(self, testAnts, loc):
         for i in n.arange(n.alen(testAnts)):
-            print loc
+            #print loc
             testAnts[i] = a.ANT(loc[1],loc[0],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
                                                                                 fill = "black"))
                                                                                 
@@ -138,16 +139,18 @@ class viz:
 
 # viz class demo
 if __name__ == '__main__':
-    dim = 50
-    vizTest = viz(dim,500,500, 900) 
-    testEnviorment = des.Desert(dim,1)
+    dim =500
+    vizTest = viz(dim,500,500, 1)
+    testEnviorment = des.Desert(dim,2)
     hives = testEnviorment.getHives()
     
     for i in hives:
-        myAnts = n.empty(5, dtype=object)
+        myAnts = n.empty(50, dtype=object)
         vizTest.create_ants(myAnts, i.getLocation())
-        i.setAnts(myAnts)  
-    
+        i.setAnts(myAnts)
+        #print i.getAnts()
+
+    #print testEnviorment.getHives()
     #print testAnts
     vizTest.Run_Sim(testEnviorment)
 
