@@ -120,17 +120,17 @@ class Desert:
                 return desert
         
     #create a random desert 
-    def random_desert_init(self, num_hives, hivelocations):
+    def random_desert_init(self, num_hives):
         desert = n.empty((self.size, self.size), dtype=object)
         for i in range(self.size):
             for j in range(self.size):
 
                 desert[i, j] = DesertAgent(0, None, 0)
                 # print test_env
-        self.place_anthills(desert, num_hives, self.size, hivelocations)
+        self.place_anthills(desert, num_hives, self.size)
         return desert
 
-    def place_anthills(self, test_env, num_hives, size, hivelocations):
+    def place_anthills(self, test_env, num_hives, size):
         while num_hives != 0:
             rand_x = r.randint(0, size - 1)
             rand_y = r.randint(0, size - 1)
