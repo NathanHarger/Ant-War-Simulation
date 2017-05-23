@@ -13,27 +13,38 @@ class HiveState(Enum):
 #and a mask grid of pheromones belonging to the hive.
 class Hive:
     
-    env = 1    #The current desert the hive is located in.
-    list_ants = 1 #A list of ants in the hive.
-    pheremone_total = 1 #holds the pheromone values belonging to the hive.
-    whater_total = 1 #shows total moisture supply for hive.
-    food_total = 1 #shows total food supply for hive.
-    loc_nest = (0,0) #A tuple containing the xy coordinates of the hive’s nest. 
-    num_eggs = 1 #How many eggs are in the nest.
-    num_pupae = 1 #How many pupae are in the nest
-    num_workers_nest = 1 # How many workers are in the nest
-    num_soldiers_nest = 1 #How many soldiers are in the nest.
-    num_queens_nest = 1 #Number of queens in nest. Will only be 0 or 1.
-    state = HiveState.HEALTHY # state of the hive
-    kill_count = 1 #How many opposing ants have been killed by this hive
-    amount_dead = 1 #How many ants of this hive have died
-    peak_population = 1#The most population this hive has had
+    #env = 1    #The current desert the hive is located in.
+    #list_ants = 1 #A list of ants in the hive.
+    #pheremone_total = 1 #holds the pheromone values belonging to the hive.
+    #whater_total = 1 #shows total moisture supply for hive.
+    #food_total = 1 #shows total food supply for hive.
+    #loc_nest = (0,0) #A tuple containing the xy coordinates of the hive’s nest. 
+    #num_eggs = 1 #How many eggs are in the nest.
+    #num_pupae = 1 #How many pupae are in the nest
+    #num_workers_nest = 1 # How many workers are in the nest
+    #num_soldiers_nest = 1 #How many soldiers are in the nest.
+    #num_queens_nest = 1 #Number of queens in nest. Will only be 0 or 1.
+    #state = HiveState.HEALTHY # state of the hive
+    #kill_count = 1 #How many opposing ants have been killed by this hive
+    #amount_dead = 1 #How many ants of this hive have died
+    #peak_population = 1#The most population this hive has had
 
     
     #Initialize the hive with a certain amount of starting ants.
-    def __init__(size):
+    def __init__(self, location):
+        self.list_ants = []
+        self.my_location = location
+        self.foodLevel = 10
         #TODO 
-        return 
+
+    def getAnts(self):
+        return self.list_ants
+        
+    def setAnts(self, ants):
+        self.list_ants = ants
+        
+    def getLocation(self):
+        return self.my_location
         
     #Add/remove food based on season. (If it is a rainy season, add food, 
     #otherwise remove it). Then, if the current season length is equal to 

@@ -3,6 +3,7 @@ import random as r
 import numpy as n
 from enum import Enum
 from DesertAgent import DesertAgent, State
+from HiveClass import Hive, HiveState
 
 # this class in in charge of controlling seasons and its effect on the desert agents
 class Season(Enum):
@@ -41,13 +42,19 @@ class Desert:
 
     #SIZE = (50,50)          #A tuple of the x,y coordinates
     #SEASON = Season.SPRING  #Either rainy or dry
-
     #Initialize a new desert using desert agents. Allows keywords to change variables.
     def __init__(self, size, num_hives):
         self.season = Season.SPRING  #Either rainy or dry
         self.size = size
+        self.hives = []
         self.grid = self.random_desert_init(num_hives)
         
+    def setHive(self, hive):
+        self.hives.append(hive)
+        
+    def getHives(self):
+        return self.hives  
+    
     #Add/remove food based on season. (If it is a rainy season, add food, 
     #otherwise remove it). Then, if the current season length is equal to 
     #that season’s length, change seasons and set season length to zero.
@@ -113,17 +120,17 @@ class Desert:
                 return desert
         
     #create a random desert 
-    def random_desert_init(self, num_hives):
+    def random_desert_init(self, num_hives, hivelocations):
         desert = n.empty((self.size, self.size), dtype=object)
         for i in range(self.size):
             for j in range(self.size):
 
                 desert[i, j] = DesertAgent(0, None, 0)
                 # print test_env
-        self.place_anthills(desert, num_hives, self.size)
+        self.place_anthills(desert, num_hives, self.size, hivelocations)
         return desert
 
-    def place_anthills(self, test_env, num_hives, size):
+    def place_anthills(self, test_env, num_hives, size, hivelocations):
         while num_hives != 0:
             rand_x = r.randint(0, size - 1)
             rand_y = r.randint(0, size - 1)
@@ -131,6 +138,8 @@ class Desert:
             # a hive cannot be placed in water, or ontop an existing hive
             if test_env[rand_y, rand_x].getState() != 2 and test_env[rand_y, rand_x].getState() != 3:
                 test_env[rand_y, rand_x].setState(3)
+                self.setHive(Hive((rand_y, rand_x)))
                 num_hives = num_hives - 1
+                
     def getItem(self, x , y):
         return self.grid[y,x]

@@ -3,7 +3,7 @@ import numpy as n
 import Desert as d
 from DesertAgent import State as state
 import random as r
-from Desert import *
+import Desert as des
 import Ant as a
 
 SIM_LENGTH = 1         #How many ticks in a simulation
@@ -36,7 +36,7 @@ class viz:
     # 2: water
     # 3: hive
     # function that is called by the tkinter canvas that updates ojects in sim every frame
-    def update_frame(self,enviornment, ant):
+    def update_frame(self,enviornment):
         for i in range(self.dim):
             for j in range(self.dim):
                 enviornment_type = enviornment.getItem(j,i).getState()
@@ -73,7 +73,7 @@ class viz:
 
     def draw_frame(self,enviorment, Ants):
 
-        self.update_frame(enviorment,Ants)
+        self.update_frame(enviorment)
 
         if self.running:
             self.canvas.after(self.delay,self.Run_Sim, enviorment, Ants)
@@ -83,19 +83,19 @@ class viz:
     # Runs a simulation. Initialize all values based on keywords if passed in.
     # For each time tick, run phase 1-3. When the simulation runs to the
     # variable sim_length, end it.
-    def Run_Sim(self, enviornment, Ants):
+    def Run_Sim(self, enviornment):
         self.Phase_One()
-        self.Phase_Two(Ants)
+        for i in enviornment.getHives():
+            ants = i.getAnts()
+            self.Phase_Two(ants)
+            self.draw_frame(enviornment, ants)
         #self.Phase_Three(enviornment)
-        self.draw_frame(enviornment, Ants)
         # TODO
         return
 
     def ant_movement(self, ants):
         for i in range(len(ants)):
-
             [x,y] = ants[i].move()
-            print str(x) + " " + str(y)
             self.canvas.move(ants[i].getShape(), self.size_ratio*x, self.size_ratio*y)
 
     # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
@@ -123,27 +123,32 @@ class viz:
         # TODO
         return
 
-    def create_ants(self, testAnts):
+    def create_ants(self, testAnts, i):
         for i in n.arange(n.alen(testAnts)):
             testAnts[i] = a.ANT(i, 0,
                                 self.canvas.create_oval(i*self.size_ratio ,0 ,(i*self.size_ratio)+self.size_ratio,self.size_ratio,
                                                                                 fill = "black"))
+                                                                                
+    def create_hive(self, hive, location):
+        hive = a.ANT(i, 0, self.canvas.create_oval(location[0]*self.size_ratio ,location[1]*self.size_ratio ,(i*self.size_ratio)+self.size_ratio,self.size_ratio, fill = "brown"))
         #print testAnts
 
 
 
 # viz class demo
 if __name__ == '__main__':
-    dim = 10
-    testEnviorment = Desert(dim,2)
-    testAnts = n.empty(dim, dtype=object)
-
-
-    vizTest = viz(dim,500,500, 900)
-    vizTest.create_ants(testAnts)
-
+    dim = 50
+    vizTest = viz(dim,500,500, 900) 
+    testEnviorment = des.Desert(dim,2)
+    hives = testEnviorment.getHives()
+    
+    for i in hives:
+        myAnts = n.empty(5, dtype=object)
+        vizTest.create_ants(myAnts, i)
+        i.setAnts(myAnts)  
+    
     #print testAnts
-    vizTest.Run_Sim(testEnviorment,testAnts)
+    vizTest.Run_Sim(testEnviorment)
 
     vizTest.dispViz()
 
