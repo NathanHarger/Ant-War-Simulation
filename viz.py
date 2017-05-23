@@ -76,7 +76,7 @@ class viz:
         self.update_frame(enviorment)
 
         if self.running:
-            self.canvas.after(self.delay,self.Run_Sim, enviorment, Ants)
+            self.canvas.after(self.delay,self.Run_Sim, enviorment)
         else:
             self.dispViz()
 
