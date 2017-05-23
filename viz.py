@@ -58,7 +58,7 @@ class viz:
         for i in range(self.dim):
             for j in range(self.dim):
                 self.cell[i, j] = self.canvas.create_rectangle(self.size_ratio * i, self.size_ratio * j,
-                                                               self.size_ratio * i+ self.size_ratio, self.size_ratio * j + self.size_ratio)
+                                                               self.size_ratio * i+ self.size_ratio, self.size_ratio * j + self.size_ratio, outline="")
 
     # test that shows animation of object moving and changing color
     #def draw_colors_test(self):
@@ -94,9 +94,12 @@ class viz:
         return
 
     def ant_movement(self, ants):
+        #print ants[1]
+
         for i in range(len(ants)):
-            [x,y] = ants[i].move()
-            self.canvas.move(ants[i].getShape(), self.size_ratio*x, self.size_ratio*y)
+            [x,y] = ants[i].move( self.dim)
+            #print str(x) + " " + str(y)
+            self.canvas.move(ants[i].getShape(), self.size_ratio/self.dim* x, self.size_ratio/self.dim* y)
 
     # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
     # The queen lays eggs based on amount of food in nest.
@@ -123,10 +126,10 @@ class viz:
         # TODO
         return
 
-    def create_ants(self, testAnts, loc):
-        for j in n.arange(n.alen(testAnts)):
-            testAnts[j] = a.ANT(loc[1], loc[0],
-                                self.canvas.create_oval(j*self.size_ratio ,0 ,(j*self.size_ratio)+self.size_ratio,self.size_ratio,
+    def create_ants(self, testAnts):
+        for i in n.arange(n.alen(testAnts)):
+            testAnts[i] = a.ANT(i, 0,0,0,
+                                self.canvas.create_rectangle(i*self.size_ratio ,0 ,(i*self.size_ratio),self.size_ratio/self.dim,
                                                                                 fill = "black"))
                                                                                 
     def create_hive(self, myHive, location):
