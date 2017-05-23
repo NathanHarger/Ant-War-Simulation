@@ -126,9 +126,9 @@ class viz:
         # TODO
         return
 
-    def create_ants(self, testAnts):
+    def create_ants(self, testAnts, loc):
         for i in n.arange(n.alen(testAnts)):
-            testAnts[i] = a.ANT(i, 0,0,0,
+            testAnts[i] = a.ANT(loc[1],loc[0],0,0,
                                 self.canvas.create_rectangle(i*self.size_ratio ,0 ,(i*self.size_ratio),self.size_ratio/self.dim,
                                                                                 fill = "black"))
                                                                                 
@@ -148,7 +148,6 @@ if __name__ == '__main__':
     for i in hives:
         myAnts = n.empty(5, dtype=object)
         vizTest.create_ants(myAnts, i.getLocation())
-        print(myAnts)
         i.setAnts(myAnts)  
     
     #print testAnts
