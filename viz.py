@@ -50,7 +50,6 @@ class viz:
                 else:
                     self.canvas.itemconfig(self.cell[i,j], fill="brown")
 
-        # self.draw_colors_test()
 
 
     def __setup_grid__(self):
@@ -59,14 +58,7 @@ class viz:
                 self.cell[i, j] = self.canvas.create_rectangle(self.size_ratio * i, self.size_ratio * j,
                                                                self.size_ratio * i+ self.size_ratio, self.size_ratio * j + self.size_ratio, outline="")
 
-    # test that shows animation of object moving and changing color
-    #def draw_colors_test(self):
 
-        # color changing from
-        # http://stackoverflow.com/questions/11340765/default-window-colour-tkinter-and-hex-colour-codes
-       # rgb = tuple(n.random.randint(0,256, (3)))
-      #  mycolor = '#%02x%02x%02x' % rgb
-      #  self.canvas.itemconfig(self.testCircle, fill=mycolor)
     def dispViz(self):
         self.root.mainloop()
 
@@ -127,21 +119,29 @@ class viz:
         # TODO
         return
 
+    def get_random_color(self):
+    # color changing from
+    # http://stackoverflow.com/questions/11340765/default-window-colour-tkinter-and-hex-colour-codes
+        rgb = tuple(n.random.randint(0,256, (3)))
+        return '#%02x%02x%02x' % rgb
+
     def create_ants(self, testAnts, loc):
+        color = self.get_random_color()
+        #print color
         for i in n.arange(n.alen(testAnts)):
+
             #print loc
-            testAnts[i] = a.ANT(loc[1],loc[0],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
-                                                                                fill = "black"))
-                                                                                
+            testAnts[i] = a.ANT(loc[1],loc[0],0,0, self.canvas.create_rectangle((loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio), outline = color))
+
     def create_hive(self, myHive, location):
         myHive = hive.Hive((location[1], location[0]))
         return myHive
 
-# viz class demo
+
 if __name__ == '__main__':
-    dim =500
-    vizTest = viz(dim,500,500, 1)
-    testEnviorment = des.Desert(dim,2)
+    dim =50
+    vizTest = viz(dim,500,500, 40)
+    testEnviorment = des.Desert(dim,4)
     hives = testEnviorment.getHives()
     
     for i in hives:
