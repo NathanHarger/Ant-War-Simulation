@@ -3,8 +3,7 @@ import random as r
 import numpy as n
 from enum import Enum
 from DesertAgent import DesertAgent, State
-from HiveClass import hive
-
+from HiveClass import Hive
 # this class in in charge of controlling seasons and its effect on the desert agents
 class Season(Enum):
     SPRING = 0
@@ -64,8 +63,10 @@ class Desert:
         rainy = Season.getSeasonResults(self.season)
 
         delta_leaf = r.randint(0, 50)
-        print self.season
-        self.season = self.getNextSeason(self.season)
+
+        #print SEASON
+        self.season = Season.getNextSeason(self.season)
+
 
         if rainy:
             if current_season_length == season_length_rainy:
@@ -138,7 +139,7 @@ class Desert:
             # a hive cannot be placed in water, or ontop an existing hive
             if test_env[rand_y, rand_x].getState() != 2 and test_env[rand_y, rand_x].getState() != 3:
                 test_env[rand_y, rand_x].setState(3)
-                self.setHive(hive.Hive((rand_y, rand_x)))
+                self.setHive(Hive((rand_y, rand_x)))
                 num_hives = num_hives - 1
                 
     def getItem(self, x , y):
