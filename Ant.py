@@ -35,11 +35,11 @@ class ANT:
         self.shape = shape
 
     # determine the next change in x and change in y
-    def move(self, factor, dim):
+    def move(self, dim):
         rand_x = r.randint(-1,1)
         rand_y = r.randint(-1,1)
-        self.outer_x += (rand_x* factor)
-        self.outer_y += (rand_y * factor)
+        self.outer_x += (rand_x)
+        self.outer_y += (rand_y )
 
         self.inner_x += rand_x
         self.inner_y += rand_y
@@ -54,8 +54,8 @@ class ANT:
         elif self.inner_y < 0:
             self.inner_y = dim
 
+        return [rand_x ,rand_y ]
 
-        return [rand_x * factor,rand_y * factor]
     def getShape(self):
         return self.shape
     def consume():

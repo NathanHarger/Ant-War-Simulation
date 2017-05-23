@@ -96,9 +96,9 @@ class viz:
         #print ants[1]
 
         for i in range(len(ants)):
-            [x,y] = ants[i].move(self.size_ratio/self.dim, self.dim)
+            [x,y] = ants[i].move( self.dim)
             #print str(x) + " " + str(y)
-            self.canvas.move(ants[i].getShape(), x, y)
+            self.canvas.move(ants[i].getShape(), self.size_ratio/self.dim* x, self.size_ratio/self.dim* y)
 
     # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
     # The queen lays eggs based on amount of food in nest.
