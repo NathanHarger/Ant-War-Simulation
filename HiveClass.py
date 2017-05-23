@@ -61,9 +61,10 @@ class Hive:
         #4. Pupae morphs into ant with random caste (keeping right percentages) if there is food and a nursing worker ant, or dies if either is not true. If there is no queen, it becomes a new queen.
         #5. Create new ant agents based on rules from the Ant behavior section. Up to 8 can be created, one for each neighboring cell.
         return 
-
+    
     def update_food_store():
         self.foodLevel = self.foodLevel - (len(list_ants) * desication_level)
+        hello = 0
 
     def queen_lays_eggs():
         if(self.foodLevel / num_eggs > desication_level):
