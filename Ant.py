@@ -42,10 +42,10 @@ class ANT:
 
         myHiveX = self.my_hive.getLocation()[1]
         myHiveY = self.my_hive.getLocation()[0]
-
+        print  self.my_hive.get_food()
         # is at hive and will request the food he needs
-        if(myHiveY == self.outer_y and myHiveX == self.outer_x and self.foodLevel < .5):
-            print("Eating")
+        if myHiveY == self.outer_y and myHiveX == self.outer_x and self.foodLevel < .5 and self.my_hive.get_food() != 0:
+            #print("Eating")
             self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
 
         print(self.foodLevel)

@@ -141,7 +141,7 @@ class viz:
 if __name__ == '__main__':
     dim = 100
     vizTest = viz(dim,500,500, 1)
-    testEnviorment = des.Desert(dim,2)
+    testEnviorment = des.Desert(dim,1)
     hives = testEnviorment.getHives()
     
     for i in hives:

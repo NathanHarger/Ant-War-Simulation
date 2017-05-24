@@ -39,7 +39,10 @@ class Hive:
 
     def getAnts(self):
         return self.list_ants
-        
+
+    def get_food(self):
+        return self.foodLevel
+
     def setAnts(self, ants):
         self.list_ants = n.append(self.list_ants, ants)
         
