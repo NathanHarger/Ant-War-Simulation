@@ -119,8 +119,8 @@ class viz:
         # TODO
         return
       
-     def get_random_color(self):
-       # color changing from
+    def get_random_color(self):
+        # color changing from
        # http://stackoverflow.com/questions/11340765/default-window-colour-tkinter-and-hex-colour-codes
         rgb = tuple(n.random.randint(0,256, (3)))
         return '#%02x%02x%02x' % rgb
