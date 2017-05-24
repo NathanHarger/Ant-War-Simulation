@@ -20,8 +20,9 @@ WATER_CRAWL = .03 #maximum water used by ant when crawling
 ENERGY_CRAWL = .03 #maximum energy used by ant when crawling
 
 class ANT:
-    def __init__(self,x,y, i_x, i_y, shape, myHive):
+    def __init__(self,x,y, i_x, i_y, shape, myHive, myEnvir):
         self.my_hive = myHive
+        self.my_envi = myEnvir
         self.foodLevel = 1
         self.AMT_DRINK = .05
         self.AMT_EAT = 0.01

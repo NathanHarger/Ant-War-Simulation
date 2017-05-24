@@ -51,7 +51,10 @@ class Hive:
             self.foodLevel -= howMuchRequested
             return howMuchRequested
         else:
-            return 0       
+            return 0   
+
+    def getFoodLevel(self):
+        return self.foodLevel    
 
     #Add/remove food based on season. (If it is a rainy season, add food, 
     #otherwise remove it). Then, if the current season length is equal to 
