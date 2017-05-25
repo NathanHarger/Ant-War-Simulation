@@ -84,6 +84,7 @@ class viz:
         self.Phase_One()
         #print enviornment.getHives()
         for i in enviornment.getHives():
+            print i.getFoodLevel()
             ants = i.getAnts()
            # print ants
             self.Phase_Two(ants,enviornment)
@@ -152,7 +153,7 @@ class viz:
 if __name__ == '__main__':
 
     dim = 100
-    num_ants_per_hive = 10
+    num_ants_per_hive = 1
     vizTest = viz(dim,500,500, 1)
     testEnviorment = des.Desert(dim,1)
     #print testEnviorment.__str__()

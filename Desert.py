@@ -128,7 +128,7 @@ class Desert:
 
                 desert[j, i] = DesertAgent(0, None, 0)
                 # print test_env
-
+        self.place_food(desert)
         self.place_anthills(desert, num_hives)
         return desert
     def __str__(self):
@@ -138,6 +138,36 @@ class Desert:
                 r= r +  str(self.grid[j,i])
             r = r + "\n"
         return r
+
+    def get_size(self):
+        return self.size
+    def place_food(self,env):
+        count = r.randint(25,35)
+        for i in range(count):
+            rand_x = r.randint(0, self.size - 1)
+            rand_y = r.randint(0, self.size - 1)
+            self.set_leaves(env, rand_x,rand_y)
+
+
+    def set_leaves(self, env, x,y):
+        if x + 2 >= self.size or y+2 >= self.size:
+            return
+        env[y, x].setState(State.FOOD)
+        env[y-1, x].setState(State.FOOD)
+        env[y+1, x].setState(State.FOOD)
+
+        env[y, x-1].setState(State.FOOD)
+        env[y , x+1].setState(State.FOOD)
+        env[y - 1, x-1].setState(State.FOOD)
+        env[y + 1, x+1].setState(State.FOOD)
+        env[y -1, x+1].setState(State.FOOD)
+        env[y +1, x - 1].setState(State.FOOD)
+
+        env[y - 2, x].setState(State.FOOD)
+        env[y + 2, x].setState(State.FOOD)
+
+        env[y - 2, x-1].setState(State.FOOD)
+        env[y - 2, x+1].setState(State.FOOD)
     def place_anthills(self, test_env, num_hives):
         while num_hives != 0:
             rand_x = r.randint(0, self.size - 1)
@@ -150,5 +180,6 @@ class Desert:
                 num_hives = num_hives - 1
                 
     def getItem(self, x , y):
-
+        if (y>=len(self.grid) or x >= len(self.grid)):
+            return None
         return self.grid[y,x]

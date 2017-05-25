@@ -19,7 +19,7 @@ WATER_COMBAT = 0.05 #maximum water used by ant in combat
 SITTING_ENERGY = .01 #maximum energy used by ant inside of Hive
 SITTING_WATER = .01 #maximum water used by ant inside of Hive
 WATER_CRAWL = .03 #maximum water used by ant when crawling
-ENERGY_CRAWL = .009 #maximum energy used by ant when crawling
+ENERGY_CRAWL = .003 #maximum energy used by ant when crawling
 
 AMT_EAT_PER_STEP = .5
 ANT_MAX_FOOD = 2
@@ -36,6 +36,7 @@ class ANT:
         self.outer_y = y
         self.inner_x = i_x
         self.inner_y = i_y
+        self.return_to_hive = False
 
         global AMT_MIN_INIT, INIT_RANGE
         self.energy = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
@@ -45,25 +46,27 @@ class ANT:
 
     # determine the next change in x and change in y
     def move(self, dim, desert):
-        global ENERGY_CRAWL
         self.foodLevel -= ENERGY_CRAWL
 
         myHiveX = self.my_hive.getLocation()[0]
         myHiveY = self.my_hive.getLocation()[1]
 
         # what type of surface the ant is one
-        print desert.getItem(self.outer_x, self.outer_y).getState()
+       # print desert.getItem(self.outer_x, self.outer_y).getState()
 
         # is at hive and will request the food he needs
         if(myHiveY == self.outer_y and myHiveX == self.outer_x ):
+            self.return_to_hive = False
             if self.foodLevel < .5:
                 self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
             elif self.foodLevel > 1:
-                amount_food = self.getFood() - 1
+
+                amount_food =  1 - self.getFood()
                 self.my_hive.add_food(amount_food)
         current_spot = desert.getItem(self.outer_x,self.outer_y)
         # ant is on a food grid and does not need to return to the hive
-        if current_spot.getState() is d.State.FOOD:
+        #print self.foodLevel
+        if current_spot.getState() is d.State.FOOD  and not self.return_to_hive:
 
             self.eat(current_spot.getFood(), current_spot)
             return [0,0]
@@ -73,8 +76,8 @@ class ANT:
         #print(str(myHiveX) + " " +str(self.outer_x))
         #print( self.foodLevel < .5 )
         # they need to go twards hive
-        if(self.foodLevel < .5 or self.foodLevel >= ANT_MAX_FOOD):
-
+        if(self.foodLevel < .5 or self.foodLevel >= 1.5):
+            self.return_to_hive = True
             if(myHiveY < self.outer_y):
                  rand_y = -1
             elif(myHiveY > self.outer_y):
@@ -125,6 +128,8 @@ class ANT:
     def get_neighbour_with_food(self, x,y, grid):
         y = self.outer_y
         x = self.outer_x
+        if y > grid.get_size() or x > grid.get_size():
+            return
         neigbors = n.array([grid.getItem( x,y-1).is_food(),
 
                             grid.getItem(x+1,y - 1).is_food(),

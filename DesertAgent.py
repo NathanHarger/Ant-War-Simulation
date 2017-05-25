@@ -21,28 +21,24 @@ class DesertAgent:
         if(selection_rand < .009):
             self.state = State.WATER
             self.water = 1
-        elif ( selection_rand < .03):
-            self.state = State.FOOD
-            self.food = 1
+        #elif ( selection_rand < .03):
+         #   self.state = State.FOOD
+        #    self.food = 1
         else:
             self.state = State.DESERT
         #print self.state
 
-    #subtract the food
-    def updateFood(self, d_food, d_water):
-        self.food = self.food - d_food
-
-        self.water = self.water - d_water
-        if self.water < 0:
-            self.water = 0
-        if self.food < 0:
-            self.food = 0
 
     def getState(self):
         return self.state
 
+    def is_food(self):
+        return self.state is State.FOOD
+
     #TODO state change need to change food and water levels
     def setState(self, state):
+        if state is State.FOOD:
+            self.food = 1
         self.state = state
         
     def getAnt(self):
@@ -59,6 +55,11 @@ class DesertAgent:
         
     def getFood(self):
         return self.food
+
+    def updateFood(self, delta_food):
+        self.food = self.food - delta_food
+        if self.food <= 0 :
+            self.setState(State.DESERT)
 
     def setFood(self,food):
         self.food = food
