@@ -129,12 +129,11 @@ class ANT:
                     return (0,0)
                else:
                     f = self.get_neighbour_with_food(self.outer_x, self.outer_y, self.my_envi)
-                    if not len(f) == 0:
-                        return r.choice(f)
-                    else:
-                        return (r.randint(-1,1), r.randint(-1,1))
-        else:
-            return (r.randint(-1,1), r.randint(-1,1))
+                    if (f != None):
+                        if not len(f) == 0:
+                            return r.choice(f)
+        
+        return (r.randint(-1,1), r.randint(-1,1))
            
 
           
