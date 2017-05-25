@@ -180,6 +180,6 @@ class Desert:
                 num_hives = num_hives - 1
                 
     def getItem(self, x , y):
-        if (y>=len(self.grid) or x >= len(self.grid)):
-            return None
+        if (y>=len(self.grid) or x >= len(self.grid) or y < 0 or x < 0):
+            return  DesertAgent(0, None, 0)
         return self.grid[y,x]

@@ -152,8 +152,8 @@ class viz:
 
 if __name__ == '__main__':
 
-    dim = 100
-    num_ants_per_hive = 1
+    dim = 50
+    num_ants_per_hive = 20
     vizTest = viz(dim,500,500, 1)
     testEnviorment = des.Desert(dim,1)
     #print testEnviorment.__str__()

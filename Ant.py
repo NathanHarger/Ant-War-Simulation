@@ -105,17 +105,17 @@ class ANT:
             return (0,0)
 
         elif (self.action == ACTION.RETURN):
-            if(myHiveY == self.outer_y and myHiveX == self.outer_x ):       
+            if(self.myHiveY == self.outer_y and self.myHiveX == self.outer_x ):       
                 self.action = ACTION.HOME
-            if(myHiveY < self.outer_y):
+            if(self.myHiveY < self.outer_y):
                  rand_y = -1
-            elif(myHiveY > self.outer_y):
+            elif(self.myHiveY > self.outer_y):
                  rand_y = 1
             else:
                 rand_y = 0
-            if(myHiveX < self.outer_x):
+            if(self.myHiveX < self.outer_x):
                  rand_x = -1
-            elif(myHiveX > self.outer_x):
+            elif(self.myHiveX > self.outer_x):
                  rand_x = 1
             else:
                 rand_x = 0  
@@ -155,10 +155,10 @@ class ANT:
         x = self.outer_x
         if y > grid.get_size() or x > grid.get_size():
             return
-        neigbors = n.array([grid.getItem( x,y-1).is_food(),
-                            grid.getItem(x+1,y - 1).is_food(),
+        neigbors = n.array([grid.getItem(x,y-1).is_food(),
+                            grid.getItem(x+1,y-1).is_food(),
                             grid.getItem(x+1,y).is_food(),
-                            grid.getItem(x+1, y+1).is_food(),
+                            grid.getItem(x+1,y+1).is_food(),
                             grid.getItem(x,y+1).is_food(),
                             grid.getItem(x-1,y+1).is_food(),
                             grid.getItem(x-1,y).is_food(),
