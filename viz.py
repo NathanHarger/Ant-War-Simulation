@@ -41,11 +41,11 @@ class viz:
             for j in range(self.dim):
                 enviornment_type = enviornment.getItem(j,i).getState()
                 #print enviornment_type
-                if enviornment_type == state.DESERT:
+                if enviornment_type is state.DESERT:
                     self.canvas.itemconfig(self.cell[i,j], fill="yellow")
-                elif enviornment_type ==  state.FOOD:
+                elif enviornment_type is  state.FOOD:
                     self.canvas.itemconfig(self.cell[i,j], fill="green")
-                elif enviornment_type==  state.WATER:
+                elif enviornment_type is  state.WATER:
                     self.canvas.itemconfig(self.cell[i,j], fill="blue")
                 else:
                     self.canvas.itemconfig(self.cell[i,j], fill="brown")
@@ -55,8 +55,8 @@ class viz:
     def __setup_grid__(self):
         for i in range(self.dim):
             for j in range(self.dim):
-                self.cell[i, j] = self.canvas.create_rectangle(self.size_ratio * i, self.size_ratio * j,
-                                                               self.size_ratio * i+ self.size_ratio, self.size_ratio * j + self.size_ratio, outline="")
+                self.cell[i, j] = self.canvas.create_rectangle(self.size_ratio * j, self.size_ratio * i,
+                                                               self.size_ratio * j+ self.size_ratio, self.size_ratio * i + self.size_ratio, outline="")
 
 
     def dispViz(self):
@@ -75,22 +75,23 @@ class viz:
     # For each time tick, run phase 1-3. When the simulation runs to the
     # variable sim_length, end it.
     def Run_Sim(self, enviornment):
+
         self.Phase_One()
         #print enviornment.getHives()
         for i in enviornment.getHives():
             ants = i.getAnts()
            # print ants
-            self.Phase_Two(ants)
+            self.Phase_Two(ants,enviornment)
         self.draw_frame(enviornment)
         #self.Phase_Three(enviornment)
         # TODO
         return
 
-    def ant_movement(self, ants):
+    def ant_movement(self, ants,env):
         #print ants[1]
 
         for i in range(len(ants)):
-            [x,y] = ants[i].move( self.dim)
+            [x,y] = ants[i].move( self.dim, env)
             #print str(x) + " " + str(y)
             self.canvas.move(ants[i].getShape(), self.size_ratio* x, self.size_ratio* y)
 
@@ -104,8 +105,8 @@ class viz:
     # First - execute combat for the entire desert. Remove all ants destroyed.
     # Second - move all ants based on caste, current job,
     # and pheromones of neighbor cells.
-    def Phase_Two(self,ants):
-        self.ant_movement(ants)
+    def Phase_Two(self,ants,enviornment):
+        self.ant_movement(ants,enviornment)
         # TODO
         return
 
@@ -134,25 +135,26 @@ class viz:
 
             #print loc
 
-            testAnts[i] = a.ANT(loc[1],loc[0],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
+            testAnts[i] = a.ANT(loc[0],loc[1],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
                                                                                 outline = color), myHive, myEnv)
                                                                                 
 
     def create_hive(self, myHive, location):
-        myHive = hive.Hive((location[1], location[0]))
+        myHive = hive.Hive((location[0], location[1]))
         return myHive
 
 
 if __name__ == '__main__':
 
     dim = 100
+    num_ants_per_hive = 1
     vizTest = viz(dim,500,500, 1)
-    testEnviorment = des.Desert(dim,2)
-
+    testEnviorment = des.Desert(dim,1)
+    #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     
     for i in hives:
-        myAnts = n.empty(20, dtype=object)
+        myAnts = n.empty(num_ants_per_hive, dtype=object)
         vizTest.create_ants(myAnts, i.getLocation(), i, testEnviorment)
         i.setAnts(myAnts)
         #print i.getAnts()

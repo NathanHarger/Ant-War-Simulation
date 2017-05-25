@@ -50,7 +50,7 @@ class Desert:
         
     def setHive(self, hive):
         self.hives.append(hive)
-        
+
     def getHives(self):
         return self.hives  
     
@@ -109,7 +109,7 @@ class Desert:
                 water = moisture_locations[i, j]
                 food = food_location[i,j]
                 hive_locations = hive_locations[i, j]
-                desert[i, j] = DesertAgent(0, None, 0)
+                desert[j, i] = DesertAgent(0, None, 0)
                 state = 0
                 if water:
                     state = State.WATER
@@ -126,21 +126,29 @@ class Desert:
         for i in range(self.size):
             for j in range(self.size):
 
-                desert[i, j] = DesertAgent(0, None, 0)
+                desert[j, i] = DesertAgent(0, None, 0)
                 # print test_env
+
         self.place_anthills(desert, num_hives)
         return desert
-
+    def __str__(self):
+        r=""
+        for j in range(10):
+            for i in range(10):
+                r= r +  str(self.grid[j,i])
+            r = r + "\n"
+        return r
     def place_anthills(self, test_env, num_hives):
         while num_hives != 0:
             rand_x = r.randint(0, self.size - 1)
             rand_y = r.randint(0, self.size - 1)
 
             # a hive cannot be placed in water, or ontop an existing hive
-            if test_env[rand_y, rand_x].getState() != 2 and test_env[rand_y, rand_x].getState() != 3:
-                test_env[rand_y, rand_x].setState(3)
-                self.setHive(Hive((rand_y, rand_x)))
+            if not test_env[rand_y, rand_x].getState() is 2 and not test_env[rand_y, rand_x].getState() is 3:
+                test_env[rand_y, rand_x].setState(State.HIVE)
+                self.setHive(Hive((rand_x, rand_y)))
                 num_hives = num_hives - 1
                 
     def getItem(self, x , y):
+
         return self.grid[y,x]
