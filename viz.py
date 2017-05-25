@@ -39,18 +39,23 @@ class viz:
     def update_frame(self,enviornment):
         for i in range(self.dim):
             for j in range(self.dim):
-                enviornment_type = enviornment.getItem(j,i).getState()
+                curr_agent = enviornment.getItem(j,i)
+                enviornment_type = curr_agent.getState()
                 #print enviornment_type
                 if enviornment_type is state.DESERT:
                     self.canvas.itemconfig(self.cell[i,j], fill="yellow")
                 elif enviornment_type is  state.FOOD:
-                    self.canvas.itemconfig(self.cell[i,j], fill="green")
+                    color = self.get_food_color_intensity(curr_agent.getFood())
+                    self.canvas.itemconfig(self.cell[i,j], fill= color)
                 elif enviornment_type is  state.WATER:
                     self.canvas.itemconfig(self.cell[i,j], fill="blue")
                 else:
                     self.canvas.itemconfig(self.cell[i,j], fill="brown")
 
 
+    def get_food_color_intensity(self, greenVal):
+        rgb = (0,255-greenVal*100,0)
+        return '#%02x%02x%02x' % rgb
 
     def __setup_grid__(self):
         for i in range(self.dim):
@@ -123,7 +128,7 @@ class viz:
     def get_random_color(self):
         # color changing from
        # http://stackoverflow.com/questions/11340765/default-window-colour-tkinter-and-hex-colour-codes
-        rgb = tuple(n.random.randint(0,256, (3)))
+        rgb = tuple(n.random.randint(0,255, (3)))
         return '#%02x%02x%02x' % rgb
 
 
@@ -147,7 +152,7 @@ class viz:
 if __name__ == '__main__':
 
     dim = 100
-    num_ants_per_hive = 1
+    num_ants_per_hive = 10
     vizTest = viz(dim,500,500, 1)
     testEnviorment = des.Desert(dim,1)
     #print testEnviorment.__str__()
