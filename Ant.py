@@ -2,16 +2,17 @@ import random as r
 import numpy as n
 import Desert as d
 import DesertAgent as da
+from enum import Enum
 
 ANT_WOULD_LIKE_DRINK = 0.9  # water level at which ANT would like to drink
 ANT_WOULD_LIKE_EAT = 0.9  # food level at which ANT would like to eat
-FRACTION_WATER = 0.6  # fraction of prey that is water
+# FRACTION_WATER = 0.6  # fraction of prey that is water
 AMT_MIN_INIT = 0.88  # minimum initial ANT energy and water values
 INIT_RANGE = .12  # range of initial ANT energy and water values
-MAY_FIGTH = 0.5 #probability of entering combat if not thirsty or hungry
-MAY_CRAWL = 0.5
-DESICCATE = 0.6 #level at which desiccation occurs
-STARVE = 0.6 #level at which starvation occurs
+# MAY_FIGTH = 0.5 #probability of entering combat if not thirsty or hungry
+# MAY_CRAWL = 0.5
+# DESICCATE = 0.6 #level at which desiccation occurs
+# STARVE = 0.6 #level at which starvation occurs
 NUMBER_OF_FIGHTS_STARTED = 0
 
 ENERGY_COMBAT = 0.05 #maximum energy used by ant in combat
@@ -21,90 +22,59 @@ SITTING_WATER = .01 #maximum water used by ant inside of Hive
 WATER_CRAWL = .03 #maximum water used by ant when crawling
 ENERGY_CRAWL = .003 #maximum energy used by ant when crawling
 
-AMT_EAT_PER_STEP = .5
+AMT_EAT = .01
 ANT_MAX_FOOD = 2
+AMT_DRINK = .05
 
+class JOB(Enum):
+    GATHERER = 0        # go out find food and bring it home
+    WARRIOR = 1         # go out find enemy and kill it
+    QUEEN = 2           # stay home reproduce
+    OTHER = 3           # NOTE: if you have another job add here and explain
+
+class ACTION(Enum):
+    RETURN = 0          # ant is coming home
+    SEARCH = 1          # and is going out to do something
+    COMBAT = 2          # ant is in combat
+    HOME = 3            # ant is in base  
 
 class ANT:
     def __init__(self,x,y, i_x, i_y, shape, myHive, myEnvir):
         self.my_hive = myHive
+        self.myHiveX = self.my_hive.getLocation()[0]
+        self.myHiveY = self.my_hive.getLocation()[1]
+
         self.my_envi = myEnvir
-        self.foodLevel = 1
-        self.AMT_DRINK = .05
-        self.AMT_EAT = .01
+        self.shape = shape
         self.outer_x = x
         self.outer_y = y
         self.inner_x = i_x
         self.inner_y = i_y
-        self.return_to_hive = False
 
-        global AMT_MIN_INIT, INIT_RANGE
+        self.job = JOB.GATHERER
+        self.action = ACTION.HOME
+        
+        self.job_switch = {0 : self.DoGatherer, 1 : self.DoWarrior, 2 : self.DoQueen, 3 : self.DoOther}   
+
+        self.foodLevel = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
         self.energy = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
         self.water = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
+        self.return_to_hive = False
         self.IsInHive = True
-        self.shape = shape
 
     # determine the next change in x and change in y
     def move(self, dim, desert):
         self.foodLevel -= ENERGY_CRAWL
 
-        myHiveX = self.my_hive.getLocation()[0]
-        myHiveY = self.my_hive.getLocation()[1]
+        # Do your job based on what you are assigned
+        location = self.job_switch[self.job.value]()
 
-        # what type of surface the ant is one
-       # print desert.getItem(self.outer_x, self.outer_y).getState()
+        rand_x = location[0]
+        rand_y = location[1]
 
-        # is at hive and will request the food he needs
-        if(myHiveY == self.outer_y and myHiveX == self.outer_x ):
-            self.return_to_hive = False
-            if self.foodLevel < .5:
-                self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
-            elif self.foodLevel > 1:
-
-                amount_food =  1 - self.getFood()
-                self.my_hive.add_food(amount_food)
-        current_spot = desert.getItem(self.outer_x,self.outer_y)
-        # ant is on a food grid and does not need to return to the hive
-        #print self.foodLevel
-        if current_spot.getState() is d.State.FOOD  and not self.return_to_hive:
-
-            self.eat(current_spot.getFood(), current_spot)
-            return [0,0]
-
-        #print(self.foodLevel)
-        #print(str(myHiveY) + " " +str(self.outer_y))
-        #print(str(myHiveX) + " " +str(self.outer_x))
-        #print( self.foodLevel < .5 )
-        # they need to go twards hive
-        if(self.foodLevel < .5 or self.foodLevel >= 1.5):
-            self.return_to_hive = True
-            if(myHiveY < self.outer_y):
-                 rand_y = -1
-            elif(myHiveY > self.outer_y):
-                 rand_y = 1
-            else:
-                rand_y = 0
-
-            if(myHiveX < self.outer_x):
-                 rand_x = -1
-            elif(myHiveX > self.outer_x):
-                 rand_x = 1
-            else:
-                rand_x = 0  
-        else:
-                #find cell with food
-                f = self.get_neighbour_with_food(self.outer_x, self.outer_y,desert)
-                #print f
-
-                if not len(f) == 0:
-                    [x,y] = r.choice(f)
-
-                    rand_x = x
-                    rand_y = y
-                else:
-                    rand_x = r.randint(-1,1)
-                    rand_y = r.randint(-1,1)
-
+        # if hungry go home no matter what
+        if(self.foodLevel < .4):
+             self.action = ACTION.RETURN
 
         self.outer_x += (rand_x)
         self.outer_y += (rand_y)
@@ -124,6 +94,61 @@ class ANT:
 
         return [rand_x ,rand_y ]
 
+    # JOB.GATHERER move function
+    def DoGatherer(self):
+        if (self.action == ACTION.HOME):
+            self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)     
+            if self.foodLevel > 1:                                         
+                amount_food =  1 - self.getFood()
+                self.my_hive.add_food(amount_food)            
+            self.action = ACTION.SEARCH
+            return (0,0)
+
+        elif (self.action == ACTION.RETURN):
+            if(myHiveY == self.outer_y and myHiveX == self.outer_x ):       
+                self.action = ACTION.HOME
+            if(myHiveY < self.outer_y):
+                 rand_y = -1
+            elif(myHiveY > self.outer_y):
+                 rand_y = 1
+            else:
+                rand_y = 0
+            if(myHiveX < self.outer_x):
+                 rand_x = -1
+            elif(myHiveX > self.outer_x):
+                 rand_x = 1
+            else:
+                rand_x = 0  
+            return (rand_x, rand_y)
+
+        elif(self.action == ACTION.SEARCH):
+               current_spot = self.my_envi.getItem(self.outer_x,self.outer_y)
+               if current_spot.getState() is d.State.FOOD:
+                    self.eat(current_spot.getFood(), current_spot)
+                    self.action = ACTION.RETURN
+                    return (0,0)
+               else:
+                    f = self.get_neighbour_with_food(self.outer_x, self.outer_y, self.my_envi)
+                    if not len(f) == 0:
+                        return r.choice(f)
+                    else:
+                        return (r.randint(-1,1), r.randint(-1,1))
+        else:
+            return (r.randint(-1,1), r.randint(-1,1))
+           
+
+          
+    def DoWarrior(self): 
+        # TODO
+        return (r.randint(-1,1), r.randint(-1,1)) 
+
+    def DoQueen(self):
+        # TODO 
+        return (r.randint(-1,1), r.randint(-1,1))
+
+    def DoOther(self): 
+        # TODO
+        return (r.randint(-1,1), r.randint(-1,1))
 
     def get_neighbour_with_food(self, x,y, grid):
         y = self.outer_y
@@ -131,9 +156,7 @@ class ANT:
         if y > grid.get_size() or x > grid.get_size():
             return
         neigbors = n.array([grid.getItem( x,y-1).is_food(),
-
                             grid.getItem(x+1,y - 1).is_food(),
-
                             grid.getItem(x+1,y).is_food(),
                             grid.getItem(x+1, y+1).is_food(),
                             grid.getItem(x,y+1).is_food(),
@@ -162,9 +185,9 @@ class ANT:
 
     def eat(self, availableFood, spot):
         # an ant takes up to 1.5 units of food
-        self.AMT_EAT = min( availableFood,  ANT_MAX_FOOD - self.foodLevel)
-        self.foodLevel = self.foodLevel+ self.AMT_EAT
-        spot.updateFood(self.AMT_EAT)
+        AMT_EAT = min( availableFood,  ANT_MAX_FOOD - self.foodLevel)
+        self.foodLevel = self.foodLevel+ AMT_EAT
+        spot.updateFood(AMT_EAT)
 
     def getFood(self):
         return self.energy
@@ -189,7 +212,7 @@ class ANT:
         if self.energy < ANT_WOULD_LIKE_EAT:
             self.eat(spotAt.getFood())
         else:
-            self.AMT_EAT = 0
+            AMT_EAT = 0
 
 
     def ANTCRAWL(self, grid, padding):
