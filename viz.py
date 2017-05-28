@@ -20,12 +20,15 @@ class viz:
         self.dim = dim
 
         self.root=tk.Tk()
-        self.canvas= tk.Canvas(self.root,width=window_width,height=window_height)
+        self.canvas= tk.Canvas(self.root,width=window_width * 1.2,height=window_height * 1.2)
         self.canvas.pack()
-        self.size_ratio = self.wWidth / self.dim
+        self.size_ratio = (self.wWidth / self.dim) * .8
+        self.text_width = window_width * 1.2
+        self.text_height = window_height * 1.2
 
         self.wHeight = window_height
         self.cell = n.empty((self.dim, self.dim), dtype=object)
+        self.text_cells = n.empty((self.dim + 10, self.dim + 10), dtype=object)
         self.__setup_grid__()
         self.delay = delay
         self.running = True
@@ -49,9 +52,17 @@ class viz:
                     self.canvas.itemconfig(self.cell[i,j], fill= color)
                 elif enviornment_type is  state.WATER:
                     self.canvas.itemconfig(self.cell[i,j], fill="blue")
-                else:
-                    self.canvas.itemconfig(self.cell[i,j], fill="brown")
 
+                elif enviornment_type is  state.HIVE:
+                    self.canvas.itemconfig(self.cell[i,j], fill="brown")
+                else:
+                    self.canvas.itemconfig(self.cell[i,j], fill="green")
+         
+                
+        canvas_id = self.canvas.create_text(500, 500, anchor="s")
+        self.canvas.itemconfig(canvas_id, text="Number of ants in Hive 1" + str(len(enviornment.getHives()[0].getAnts())))
+        canvas_id2 = self.canvas.create_text(500, 515, anchor="s")
+        self.canvas.itemconfig(canvas_id2, text="Number of ants in Hive 2" + str(len(enviornment.getHives()[1].getAnts())))
 
     def get_food_color_intensity(self, greenVal):
         rgb = (0,255-greenVal*100,0)
@@ -62,7 +73,9 @@ class viz:
             for j in range(self.dim):
                 self.cell[i, j] = self.canvas.create_rectangle(self.size_ratio * j, self.size_ratio * i,
                                                                self.size_ratio * j+ self.size_ratio, self.size_ratio * i + self.size_ratio, outline="")
-
+        for i in range(self.dim + 10):
+            for j in range(self.dim + 10):
+                self.text_cells[i,j] = self.canvas.create_rectangle(0, self.text_width, 0, self.text_height, outline="")    
 
     def dispViz(self):
         self.root.mainloop()
@@ -73,6 +86,27 @@ class viz:
 
         if self.running:
             self.canvas.after(self.delay,self.Run_Sim, enviorment)
+
+            #stats_text = """
+            #-------------------
+            #|   ------     line1    |
+            #|   ------     line2    |
+            #|   ------     line3    |
+            #-------------------"""
+
+            #legend_frame = tk.LabelFrame(self.canvas,text=stats_text,padx=5, pady=5)
+            #legend_label = tk.Label(legend_frame,text=stats_text)
+            #legend_label.pack()
+
+            #self.canvas.create_window(500,500,window=legend_frame,anchor="se")
+
+            #for i in enviorment.getHives():
+            #    location = i.getLocation()
+            #    ants = i.getAnts()
+            #    canvas_id = self.canvas.create_text(location[0] * 10, location[1] * 10)
+            #    self.canvas.itemconfig(canvas_id, text="Number of in this Hive" + str(len(ants)))
+            #    self.canvas.insert(canvas_id, 6, "new ")
+
         else:
             self.dispViz()
 
@@ -86,6 +120,7 @@ class viz:
         for i in enviornment.getHives():
             print i.getFoodLevel()
             ants = i.getAnts()
+            i.update_nest();
            # print ants
             self.Phase_Two(ants,enviornment)
         self.draw_frame(enviornment)
@@ -155,7 +190,7 @@ if __name__ == '__main__':
     dim = 50
     num_ants_per_hive = 20
     vizTest = viz(dim,500,500, 1)
-    testEnviorment = des.Desert(dim,1)
+    testEnviorment = des.Desert(dim,2)
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     
