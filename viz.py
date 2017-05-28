@@ -86,6 +86,7 @@ class viz:
         for i in enviornment.getHives():
             print i.getFoodLevel()
             ants = i.getAnts()
+            i.update_nest();
            # print ants
             self.Phase_Two(ants,enviornment)
         self.draw_frame(enviornment)
@@ -155,7 +156,7 @@ if __name__ == '__main__':
     dim = 50
     num_ants_per_hive = 20
     vizTest = viz(dim,500,500, 1)
-    testEnviorment = des.Desert(dim,1)
+    testEnviorment = des.Desert(dim,2)
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     
