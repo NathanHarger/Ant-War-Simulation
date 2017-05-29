@@ -56,7 +56,7 @@ class ANT:
         self.job = JOB.GATHERER
         self.action = ACTION.HOME
         
-        self.job_switch = {0 : self.DoGatherer, 1 : self.DoWarrior, 2 : self.DoQueen, 3 : self.DoOther}   
+        self.job_switch = {JOB.GATHERER : self.DoGatherer, JOB.WARRIOR : self.DoWarrior, JOB.QUEEN : self.DoQueen, JOB.OTHER: self.DoOther}
 
         self.foodLevel = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
         self.energy = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
@@ -69,7 +69,7 @@ class ANT:
         self.foodLevel -= ENERGY_CRAWL
 
         # Do your job based on what you are assigned
-        location = self.job_switch[self.job.value]()
+        location = self.job_switch[self.job]()
 
         rand_x = location[0]
         rand_y = location[1]
@@ -81,20 +81,27 @@ class ANT:
         self.outer_x += (rand_x)
         self.outer_y += (rand_y)
 
-        self.inner_x += rand_x
-        self.inner_y += rand_y
-
-        if self.inner_x > dim:
-            self.inner_x = 0
-        elif self.inner_x < 0:
-            self.inner_x = dim
-
-        if self.inner_y > dim:
-            self.inner_y = 0
-        elif self.inner_y < 0:
-            self.inner_y = dim
 
         return [rand_x ,rand_y ]
+
+    def random_move_in_bounds(self, dim):
+        x_moves = [-1,1]
+        y_moves = [-1,1]
+
+        x = self.getX()
+        y = self.getY()
+
+        if x == 0 :
+            x_moves.remove(-1)
+        elif x == dim - 1:
+            x_moves.remove(1)
+
+        if y == 0:
+            y_moves.remove(-1)
+        elif y == dim - 1:
+            y_moves.remove(1)
+        return (r.choice(x_moves), r.choice(y_moves))
+
 
     # JOB.GATHERER move function
     def DoGatherer(self):
@@ -135,10 +142,10 @@ class ANT:
                         if not len(f) == 0:
                             return r.choice(f)
         
-        return (r.randint(-1,1), r.randint(-1,1))
+        return self.random_move_in_bounds(self.my_envi.get_size())
            
 
-          
+
     def DoWarrior(self): 
         # TODO
         return (r.randint(-1,1), r.randint(-1,1)) 
@@ -322,6 +329,4 @@ class ANT:
     def __float__(self):
         return 0.0
 
-    def __test_move__(self,dx,dy):
-        self.outer_x += dx
-        self.outer_y += dy
+
