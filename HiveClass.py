@@ -41,8 +41,19 @@ class Hive:
         self.list_ants = n.array([])
         self.my_location = location
         self.foodLevel = 50
+        self.scouted_food_locations = []
         #TODO 
 
+    def setFoodLoc(self, x_loc, y_loc):
+        if ( (x_loc, y_loc) not in self.scouted_food_locations):
+            self.scouted_food_locations.append((x_loc, y_loc))
+
+    def getAllFoodLoc(self):
+        return self.scouted_food_locations
+
+    def getFoodLoc(self):
+        return self.scouted_food_locations.pop()
+    
     def getAnts(self):
         return self.list_ants
         

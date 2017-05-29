@@ -30,7 +30,7 @@ class JOB(Enum):
     GATHERER = 0        # go out find food and bring it home
     WARRIOR = 1         # go out find enemy and kill it
     QUEEN = 2           # stay home reproduce
-    OTHER = 3           # NOTE: if you have another job add here and explain
+    SCOUT = 3           # scout ant to find food locations better
 
 class ACTION(Enum):
     RETURN = 0          # ant is coming home
@@ -53,10 +53,10 @@ class ANT:
         self.inner_x = i_x
         self.inner_y = i_y
 
-        self.job = JOB.GATHERER
+        self.job = JOB.SCOUT
         self.action = ACTION.HOME
         
-        self.job_switch = {0 : self.DoGatherer, 1 : self.DoWarrior, 2 : self.DoQueen, 3 : self.DoOther}   
+        self.job_switch = {0 : self.DoGatherer, 1 : self.DoWarrior, 2 : self.DoQueen, 3 : self.DoScout}   
 
         self.foodLevel = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
         self.energy = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
@@ -75,7 +75,7 @@ class ANT:
         rand_y = location[1]
 
         # if hungry go home no matter what
-        if(self.foodLevel < .4):
+        if(self.foodLevel < .4 and  self.action != ACTION.HOME):
              self.action = ACTION.RETURN
 
         self.outer_x += (rand_x)
@@ -101,7 +101,8 @@ class ANT:
         if (self.action == ACTION.HOME):
             self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
             if self.foodLevel > 1:                                         
-                amount_food =  1 - self.getFood()
+                amount_food = self.foodLevel - 1
+                self.foodLevel - amount_food
                 self.my_hive.add_food(amount_food)            
             self.action = ACTION.SEARCH
             return (0,0)
@@ -147,8 +148,58 @@ class ANT:
         # TODO 
         return (r.randint(-1,1), r.randint(-1,1))
 
-    def DoOther(self): 
-        # TODO
+    def DoScout(self): 
+        if (self.action == ACTION.HOME):
+            self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
+            if self.foodLevel > 1:                                         
+                amount_food = self.foodLevel - 1
+                self.foodLevel - amount_food
+                self.my_hive.add_food(amount_food)            
+            self.action = ACTION.SEARCH
+            return (0,0)
+
+        elif (self.action == ACTION.RETURN):
+            if(self.myHiveY == self.outer_y and self.myHiveX == self.outer_x ):       
+                self.action = ACTION.HOME
+            if(self.myHiveY < self.outer_y):
+                 rand_y = -1
+            elif(self.myHiveY > self.outer_y):
+                 rand_y = 1
+            else:
+                rand_y = 0
+            if(self.myHiveX < self.outer_x):
+                 rand_x = -1
+            elif(self.myHiveX > self.outer_x):
+                 rand_x = 1
+            else:
+                rand_x = 0  
+            return (rand_x, rand_y)
+
+        elif(self.action == ACTION.SEARCH):
+            current_spot = self.my_envi.getItem(self.outer_x,self.outer_y)
+            if current_spot.getState() is d.State.FOOD:
+                 self.my_hive.setFoodLoc(self.outer_x, self.outer_y)
+
+            f = self.get_neighbour_with_food(self.outer_x, self.outer_y, self.my_envi)
+            if (f != None and not len(f) == 0):
+                return r.choice(f)
+
+            chance = r.randint(-1,1)
+ 
+            if ( chance is 1):
+                return (r.randint(-1,1), r.randint(-1,1))
+            else: 
+                if(self.myHiveY < self.outer_y):
+                    away_y = 1
+                elif(self.myHiveY >= self.outer_y):
+                    away_y = -1
+
+                if(self.myHiveX < self.outer_x):
+                    away_x = 1
+                elif(self.myHiveX >= self.outer_x):
+                    away_x = -1
+                return (away_x, away_y)                 
+        
         return (r.randint(-1,1), r.randint(-1,1))
 
     def get_neighbour_with_food(self, x,y, grid):

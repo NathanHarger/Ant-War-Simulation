@@ -191,7 +191,7 @@ if __name__ == '__main__':
     dim = 50
     num_ants_per_hive = 20
     vizTest = viz(dim,500,500, 1)
-    testEnviorment = des.Desert(dim,3)
+    testEnviorment = des.Desert(dim,1)
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     
