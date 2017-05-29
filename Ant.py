@@ -49,11 +49,17 @@ class ANT:
             self.outer_y = self.myHiveY
         self.my_envi = myEnvir
         self.shape = shape
-
+        self.targetLocation = (self.myHiveX,self.myHiveY)
         self.inner_x = i_x
         self.inner_y = i_y
 
-        self.job = JOB.SCOUT
+        chance = r.randint(-1,1)
+ 
+        if ( chance is 1):
+            self.job = JOB.SCOUT
+        else:
+            self.job = JOB.GATHERER
+
         self.action = ACTION.HOME
         
         self.job_switch = {0 : self.DoGatherer, 1 : self.DoWarrior, 2 : self.DoQueen, 3 : self.DoScout}   
@@ -132,9 +138,26 @@ class ANT:
                     return (0,0)
                else:
                     f = self.get_neighbour_with_food(self.outer_x, self.outer_y, self.my_envi)
-                    if (f != None):
-                        if not len(f) == 0:
-                            return r.choice(f)
+                    if (f != None and not len(f) == 0):
+                        return r.choice(f)
+                    else:                      
+                        if (self.my_envi.getItem(self.targetLocation[0],self.targetLocation[1]).getState() is d.State.FOOD):
+                            if(self.targetLocation[1] < self.outer_y):
+                                rand_y = -1
+                            elif(self.targetLocation[1] > self.outer_y):
+                                rand_y = 1
+                            else:
+                                rand_y = 0
+
+                            if(self.targetLocation[0] < self.outer_x):
+                                rand_x = -1
+                            elif(self.targetLocation[0] > self.outer_x):
+                                rand_x = 1
+                            else:
+                                rand_x = 0  
+                            return (rand_x, rand_y)
+                        else:
+                            self.targetLocation = self.my_hive.getFoodLoc()                                                                                                     
         
         return (r.randint(-1,1), r.randint(-1,1))
            
