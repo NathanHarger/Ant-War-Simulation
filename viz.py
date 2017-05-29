@@ -40,6 +40,7 @@ class viz:
     # 3: hive
     # function that is called by the tkinter canvas that updates ojects in sim every frame
     def update_frame(self,enviornment):
+
         for i in range(self.dim):
             for j in range(self.dim):
                 curr_agent = enviornment.getItem(j,i)
@@ -57,12 +58,12 @@ class viz:
                     self.canvas.itemconfig(self.cell[i,j], fill="brown")
                 else:
                     self.canvas.itemconfig(self.cell[i,j], fill="green")
-         
-                
-        canvas_id = self.canvas.create_text(500, 500, anchor="s")
-        self.canvas.itemconfig(canvas_id, text="Number of ants in Hive 1" + str(len(enviornment.getHives()[0].getAnts())))
-        canvas_id2 = self.canvas.create_text(500, 515, anchor="s")
-        self.canvas.itemconfig(canvas_id2, text="Number of ants in Hive 2" + str(len(enviornment.getHives()[1].getAnts())))
+
+        for i in range(len(enviornment.getHives())):
+            canvas_id = self.canvas.create_text(500, 500 + 15 * i, anchor="s")
+            label_string = "Number of ants in Hive "  + str(i) + " " + str(len(enviornment.getHives()[0].getAnts()))
+            self.canvas.itemconfig(canvas_id, text=label_string)
+
 
     def get_food_color_intensity(self, greenVal):
         rgb = (0,255-greenVal*100,0)
@@ -107,7 +108,7 @@ class viz:
             #    self.canvas.itemconfig(canvas_id, text="Number of in this Hive" + str(len(ants)))
             #    self.canvas.insert(canvas_id, 6, "new ")
 
-        else:
+        else :
             self.dispViz()
 
     # Runs a simulation. Initialize all values based on keywords if passed in.
@@ -120,7 +121,7 @@ class viz:
         for i in enviornment.getHives():
             print i.getFoodLevel()
             ants = i.getAnts()
-            i.update_nest();
+            i.update_nest()
            # print ants
             self.Phase_Two(ants,enviornment)
         self.draw_frame(enviornment)
@@ -190,7 +191,7 @@ if __name__ == '__main__':
     dim = 50
     num_ants_per_hive = 20
     vizTest = viz(dim,500,500, 1)
-    testEnviorment = des.Desert(dim,2)
+    testEnviorment = des.Desert(dim,3)
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     

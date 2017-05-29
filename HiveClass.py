@@ -63,7 +63,11 @@ class Hive:
             return 0   
 
     def getFoodLevel(self):
-        return self.foodLevel    
+        return self.foodLevel
+
+    def setFoodLevel(self, food):
+        self.foodLevel = food
+
     def add_food(self, amt):
         self.foodLevel += amt
     
@@ -71,7 +75,9 @@ class Hive:
         self.foodLevel =  self.foodLevel - (len(self.list_ants) * self.desication_level)
 
 
-    def queen_lays_eggs(self): 
+    def queen_lays_eggs(self):
+        if len(self.list_ants) == 0:
+            return
         if(self.foodLevel / len(self.list_ants)) > (self.desication_level * len(self.list_ants)):
             self.num_eggs+=5
 

@@ -98,12 +98,14 @@ class Desert:
                 self.grid[rand_y, rand_x].setState(State.DESERT)
                 delta_leaf = delta_leaf - 1
 
+
+    @staticmethod
     #create a custom desert from an existing food and moisture grid
     # hive_locations, food_location and moisture_locations are boolean
     # size x size arrays of values indicating if the grid[i,j] is a hive,
     # food or water grid
-    def custom_desert_init(self, hive_locations, food_location, moisture_locations):
-        desert = n.empty((self.dim, self.dim), dtype=object)
+    def custom_desert_init(self, size, hive_locations, food_location, moisture_locations):
+        desert = n.empty((self.size, self.size), dtype=object)
         for i in range(self.size):
             for j in range(self.size):
                 water = moisture_locations[i, j]
@@ -133,8 +135,8 @@ class Desert:
         return desert
     def __str__(self):
         r=""
-        for j in range(10):
-            for i in range(10):
+        for j in range(self.size):
+            for i in range(self.size):
                 r= r +  str(self.grid[j,i])
             r = r + "\n"
         return r

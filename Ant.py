@@ -41,13 +41,15 @@ class ACTION(Enum):
 class ANT:
     def __init__(self,x,y, i_x, i_y, shape, myHive, myEnvir):
         self.my_hive = myHive
-        self.myHiveX = self.my_hive.getLocation()[0]
-        self.myHiveY = self.my_hive.getLocation()[1]
 
+        if not self.my_hive is None:
+            self.myHiveX = self.my_hive.getLocation()[0]
+            self.myHiveY = self.my_hive.getLocation()[1]
+            self.outer_x = self.myHiveX
+            self.outer_y = self.myHiveY
         self.my_envi = myEnvir
         self.shape = shape
-        self.outer_x = x
-        self.outer_y = y
+
         self.inner_x = i_x
         self.inner_y = i_y
 
@@ -67,7 +69,7 @@ class ANT:
         self.foodLevel -= ENERGY_CRAWL
 
         # Do your job based on what you are assigned
-        location = self.job_switch[self.job.value]()
+        location = self.job_switch[self.job]()
 
         rand_x = location[0]
         rand_y = location[1]
@@ -97,7 +99,7 @@ class ANT:
     # JOB.GATHERER move function
     def DoGatherer(self):
         if (self.action == ACTION.HOME):
-            self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)     
+            self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
             if self.foodLevel > 1:                                         
                 amount_food =  1 - self.getFood()
                 self.my_hive.add_food(amount_food)            
@@ -178,9 +180,11 @@ class ANT:
     def getY(self):
         return self.outer_y
 
+    def set_food(self, food):
+        self.foodLevel = food
 
     def getPos(self):
-        return [self.outer_x, self.outer_y]
+        return (self.outer_x, self.outer_y)
 
     def eat(self, availableFood, spot):
         # an ant takes up to 1.5 units of food
@@ -194,16 +198,6 @@ class ANT:
     def getWater(self):
         return self.water
 
-
-
-
-    def __repr__(self):
-        return str(self.outer_x) + " " + str(self.outer_y) + " (" + str(self.inner_x) + ", " + str(self.inner_y )+ " ) "
-
-    def __str__(self):
-        return str(self.outer_x) + " " + str(self.outer_y) + " (" + str(self.inner_x) + ", " + str(self.inner_y) + " ) "
-    def __float__(self):
-        return 0.0
 
     def ANTMayEat(self,spotAt):
         
@@ -319,3 +313,15 @@ class ANT:
     def isInHive(self):
         return self.IsInHive
 
+    def __repr__(self):
+        return str(self.outer_x) + " " + str(self.outer_y) + " (" + str(self.inner_x) + ", " + str(self.inner_y) + " ) "
+
+    def __str__(self):
+        return str(self.outer_x) + " " + str(self.outer_y) + " (" + str(self.inner_x) + ", " + str(self.inner_y) + " ) "
+
+    def __float__(self):
+        return 0.0
+
+    def __test_move__(self,dx,dy):
+        self.outer_x += dx
+        self.outer_y += dy
