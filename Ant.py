@@ -69,7 +69,7 @@ class ANT:
         self.foodLevel -= ENERGY_CRAWL
 
         # Do your job based on what you are assigned
-        location = self.job_switch[self.job]()
+        location = self.job_switch[self.job.value]()
 
         rand_x = location[0]
         rand_y = location[1]
