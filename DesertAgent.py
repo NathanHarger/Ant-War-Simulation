@@ -22,7 +22,7 @@ class DesertAgent:
             self.state = State.WATER
             self.water = 1
         #elif ( selection_rand < .03):
-         #   self.state = State.FOOD
+        #   self.state = State.FOOD
         #    self.food = 1
         else:
             self.state = State.DESERT
@@ -35,15 +35,16 @@ class DesertAgent:
     def is_food(self):
         return self.state is State.FOOD
 
-    #TODO state change need to change food and water levels
+    # set the sate of the spot
     def setState(self, state):
 
         # cannot overwrite hive or water
         if self.state == State.HIVE or self.state == State.WATER:
-
             return
+
         if state is State.FOOD:
             self.food = 1
+
         self.state = state
         
     #run combat for the cell

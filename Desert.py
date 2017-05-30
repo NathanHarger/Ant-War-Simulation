@@ -50,16 +50,8 @@ class Desert:
         self.size = size
         self.hives = []
         self.grid = self.random_desert_init(num_hives)
-        
-    def setHive(self, hive):
-        self.hives.append(hive)
-
-    def getHives(self):
-        return self.hives  
-    
-    #Add/remove food based on season. (If it is a rainy season, add food, 
-    #otherwise remove it). Then, if the current season length is equal to 
-    #that season’s length, change seasons and set season length to zero.
+          
+    # called every time step 
     def update_seasons(self):
         self.season_count -= 1
         if( self.season_count == 0):
@@ -69,6 +61,7 @@ class Desert:
         if(  self.season_count % 5 == 0 ):
             self.season_event[self.season.value]()
 
+    # Do the Spring season event
     def DoSprint(self):
         delta_water = r.randint(0, 2)
         self.add_water(delta_water)
@@ -78,12 +71,14 @@ class Desert:
             rand_y = r.randint(0, self.size - 1)
             self.set_leaves(self.grid, rand_x,rand_y)
      
+    # Do the Summer season event
     def DoSummer(self):
         delta_leaf = r.randint(0, 8)
         self.remove_leaves(delta_leaf)   
         delta_water = r.randint(0, 10)
         self.remove_water(delta_water) 
 
+    # Do the Fall season event
     def DoFall(self):
         delta_leaf = r.randint(0, 4)
         for i in range(delta_leaf):
@@ -93,12 +88,14 @@ class Desert:
         delta_water = r.randint(0, 8)
         self.remove_water(delta_water)
 
+    # Do the Winter season event
     def DoWinter(self):
             delta_water = r.randint(0, 1)
             self.add_water(delta_water)
             delta_leaf = r.randint(0, 16)
             self.remove_leaves(delta_leaf)    
 
+    # add a vegitation spot on the map at random location
     def add_leaves(self, delta_leaf):
         while delta_leaf != 0:
             rand_x = r.randint(0, self.size - 1)
@@ -108,6 +105,7 @@ class Desert:
                 self.grid[rand_y, rand_x].setState(State.FOOD)
                 delta_leaf = delta_leaf - 1
 
+    # remove a vegatation spot from the map at random location
     def remove_leaves(self, delta_leaf):
         while delta_leaf != 0:
             rand_x = r.randint(0, self.size - 1)
@@ -117,6 +115,7 @@ class Desert:
                 self.grid[rand_y, rand_x].setState(State.DESERT)
                 delta_leaf = delta_leaf - 1
 
+     # add a water spot on the map at random location   
     def add_water(self, delta_water):
         while delta_water != 0:
             rand_x = r.randint(0, self.size - 1)
@@ -126,13 +125,12 @@ class Desert:
                 self.grid[rand_y, rand_x].setState(State.WATER)
                 delta_water = delta_water - 1
 
-
+    # remove a water spot on the map at random location
     def remove_water(self, delta_water):
         while delta_water != 0:
             rand_x = r.randint(0, self.size - 1)
             rand_y = r.randint(0, self.size - 1)
 
-            # a hive cannot be placed in water, or ontop an existing hive
             if self.grid[rand_y, rand_x].getState() == State.WATER or self.grid[rand_y, rand_x].getState() == State.DESERT:
                 self.grid[rand_y, rand_x].setState(State.DESERT)
                 delta_water = delta_water - 1
@@ -172,6 +170,7 @@ class Desert:
         self.place_food(desert)
         self.place_anthills(desert, num_hives)
         return desert
+
     def __str__(self):
         r=""
         for j in range(self.size):
@@ -182,6 +181,8 @@ class Desert:
 
     def get_size(self):
         return self.size
+
+    # initialize the food locations on the map
     def place_food(self,env):
         count = r.randint(25,35)
         for i in range(count):
@@ -189,21 +190,21 @@ class Desert:
             rand_y = r.randint(0, self.size - 1)
             self.set_leaves(env, rand_x,rand_y)
 
+    # remove all the dead ants from the map
     def update_ants(self):
         for i in range(len(self.hives)):
             for j in range(len(self.hives[i].list_ants)):
-                if (j >= len(self.hives[i].list_ants)): break
-                
+                if (j >= len(self.hives[i].list_ants)): break              
                 if (self.hives[i].list_ants[j].dead()):
                     self.hives[i].list_ants = n.delete(self.hives[i].list_ants, j)
                 
-                 
+    # run the combat in each sell   
     def combat(self):
         for i in range(self.size):
             for j in range(self.size):
                 self.grid[i,j].runCombat(self)
 
-
+    # set a leaf at a given position
     def set_leaves(self, env, x,y):
         if x + 2 >= self.size or y+2 >= self.size:
             return
@@ -224,6 +225,7 @@ class Desert:
         env[y - 2, x-1].setState(State.FOOD)
         env[y - 2, x+1].setState(State.FOOD)
 
+    # remove a leaf at a given position
     def remove_leaves1(self, env, x, y):
         if x + 2 >= self.size or y + 2 >= self.size:
             return
@@ -244,6 +246,7 @@ class Desert:
         env[y - 2, x - 1].setState(State.DESERT)
         env[y - 2, x + 1].setState(State.DESERT)
 
+    # place an ant hill at random on the map
     def place_anthills(self, test_env, num_hives):
         while num_hives != 0:
             rand_x = r.randint(0, self.size - 1)
@@ -254,7 +257,8 @@ class Desert:
                 test_env[rand_y, rand_x].setState(State.HIVE)
                 self.setHive(Hive((rand_x, rand_y), self.size))
                 num_hives = num_hives - 1
-                
+    
+    # get the desert agent on the given location           
     def getItem(self, x , y):
         if (y>=len(self.grid) or x >= len(self.grid) or y < 0 or x < 0):
             return  DesertAgent(0, None, 0)
@@ -262,4 +266,10 @@ class Desert:
 
     def get_season(self):
         return self.season
+
+    def setHive(self, hive):
+        self.hives.append(hive)
+
+    def getHives(self):
+        return self.hives  
 
