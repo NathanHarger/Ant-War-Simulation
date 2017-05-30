@@ -32,6 +32,7 @@ class viz:
         self.__setup_grid__()
         self.delay = delay
         self.running = True
+        self.old_text = ""
 
     # the enviorment is a grid of DesertAgent
     # 0: desert
@@ -60,10 +61,16 @@ class viz:
                     self.canvas.itemconfig(self.cell[i,j], fill="green")
 
         for i in range(len(enviornment.getHives())):
+            hives = enviornment.getHives()
             canvas_id = self.canvas.create_text(500, 500 + 15 * i, anchor="s")
-            label_string = "Number of ants in Hive "  + str(i) + " " + str(len(enviornment.getHives()[0].getAnts()))
-            self.canvas.itemconfig(canvas_id, text=label_string)
+            label_string = "Number of ants in Hive "  + str(i + 1) + " " + str(len(hives[i].getAnts()))
+            canvas_id_food = self.canvas.create_text(500, 600 + 15 * i, anchor="s")
+            self.canvas.delete(self.old_text)
 
+            food_label_string = "Food Level of Hive "  + str(i + 1) + " " + str(hives[i].getFoodLevel())
+            self.canvas.itemconfig(canvas_id, text=label_string)
+            self.canvas.itemconfig(canvas_id_food, text=food_label_string)
+            self.old_text = canvas_id_food
 
     def get_food_color_intensity(self, greenVal):
         rgb = (0,255-greenVal*100,0)
