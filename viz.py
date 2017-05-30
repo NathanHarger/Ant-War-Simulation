@@ -6,7 +6,7 @@ import random as r
 import Ant as a
 import HiveClass as hive
 
-SIM_LENGTH = 1         #How many ticks in a simulation
+SIM_LENGTH = 200         #How many ticks in a simulation
 DESSICATION_LEVEL = 1  #Level an ant dies of thirst
 STARVATION_LEVEL = 1   #Level an ant dies of starvation
 MAX_FOOD_WHATER = 1    #Maximum level of food and water an ant can carry
@@ -34,6 +34,8 @@ class viz:
         self.running = True
         self.labels = None
         self.number_labels = 3
+        
+        self.tick = 0
 
     # the enviorment is a grid of DesertAgent
     # 0: desert
@@ -109,7 +111,7 @@ class viz:
 
         self.update_frame(enviorment)
 
-        if self.running:
+        if self.running and self.tick <= SIM_LENGTH:
             self.canvas.after(self.delay,self.Run_Sim, enviorment)
 
             #stats_text = """
@@ -139,6 +141,9 @@ class viz:
     # For each time tick, run phase 1-3. When the simulation runs to the
     # variable sim_length, end it.
     def Run_Sim(self, enviornment):
+        print("Tick " + str(self.tick))
+        self.tick += 1
+
 
         self.Phase_One(enviornment)
         #print enviornment.getHives()
