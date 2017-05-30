@@ -112,7 +112,7 @@ class ANT:
 
     # JOB.GATHERER move function
     def DoGatherer(self):
-        print self.foodLevel
+        #print self.foodLevel
         if (self.action == ACTION.HOME):
             self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
             if self.foodLevel > 1:

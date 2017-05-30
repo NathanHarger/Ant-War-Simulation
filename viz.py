@@ -119,7 +119,7 @@ class viz:
         self.Phase_One()
         #print enviornment.getHives()
         for i in enviornment.getHives():
-            print i.getFoodLevel()
+            #print i.getFoodLevel()
             ants = i.getAnts()
             i.update_nest()
            # print ants
@@ -156,6 +156,7 @@ class viz:
     # and moisture based on season, remove hives with no ants, and update season)
     def Phase_Three(self,enviornment):
         enviornment.update_seasons()
+        print enviornment.get_season()
         rand = r.random()
         #if rand < .01:
         # self.running = False

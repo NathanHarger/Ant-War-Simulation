@@ -37,6 +37,11 @@ class DesertAgent:
 
     #TODO state change need to change food and water levels
     def setState(self, state):
+
+        # cannot overwrite hive or water
+        if self.state == State.HIVE or self.state == State.WATER:
+
+            return
         if state is State.FOOD:
             self.food = 1
         self.state = state
