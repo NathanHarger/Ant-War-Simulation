@@ -133,17 +133,6 @@ class Hive:
     def if_hive_needs_to_replenish_food(self):
         return (self.foodLevel < self.initialFoodLevel)
 
-    def get_temp_queue_worker(self):
-        return self.temporary_queue_worker_ants
-
-    def get_temp_queue_solider(self):
-        return self.temporary_solider_worker_ants
-
-    def set_temp_queue_worker_to_zero(self):
-        self.temporary_queue_worker_ants = 0
-
-    def set_temp_queue_solider_to_zero(self):
-        temporary_solider_worker_ants = 0
     def set_color(self, color):
         self.color = color
     def get_color(self):
