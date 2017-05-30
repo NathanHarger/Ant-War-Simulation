@@ -121,19 +121,19 @@ class Hive:
         number_of_gathers = 0
         if(self.if_hive_needs_to_replenish_food()):
             if(self.state == HiveState.MILDAGRESSION):
-                number_of_gathers = math.floor(len(self.list_ants) * .2)
+                number_of_gathers = int(math.floor(len(self.list_ants) * .2))
                 self.num_workers_nest -= number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
                 return number_of_gathers
             if(self.state == HiveState.SEVEREAGRESSION):
-                number_of_gathers = math.floor(len(self.list_ants) * .4) 
+                number_of_gathers = int(math.floor(len(self.list_ants) * .4))
                 self.num_workers_nest -= number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
                 return number_of_gathers
             else:
                 if(len(self.list_ants)>=1):
                    
-                    number_of_gathers = math.floor(len(self.list_ants) * .05)
+                    number_of_gathers = int(math.floor(len(self.list_ants) * .05))
                     print number_of_gathers
                     #Send the last ant out to find food
                     if(number_of_gathers == 0):
@@ -144,9 +144,9 @@ class Hive:
    
     def dispatch_number_of_soliders(self):
         if(self.state == HiveState.MILDAGRESSION):
-            return n.empty(math.floor(len(self.list_ants) * .1), dtype=object)
+            return n.empty(int(math.floor(len(self.list_ants) * .1)), dtype=object)
         if((self.state == HiveState.SEVEREAGRESSION)):
-            return n.empty(math.floor(len(self.list_ants) * .2), dtype=object)
+            return n.empty(int(math.floor(len(self.list_ants) * .2)), dtype=object)
 
     #Add/remove food based on season. (If it is a rainy season, add food, 
     #otherwise remove it). Then, if the current season length is equal to 
