@@ -36,7 +36,8 @@ class Hive:
     peak_population = 1#The most population this hive has had
     desication_level = .1 #Picking random number to start of the hive adaptation
     total_number_ants = 0  #Keeps track of total ants in colony
-    
+    color = 0 #Color of ants emerging from the Hive 
+
     #Initialize the hive with a certain amount of starting ants.
     def __init__(self, location, initialFoodLevel):
         self.list_ants = n.array([])
@@ -131,6 +132,23 @@ class Hive:
 
     def if_hive_needs_to_replenish_food(self):
         return (self.foodLevel < self.initialFoodLevel)
+
+    def get_temp_queue_worker(self):
+        return self.temporary_queue_worker_ants
+
+    def get_temp_queue_solider(self):
+        return self.temporary_solider_worker_ants
+
+    def set_temp_queue_worker_to_zero(self):
+        self.temporary_queue_worker_ants = 0
+
+    def set_temp_queue_solider_to_zero(self):
+        temporary_solider_worker_ants = 0
+    def set_color(self, color):
+        self.color = color
+    def get_color(self):
+        return self.color
+
     def dispatch_number_gathers(self):
         number_of_gathers = 0
         if(self.if_hive_needs_to_replenish_food()):
@@ -139,12 +157,14 @@ class Hive:
                 number_of_gathers = int(math.floor(len(self.list_ants) * .2))
                 self.num_workers_nest -= number_of_gathers
                 self.total_number_ants -= number_of_gathers
+                self.temporary_queue_worker_ants += number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
                 return number_of_gathers
             if(self.state == HiveState.SEVEREAGRESSION):
                 number_of_gathers = int(math.floor(len(self.list_ants) * .4))
                 self.num_workers_nest -= number_of_gathers
                 self.total_number_ants -= number_of_gathers
+                self.temporary_queue_worker_ants += number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
                 return number_of_gathers
             else:
@@ -156,14 +176,21 @@ class Hive:
                         number_of_gathers = 1
                     self.num_workers_nest -= number_of_gathers
                     self.total_number_ants -= number_of_gathers
+                    self.temporary_queue_worker_ants += number_of_gathers
                     number_of_gathers = n.empty(number_of_gathers, dtype=object)
                     return number_of_gathers
    
     def dispatch_number_of_soliders(self):
         if(self.state == HiveState.MILDAGRESSION):
-            return n.empty(int(math.floor(len(self.list_ants) * .1)), dtype=object)
+            number_solider_ants_to_create = int(math.floor(len(self.list_ants) * .1))
+            self.total_number_ants -= number_solider_ants_to_create
+            self.temporary_queue_worker_ants += number_solider_ants_to_create
+            return n.empty(number_solider_ants_to_create, dtype=object)
         if((self.state == HiveState.SEVEREAGRESSION)):
-            return n.empty(int(math.floor(len(self.list_ants) * .2)), dtype=object)
+            number_solider_ants_to_create = int(math.floor(len(self.list_ants) * .2))
+            self.total_number_ants -= number_solider_ants_to_create
+            self.temporary_queue_worker_ants += number_solider_ants_to_create
+            return n.empty(number_solider_ants_to_create, dtype=object)
 
     #Add/remove food based on season. (If it is a rainy season, add food, 
     #otherwise remove it). Then, if the current season length is equal to 

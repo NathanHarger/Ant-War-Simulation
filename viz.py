@@ -150,7 +150,7 @@ class viz:
             if number_of_gathers_to_create is not None:
              if(len(number_of_gathers_to_create) > 0):
                 self.create_ants(number_of_gathers_to_create, i.getLocation(), i, testEnviorment, a.JOB.GATHERER)
-           
+                self.append_to_hive(number_of_gathers_to_create, i.getLocation(), i, testEnviorment, a.JOB.GATHERER)
             number_of_soliders_to_create = i.dispatch_number_of_soliders()
             if number_of_soliders_to_create is not None:
                 if(len(number_of_soliders_to_create) > 0):
@@ -194,8 +194,6 @@ class viz:
         
         enviornment.update_ants()
         
-        for i in range(len(enviornment.hives)):
-            print( "Hive " + str(i) + ": " + str(len(enviornment.hives[i].list_ants)))
         
         #if rand < .01:
         # self.running = False
@@ -211,7 +209,7 @@ class viz:
 
 
     def create_ants(self, testAnts, loc,myHive, myEnv, job):
-        color = self.get_random_color()
+        color = myHive.get_color()
         #print color
         for i in n.arange(n.alen(testAnts)):
 
@@ -220,6 +218,13 @@ class viz:
             testAnts[i] = a.ANT(loc[0],loc[1],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
                                                                                 outline = color), myHive, myEnv, job)                                                             
             myEnv.set_number_ants_in_desert(1);
+
+    def append_to_hive(self, testAnts, loc,myHive, myEnv, job):
+         color = myHive.get_color()
+         for i in n.arange(n.alen(testAnts)):
+            myHive.setAnts(a.ANT(loc[0],loc[1],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
+                                                                                outline = color), myHive, myEnv, job))            
+                                                             
     def create_hive(self, myHive, location):
         myHive = hive.Hive((location[0], location[1]))
         return myHive
@@ -239,6 +244,7 @@ if __name__ == '__main__':
 
     for i in hives:
         myAnts = n.empty(num_ants_per_hive, dtype=object)
+        i.set_color(vizTest.get_random_color())
         vizTest.create_ants(myAnts, i.getLocation(), i, testEnviorment, a.JOB.GENERICINITIAL)
         i.setAnts(myAnts)
 
