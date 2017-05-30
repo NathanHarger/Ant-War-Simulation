@@ -13,12 +13,6 @@ class HiveState(Enum):
     MILDAGRESSION = 3
     SEVEREAGRESSION = 4
 
-class JOB(Enum):
-    GATHERER = 0        # go out find food and bring it home
-    WARRIOR = 1         # go out find enemy and kill it
-    QUEEN = 2           # stay home reproduce
-    OTHER = 3           # NOTE: if you have another job add here and explain
-
 
 #The hive class keeps track of the ants belonging to a single hive. 
 #It has a list of ants belonging to the hive,the location of the mouth of the nest, 
