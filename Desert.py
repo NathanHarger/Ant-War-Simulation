@@ -23,7 +23,7 @@ class Season(Enum):
         if season is Season.WINTER:
             return Season.SPRING
         else:
-            season = Season(season.value + 1)
+            return Season(season.value + 1)
 
 #SIZE = (50,50)          #A tuple of the x,y coordinates
 #SEASON = Season.SPRING  #Either rainy or dry
@@ -32,7 +32,7 @@ season_length_rainy = 1    #Number of time ticks the rainy season lasts
 season_length_dry = 1      #Number of ticks the dry season lasts
 current_season_length = 1  #How many ticks the current season has lasted.
 
-
+SEASON_LENGTH = 10
 #The desert class will have an n x n sized grid of desert cells.
 #We will simulate two seasons, rainy and dry, with user adjustable 
 #variables to change the length of either, or give them a random length. 
@@ -44,6 +44,7 @@ class Desert:
     #Initialize a new desert using desert agents. Allows keywords to change variables.
     def __init__(self, size, num_hives):
         self.season = Season.SPRING  #Either rainy or dry
+        self.season_count = SEASON_LENGTH
         self.size = size
         self.hives = []
         self.grid = self.random_desert_init(num_hives)
@@ -58,23 +59,28 @@ class Desert:
     #otherwise remove it). Then, if the current season length is equal to 
     #that season’s length, change seasons and set season length to zero.
     def update_seasons(self):
-        #global SEASON, 
-        current_season_length = 0
-        rainy = Season.getSeasonResults(self.season)
+        self.season_count -= 1
+        if( self.season_count == 0):
+            self.season_count = SEASON_LENGTH
+            self.season = Season.getNextSeason(self.season)
+        
 
-        delta_leaf = r.randint(0, 50)
+        if ( self.season == Season.FALL):
+            delta_leaf = r.randint(0, 2)
+            for i in range(delta_leaf):
+                rand_x = r.randint(0, self.size - 1)
+                rand_y = r.randint(0, self.size - 1)
+                self.set_leaves(self.grid, rand_x,rand_y)
 
-        #print SEASON
-        self.season = Season.getNextSeason(self.season)
+        
+        if ( self.season == Season.WINTER):
+            delta_leaf = r.randint(0, 8)
+            self.remove_leaves(delta_leaf) 
 
-
-        if rainy:
-            if current_season_length == season_length_rainy:
-                self.add_leaves(delta_leaf)
-        else:
-            if current_season_length == season_length_dry:
-                self.remove_leaves(delta_leaf)
-        current_season_length = 1
+        if ( self.season == Season.SUMMER):
+            delta_leaf = r.randint(0, 4)
+            self.remove_leaves(delta_leaf)    
+            
 
     def add_leaves(self, delta_leaf):
         while delta_leaf != 0:
