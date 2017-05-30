@@ -143,13 +143,13 @@ class Hive:
         if(self.if_hive_needs_to_replenish_food()):
          if(self.total_number_ants>=1):
             if(self.state == HiveState.MILDAGRESSION):
-                number_of_gathers = int(math.floor(len(self.list_ants) * .2))
+                number_of_gathers = int(math.floor(len(self.list_ants) * .01))
                 self.num_workers_nest -= number_of_gathers
                 self.total_number_ants -= number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
                 return number_of_gathers
             if(self.state == HiveState.SEVEREAGRESSION):
-                number_of_gathers = int(math.floor(len(self.list_ants) * .4))
+                number_of_gathers = int(math.floor(len(self.list_ants) * .02))
                 self.num_workers_nest -= number_of_gathers
                 self.total_number_ants -= number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
@@ -157,7 +157,7 @@ class Hive:
             else:
                 if(self.total_number_ants>=1):
                    
-                    number_of_gathers = int(math.floor(len(self.list_ants) * .05))
+                    number_of_gathers = int(math.floor(len(self.list_ants) * .001))
                     #Send the last ant out to find food
                     if(number_of_gathers == 0):
                         number_of_gathers = 1
@@ -168,11 +168,11 @@ class Hive:
    
     def dispatch_number_of_soliders(self):
         if(self.state == HiveState.MILDAGRESSION):
-            number_solider_ants_to_create = int(math.floor(len(self.list_ants) * .1))
+            number_solider_ants_to_create = int(math.floor(len(self.list_ants) * .01))
             self.total_number_ants -= number_solider_ants_to_create
             return n.empty(number_solider_ants_to_create, dtype=object)
         if((self.state == HiveState.SEVEREAGRESSION)):
-            number_solider_ants_to_create = int(math.floor(len(self.list_ants) * .2))
+            number_solider_ants_to_create = int(math.floor(len(self.list_ants) * .02))
             self.total_number_ants -= number_solider_ants_to_create
             return n.empty(number_solider_ants_to_create, dtype=object)
 
