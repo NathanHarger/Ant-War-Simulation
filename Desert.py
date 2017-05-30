@@ -241,7 +241,7 @@ class Desert:
             # a hive cannot be placed in water, or ontop an existing hive
             if not test_env[rand_y, rand_x].getState() is 2 and not test_env[rand_y, rand_x].getState() is 3:
                 test_env[rand_y, rand_x].setState(State.HIVE)
-                self.setHive(Hive((rand_x, rand_y)))
+                self.setHive(Hive((rand_x, rand_y), self.size))
                 num_hives = num_hives - 1
                 
     def getItem(self, x , y):
