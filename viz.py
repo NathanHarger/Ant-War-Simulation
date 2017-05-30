@@ -123,12 +123,14 @@ class viz:
             ants = i.getAnts()
             i.update_nest()
             number_of_gathers_to_create = i.dispatch_number_gathers()
-            if(number_of_gathers_to_create > 0):
+            if number_of_gathers_to_create is not None:
+             if(len(number_of_gathers_to_create) > 0):
                 self.create_ants(number_of_gathers_to_create, i.getLocation(), i, testEnviorment, a.JOB.GATHERER)
            
             number_of_soliders_to_create = i.dispatch_number_of_soliders()
-            if(number_of_gathers_to_create > 0):
-                self.create_ants(number_of_soliders_to_create, i.getLocation(), i, testEnviorment, a.JOB.WARRIOR)
+            if number_of_soliders_to_create is not None:
+                if(len(number_of_soliders_to_create) > 0):
+                    self.create_ants(number_of_soliders_to_create, i.getLocation(), i, testEnviorment, a.JOB.WARRIOR)
            # print ants
             self.Phase_Two(ants,enviornment)
         self.draw_frame(enviornment)
