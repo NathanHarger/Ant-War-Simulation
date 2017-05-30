@@ -156,7 +156,6 @@ class viz:
     # and moisture based on season, remove hives with no ants, and update season)
     def Phase_Three(self,enviornment):
         enviornment.update_seasons()
-        print enviornment.get_season()
         rand = r.random()
         #if rand < .01:
         # self.running = False

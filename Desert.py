@@ -23,7 +23,7 @@ class Season(Enum):
         if season is Season.WINTER:
             return Season.SPRING
         else:
-            return season + 1
+            return Season(season.value + 1)
 
 #SIZE = (50,50)          #A tuple of the x,y coordinates
 #SEASON = Season.SPRING  #Either rainy or dry
@@ -61,7 +61,6 @@ class Desert:
     #that season’s length, change seasons and set season length to zero.
     def update_seasons(self):
         self.season_count -= 1
-        print self.season
         if( self.season_count == 0):
             self.season_count = SEASON_LENGTH
             self.season = Season.getNextSeason(self.season)
@@ -89,45 +88,23 @@ class Desert:
 
     def DoWinter(self):
         if ( self.season == Season.WINTER):
-<<<<<<< HEAD
             delta_leaf = r.randint(0, 16)
             self.remove_leaves(delta_leaf)    
-           
-=======
             delta_leaf = r.randint(0, 8)
             self.remove_leaves(delta_leaf)
 
         if ( self.season == Season.SUMMER):
             delta_leaf = r.randint(0, 4)
             self.remove_leaves(delta_leaf)
->>>>>>> origin/add_remove_leaves
 
-    def remove_leaves1(self, env, x, y):
-        if x + 2 >= self.size or y + 2 >= self.size:
-            return
-        env[y, x].setState(State.DESERT)
-        env[y - 1, x].setState(State.DESERT)
-        env[y + 1, x].setState(State.DESERT)
 
-        env[y, x - 1].setState(State.DESERT)
-        env[y, x + 1].setState(State.DESERT)
-        env[y - 1, x - 1].setState(State.DESERT)
-        env[y + 1, x + 1].setState(State.DESERT)
-        env[y - 1, x + 1].setState(State.DESERT)
-        env[y + 1, x - 1].setState(State.DESERT)
-
-        env[y - 2, x].setState(State.DESERT)
-        env[y + 2, x].setState(State.DESERT)
-
-        env[y - 2, x - 1].setState(State.DESERT)
-        env[y - 2, x + 1].setState(State.DESERT)
     def add_leaves(self, delta_leaf):
         while delta_leaf != 0:
             rand_x = r.randint(0, self.size - 1)
             rand_y = r.randint(0, self.size - 1)
 
             if self.grid[rand_y, rand_x].getState() == State.DESERT or self.grid[rand_y, rand_x].getState() == State.FOOD:
-                self.set_leaves(rand_x,rand_y)
+                self.grid[rand_y, rand_x].setState(State.FOOD)
                 delta_leaf = delta_leaf - 1
 
     def remove_leaves(self, delta_leaf):
@@ -136,7 +113,7 @@ class Desert:
             rand_y = r.randint(0, self.size - 1)
 
             if self.grid[rand_y, rand_x].getState() == State.FOOD or self.grid[rand_y, rand_x].getState() == State.DESERT:
-                self.remove_leaves1(self.grid, rand_x,rand_y)
+                self.grid[rand_y, rand_x].setState(State.DESERT)
                 delta_leaf = delta_leaf - 1
 
     def add_water(self, delta_water):
@@ -232,6 +209,25 @@ class Desert:
         env[y - 2, x-1].setState(State.FOOD)
         env[y - 2, x+1].setState(State.FOOD)
 
+    def remove_leaves1(self, env, x, y):
+        if x + 2 >= self.size or y + 2 >= self.size:
+            return
+        env[y, x].setState(State.DESERT)
+        env[y - 1, x].setState(State.DESERT)
+        env[y + 1, x].setState(State.DESERT)
+
+        env[y, x - 1].setState(State.DESERT)
+        env[y, x + 1].setState(State.DESERT)
+        env[y - 1, x - 1].setState(State.DESERT)
+        env[y + 1, x + 1].setState(State.DESERT)
+        env[y - 1, x + 1].setState(State.DESERT)
+        env[y + 1, x - 1].setState(State.DESERT)
+
+        env[y - 2, x].setState(State.DESERT)
+        env[y + 2, x].setState(State.DESERT)
+
+        env[y - 2, x - 1].setState(State.DESERT)
+        env[y - 2, x + 1].setState(State.DESERT)
 
     def place_anthills(self, test_env, num_hives):
         while num_hives != 0:
