@@ -124,13 +124,11 @@ class Hive:
                 number_of_gathers = math.floor(len(self.list_ants) * .2) 
                 self.num_workers_nest -= number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
-                self.num_workers_nest -= number_of_gathers
                 return number_of_gathers
             if(self.state == HiveState.SEVEREAGRESSION):
                 number_of_gathers = math.floor(len(self.list_ants) * .4) 
                 self.num_workers_nest -= number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
-                self.num_workers_nest -= number_of_gathers
                 return number_of_gathers
             else:
                 if(len(self.list_ants)>=1):
