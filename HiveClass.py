@@ -34,7 +34,7 @@ class Hive:
     kill_count = 1 #How many opposing ants have been killed by this hive
     amount_dead = 1 #How many ants of this hive have died
     peak_population = 1#The most population this hive has had
-    desication_level = .1 #Picking random number to start of the hive adaptation
+    desication_level = .01 #Picking random number to start of the hive adaptation
     total_number_ants = 0  #Keeps track of total ants in colony
     color = 0 #Color of ants emerging from the Hive 
 

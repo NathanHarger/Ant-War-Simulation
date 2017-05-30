@@ -235,9 +235,10 @@ class viz:
 if __name__ == '__main__':
 
     dim = 25
-    num_ants_per_hive = 2
+    num_ants_per_hive = 200
     vizTest = viz(dim,500,500, 1)
-    testEnviorment = des.Desert(dim,2)
+    num_hives = 3
+    testEnviorment = des.Desert(dim,num_hives)
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     vizTest.create_stat_labels(testEnviorment)
