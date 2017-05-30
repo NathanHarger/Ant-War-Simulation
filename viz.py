@@ -125,7 +125,7 @@ class viz:
            # print ants
             self.Phase_Two(ants,enviornment)
         self.draw_frame(enviornment)
-        #self.Phase_Three(enviornment)
+        self.Phase_Three(enviornment)
         # TODO
         return
 

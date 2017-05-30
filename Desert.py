@@ -45,6 +45,7 @@ class Desert:
     def __init__(self, size, num_hives):
         self.season = Season.SPRING  #Either rainy or dry
         self.season_count = SEASON_LENGTH
+        self.season_event = {0 : self.DoSprint, 1 : self.DoSummer, 2 : self.DoFall, 3 : self.DoWinter}  
         self.size = size
         self.hives = []
         self.grid = self.random_desert_init(num_hives)
@@ -64,45 +65,70 @@ class Desert:
             self.season_count = SEASON_LENGTH
             self.season = Season.getNextSeason(self.season)
         
+        self.season_event[self.season.value]()
 
-        if ( self.season == Season.FALL):
-            delta_leaf = r.randint(0, 2)
-            for i in range(delta_leaf):
-                rand_x = r.randint(0, self.size - 1)
-                rand_y = r.randint(0, self.size - 1)
-                self.set_leaves(self.grid, rand_x,rand_y)
+    def DoSprint(self):
+        delta_water = r.randint(0, 2)
+        self.add_water(delta_water)
+     
+    def DoSummer(self):
+        delta_leaf = r.randint(0, 8)
+        self.remove_leaves(delta_leaf)   
+        delta_water = r.randint(0, 10)
+        self.remove_water(delta_water) 
 
-        
+    def DoFall(self):
+        delta_leaf = r.randint(0, 2)
+        for i in range(delta_leaf):
+            rand_x = r.randint(0, self.size - 1)
+            rand_y = r.randint(0, self.size - 1)
+            self.set_leaves(self.grid, rand_x,rand_y)
+        delta_water = r.randint(0, 8)
+        self.remove_water(delta_water)
+
+    def DoWinter(self):
         if ( self.season == Season.WINTER):
-            delta_leaf = r.randint(0, 8)
-            self.remove_leaves(delta_leaf) 
-
-        if ( self.season == Season.SUMMER):
-            delta_leaf = r.randint(0, 4)
+            delta_leaf = r.randint(0, 16)
             self.remove_leaves(delta_leaf)    
-            
+           
 
     def add_leaves(self, delta_leaf):
         while delta_leaf != 0:
             rand_x = r.randint(0, self.size - 1)
             rand_y = r.randint(0, self.size - 1)
 
-            # a hive cannot be placed in water, or ontop an existing hive
             if self.grid[rand_y, rand_x].getState() == State.DESERT or self.grid[rand_y, rand_x].getState() == State.FOOD:
                 self.grid[rand_y, rand_x].setState(State.FOOD)
                 delta_leaf = delta_leaf - 1
 
-    # remove leafs using the random picking of grids method since
-    # which cannot be performed on a numpy array of objects
     def remove_leaves(self, delta_leaf):
         while delta_leaf != 0:
             rand_x = r.randint(0, self.size - 1)
             rand_y = r.randint(0, self.size - 1)
 
-            # a hive cannot be placed in water, or ontop an existing hive
             if self.grid[rand_y, rand_x].getState() == State.FOOD or self.grid[rand_y, rand_x].getState() == State.DESERT:
                 self.grid[rand_y, rand_x].setState(State.DESERT)
                 delta_leaf = delta_leaf - 1
+
+    def add_water(self, delta_water):
+        while delta_water != 0:
+            rand_x = r.randint(0, self.size - 1)
+            rand_y = r.randint(0, self.size - 1)
+
+            if self.grid[rand_y, rand_x].getState() == State.DESERT or self.grid[rand_y, rand_x].getState() == State.WATER:
+                self.grid[rand_y, rand_x].setState(State.WATER)
+                delta_water = delta_water - 1
+
+
+    def remove_water(self, delta_water):
+        while delta_water != 0:
+            rand_x = r.randint(0, self.size - 1)
+            rand_y = r.randint(0, self.size - 1)
+
+            # a hive cannot be placed in water, or ontop an existing hive
+            if self.grid[rand_y, rand_x].getState() == State.WATER or self.grid[rand_y, rand_x].getState() == State.DESERT:
+                self.grid[rand_y, rand_x].setState(State.DESERT)
+                delta_water = delta_water - 1
 
 
     @staticmethod

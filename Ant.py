@@ -75,10 +75,11 @@ class ANT:
         self.foodLevel -= ENERGY_CRAWL
 
         # Do your job based on what you are assigned
-        location = self.job_switch[self.job.value]()
+        rand_x, rand_y = self.job_switch[self.job.value]()
 
-        rand_x = location[0]
-        rand_y = location[1]
+        current_spot = self.my_envi.getItem(rand_x,rand_y)
+        if current_spot.getState() is d.State.WATER:
+             rand_x, rand_y = (0,0)
 
         # if hungry go home no matter what
         if(self.foodLevel < .4 and  self.action != ACTION.HOME):
