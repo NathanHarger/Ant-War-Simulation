@@ -203,7 +203,7 @@ class Desert:
     def combat(self):
         for i in range(self.size):
             for j in range(self.size):
-                self.grid[i,j].runCombat(self)
+                self.grid[i,j].runCombat(self, (i,j))
     
     # set a leaf at a given position
     def set_leaves(self, env, x,y):

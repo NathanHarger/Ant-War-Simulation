@@ -179,6 +179,7 @@ class viz:
     # Second - move all ants based on caste, current job,
     # and pheromones of neighbor cells.
     def Phase_Two(self,ants,enviornment):
+        enviornment.combat()
         self.ant_movement(ants,enviornment)
         # TODO
         return

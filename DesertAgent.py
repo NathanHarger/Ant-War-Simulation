@@ -53,6 +53,7 @@ class DesertAgent:
         hives_combat = [] #each element is idex of hive involved in combat
         list_ants_combat = [] #each element is index of and in list_ants
                             #from that index in the hive list
+        self.loc = loc
         
         for i in range(len(desert.hives)):
             temp = []
