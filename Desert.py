@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 import random as r
 import numpy as n
@@ -188,6 +189,20 @@ class Desert:
             rand_y = r.randint(0, self.size - 1)
             self.set_leaves(env, rand_x,rand_y)
 
+    def update_ants(self):
+        for i in range(len(self.hives)):
+            for j in range(len(self.hives[i].list_ants)):
+                if (j >= len(self.hives[i].list_ants)): break
+                
+                if (self.hives[i].list_ants[j].dead()):
+                    self.hives[i].list_ants = n.delete(self.hives[i].list_ants, j)
+                
+                 
+    def combat(self):
+        for i in range(self.size):
+            for j in range(self.size):
+                self.grid[i,j].runCombat(self)
+
 
     def set_leaves(self, env, x,y):
         if x + 2 >= self.size or y+2 >= self.size:
@@ -247,3 +262,4 @@ class Desert:
 
     def get_season(self):
         return self.season
+

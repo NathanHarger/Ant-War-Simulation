@@ -166,6 +166,12 @@ class viz:
     def Phase_Three(self,enviornment):
         enviornment.update_seasons()
         rand = r.random()
+        
+        enviornment.update_ants()
+        
+        for i in range(len(enviornment.hives)):
+            print( "Hive " + str(i) + ": " + str(len(enviornment.hives[i].list_ants)))
+        
         #if rand < .01:
         # self.running = False
         # TODO
@@ -198,10 +204,10 @@ class viz:
 
 if __name__ == '__main__':
 
-    dim = 50
+    dim = 25
     num_ants_per_hive = 20
     vizTest = viz(dim,500,500, 1)
-    testEnviorment = des.Desert(dim,1)
+    testEnviorment = des.Desert(dim,2)
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     
@@ -216,5 +222,3 @@ if __name__ == '__main__':
     vizTest.Run_Sim(testEnviorment)
 
     vizTest.dispViz()
-
-

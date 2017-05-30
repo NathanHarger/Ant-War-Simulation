@@ -10,9 +10,9 @@ ANT_WOULD_LIKE_EAT = 0.9  # food level at which ANT would like to eat
 AMT_MIN_INIT = 0.88  # minimum initial ANT energy and water values
 INIT_RANGE = .12  # range of initial ANT energy and water values
 # MAY_FIGTH = 0.5 #probability of entering combat if not thirsty or hungry
-# MAY_CRAWL = 0.5
-# DESICCATE = 0.6 #level at which desiccation occurs
-# STARVE = 0.6 #level at which starvation occurs
+MAY_CRAWL = 0.5
+DESICCATE = 0.6 #level at which desiccation occurs
+STARVE = 0.6 #level at which starvation occurs
 NUMBER_OF_FIGHTS_STARTED = 0
 
 ENERGY_COMBAT = 0.05 #maximum energy used by ant in combat
@@ -50,9 +50,10 @@ class ANT:
             self.outer_y = self.myHiveY
         self.my_envi = myEnvir
         self.shape = shape
-        self.targetLocation = (self.myHiveX,self.myHiveY)
+
         self.inner_x = i_x
         self.inner_y = i_y
+
 
         chance = r.randint(-1,1)
         if(job == JOB.GENERICINITIAL):
@@ -62,6 +63,8 @@ class ANT:
                 self.job = JOB.GATHERER
         else: 
             self.job = job
+
+        
         self.action = ACTION.HOME
         
         self.job_switch = {0 : self.DoGatherer, 1 : self.DoWarrior, 2 : self.DoQueen, 3 : self.DoScout}   
@@ -90,42 +93,36 @@ class ANT:
         self.outer_x += (rand_x)
         self.outer_y += (rand_y)
 
+        self.inner_x += rand_x
+        self.inner_y += rand_y
+
+        if self.inner_x > dim:
+            self.inner_x = 0
+        elif self.inner_x < 0:
+            self.inner_x = dim
+
+        if self.inner_y > dim:
+            self.inner_y = 0
+        elif self.inner_y < 0:
+            self.inner_y = dim
 
         return [rand_x ,rand_y ]
 
-    def random_move_in_bounds(self, dim):
-        x_moves = [-1,1]
-        y_moves = [-1,1]
-
-        x = self.getX()
-        y = self.getY()
-
-        if x == 0 :
-            x_moves.remove(-1)
-        elif x == dim - 1:
-            x_moves.remove(1)
-
-        if y == 0:
-            y_moves.remove(-1)
-        elif y == dim - 1:
-            y_moves.remove(1)
-        return (r.choice(x_moves), r.choice(y_moves))
-
-
     # JOB.GATHERER move function
     def DoGatherer(self):
-        #print self.foodLevel
+
+
         if (self.action == ACTION.HOME):
             self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
-            if self.foodLevel > 1:
+            if self.foodLevel > 1:                                         
                 amount_food = self.foodLevel - 1
                 self.foodLevel - amount_food
-                self.my_hive.add_food(amount_food)
+                self.my_hive.add_food(amount_food)            
             self.action = ACTION.SEARCH
             return (0,0)
 
         elif (self.action == ACTION.RETURN):
-            if(self.myHiveY == self.outer_y and self.myHiveX == self.outer_x ):
+            if(self.myHiveY == self.outer_y and self.myHiveX == self.outer_x ):       
                 self.action = ACTION.HOME
             if(self.myHiveY < self.outer_y):
                  rand_y = -1
@@ -138,7 +135,7 @@ class ANT:
             elif(self.myHiveX > self.outer_x):
                  rand_x = 1
             else:
-                rand_x = 0
+                rand_x = 0  
             return (rand_x, rand_y)
 
         elif(self.action == ACTION.SEARCH):
@@ -149,31 +146,14 @@ class ANT:
                     return (0,0)
                else:
                     f = self.get_neighbour_with_food(self.outer_x, self.outer_y, self.my_envi)
-                    if (f != None and not len(f) == 0):
-                        return r.choice(f)
-                    else:
-                        if (self.my_envi.getItem(self.targetLocation[0],self.targetLocation[1]).getState() is d.State.FOOD):
-                            if(self.targetLocation[1] < self.outer_y):
-                                rand_y = -1
-                            elif(self.targetLocation[1] > self.outer_y):
-                                rand_y = 1
-                            else:
-                                rand_y = 0
-
-                            if(self.targetLocation[0] < self.outer_x):
-                                rand_x = -1
-                            elif(self.targetLocation[0] > self.outer_x):
-                                rand_x = 1
-                            else:
-                                rand_x = 0
-                            return (rand_x, rand_y)
-                        else:
-                            self.targetLocation = self.my_hive.getFoodLoc()
+                    if (f != None):
+                        if not len(f) == 0:
+                            return r.choice(f)
         
-        return self.random_move_in_bounds(self.my_envi.get_size())
+        return (r.randint(-1,1), r.randint(-1,1))
            
 
-
+          
     def DoWarrior(self): 
         # TODO
         return (r.randint(-1,1), r.randint(-1,1)) 
@@ -216,9 +196,25 @@ class ANT:
 
             f = self.get_neighbour_with_food(self.outer_x, self.outer_y, self.my_envi)
             if (f != None and not len(f) == 0):
-                return r.choice(f)               
+                return r.choice(f)
+
+            chance = r.randint(-1,1)
+ 
+            if ( chance is 1):
+                return (r.randint(-1,1), r.randint(-1,1))
+            else: 
+                if(self.myHiveY < self.outer_y):
+                    away_y = 1
+                elif(self.myHiveY >= self.outer_y):
+                    away_y = -1
+
+                if(self.myHiveX < self.outer_x):
+                    away_x = 1
+                elif(self.myHiveX >= self.outer_x):
+                    away_x = -1
+                return (away_x, away_y)                 
         
-        return self.random_move_in_bounds(self.my_envi.get_size())
+        return (r.randint(-1,1), r.randint(-1,1))
 
     def get_neighbour_with_food(self, x,y, grid):
         y = self.outer_y
@@ -373,7 +369,6 @@ class ANT:
         self.energy = self.energy - ENERGY_CRAWL
 
     def dead(self):
-        global DESICCATE,STARVE
         return self.water < DESICCATE or self.energy < STARVE
 
     def migrated(self):
@@ -391,4 +386,6 @@ class ANT:
     def __float__(self):
         return 0.0
 
-
+    def __test_move__(self,dx,dy):
+        self.outer_x += dx
+        self.outer_y += dy
