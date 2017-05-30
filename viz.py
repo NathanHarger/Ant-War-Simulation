@@ -63,7 +63,7 @@ class viz:
         for i in range(len(enviornment.getHives())):
 
             hives = enviornment.getHives()
-            label_string = "Number of ants in Hive "  + str(i + 1) + " " + str(len(hives[i].getAnts()))
+            label_string = "Number of ants in Hive "  + str(i + 1) + " " + str(hives[i].get_number_of_ants())
 
             food_label_string = "Food Level of Hive "  + str(i + 1) + " " + str(round(hives[i].getFoodLevel(),3))
             self.canvas.itemconfig(self.labels[2 * i], text=label_string)

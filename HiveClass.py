@@ -35,6 +35,7 @@ class Hive:
     amount_dead = 1 #How many ants of this hive have died
     peak_population = 1#The most population this hive has had
     desication_level = .01 #Picking random number to start of the hive adaptation
+    total_number_ants = 0  #Keeps track of total ants in colony
     
     #Initialize the hive with a certain amount of starting ants.
     def __init__(self, location, initialFoodLevel):
@@ -63,6 +64,7 @@ class Hive:
         
     def setAnts(self, ants):
         self.list_ants = n.append(self.list_ants, ants)
+        self.total_number_ants = len(self.list_ants)
         
     def getLocation(self):
         return self.my_location
@@ -85,6 +87,9 @@ class Hive:
 
     def add_food(self, amt):
         self.foodLevel += amt
+
+    def get_number_of_ants(self):
+       return self.total_number_ants
     
     def update_hive_food_store(self):
         self.foodLevel =  self.foodLevel - (len(self.list_ants) * self.desication_level)
@@ -123,22 +128,24 @@ class Hive:
             if(self.state == HiveState.MILDAGRESSION):
                 number_of_gathers = int(math.floor(len(self.list_ants) * .2))
                 self.num_workers_nest -= number_of_gathers
+                self.total_number_ants -= number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
                 return number_of_gathers
             if(self.state == HiveState.SEVEREAGRESSION):
                 number_of_gathers = int(math.floor(len(self.list_ants) * .4))
                 self.num_workers_nest -= number_of_gathers
+                self.total_number_ants -= number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
                 return number_of_gathers
             else:
                 if(len(self.list_ants)>=1):
                    
                     number_of_gathers = int(math.floor(len(self.list_ants) * .05))
-                    print number_of_gathers
                     #Send the last ant out to find food
                     if(number_of_gathers == 0):
                         number_of_gathers = 1
                     self.num_workers_nest -= number_of_gathers
+                    self.total_number_ants -= number_of_gathers
                     number_of_gathers = n.empty(number_of_gathers, dtype=object)
                     return number_of_gathers
    
