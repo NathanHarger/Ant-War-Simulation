@@ -146,14 +146,12 @@ class Hive:
                 number_of_gathers = int(math.floor(len(self.list_ants) * .2))
                 self.num_workers_nest -= number_of_gathers
                 self.total_number_ants -= number_of_gathers
-                self.temporary_queue_worker_ants += number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
                 return number_of_gathers
             if(self.state == HiveState.SEVEREAGRESSION):
                 number_of_gathers = int(math.floor(len(self.list_ants) * .4))
                 self.num_workers_nest -= number_of_gathers
                 self.total_number_ants -= number_of_gathers
-                self.temporary_queue_worker_ants += number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
                 return number_of_gathers
             else:
@@ -165,7 +163,6 @@ class Hive:
                         number_of_gathers = 1
                     self.num_workers_nest -= number_of_gathers
                     self.total_number_ants -= number_of_gathers
-                    self.temporary_queue_worker_ants += number_of_gathers
                     number_of_gathers = n.empty(number_of_gathers, dtype=object)
                     return number_of_gathers
    
@@ -173,12 +170,10 @@ class Hive:
         if(self.state == HiveState.MILDAGRESSION):
             number_solider_ants_to_create = int(math.floor(len(self.list_ants) * .1))
             self.total_number_ants -= number_solider_ants_to_create
-            self.temporary_queue_worker_ants += number_solider_ants_to_create
             return n.empty(number_solider_ants_to_create, dtype=object)
         if((self.state == HiveState.SEVEREAGRESSION)):
             number_solider_ants_to_create = int(math.floor(len(self.list_ants) * .2))
             self.total_number_ants -= number_solider_ants_to_create
-            self.temporary_queue_worker_ants += number_solider_ants_to_create
             return n.empty(number_solider_ants_to_create, dtype=object)
 
     #Add/remove food based on season. (If it is a rainy season, add food, 
