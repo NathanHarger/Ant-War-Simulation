@@ -91,7 +91,8 @@ class Hive:
        return self.total_number_ants
     
     def update_hive_food_store(self):
-        self.foodLevel =  self.foodLevel - (len(self.list_ants) * self.desication_level)
+        if(self.foodLevel > 0):
+            self.foodLevel =  self.foodLevel - (len(self.list_ants) * self.desication_level)
 
 
     def queen_lays_eggs(self):
@@ -117,16 +118,20 @@ class Hive:
     def update_aggression_level(self):
         if(self.foodLevel / len(self.list_ants)< self.desication_level or self.num_queens_nest < 1): 
             self.state = HiveState.SEVEREAGRESSION
+            print("Aggression level of Hive is severe")
         if (self.foodLevel / len(self.list_ants)< (self.desication_level  + 2)):
             self.state = HiveState.MILDAGRESSION
+            print("Aggression level of Hive is Mild")
         else:
              self.state = HiveState.HEALTHY
+             print("Hive is healthy")
 
     def if_hive_needs_to_replenish_food(self):
         return (self.foodLevel < self.initialFoodLevel)
     def dispatch_number_gathers(self):
         number_of_gathers = 0
         if(self.if_hive_needs_to_replenish_food()):
+         if(self.total_number_ants>=1):
             if(self.state == HiveState.MILDAGRESSION):
                 number_of_gathers = int(math.floor(len(self.list_ants) * .2))
                 self.num_workers_nest -= number_of_gathers
@@ -140,7 +145,7 @@ class Hive:
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
                 return number_of_gathers
             else:
-                if(len(self.list_ants)>=1):
+                if(self.total_number_ants>=1):
                    
                     number_of_gathers = int(math.floor(len(self.list_ants) * .05))
                     #Send the last ant out to find food
