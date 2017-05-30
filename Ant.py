@@ -75,6 +75,24 @@ class ANT:
         self.return_to_hive = False
         self.IsInHive = True
 
+    def random_move_in_bounds(self, dim):
+        x_moves = [-1, 1]
+        y_moves = [-1, 1]
+
+        x = self.getX()
+        y = self.getY()
+
+        if x == 0:
+            x_moves.remove(-1)
+        elif x == dim - 1:
+            x_moves.remove(1)
+
+        if y == 0:
+            y_moves.remove(-1)
+        elif y == dim - 1:
+            y_moves.remove(1)
+        return (r.choice(x_moves), r.choice(y_moves))
+
     # determine the next change in x and change in y
     def move(self, dim, desert):
         self.foodLevel -= ENERGY_CRAWL
@@ -150,17 +168,20 @@ class ANT:
                         if not len(f) == 0:
                             return r.choice(f)
         
-        return (r.randint(-1,1), r.randint(-1,1))
+        return self.random_move_in_bounds(self.my_envi.get_size())
+
            
 
           
     def DoWarrior(self): 
         # TODO
-        return (r.randint(-1,1), r.randint(-1,1)) 
+        return  self.random_move_in_bounds(self.my_envi.get_size())
+
 
     def DoQueen(self):
         # TODO 
-        return (r.randint(-1,1), r.randint(-1,1))
+        return  self.random_move_in_bounds(self.my_envi.get_size())
+
 
     def DoScout(self): 
         if (self.action == ACTION.HOME):

@@ -121,7 +121,7 @@ class Hive:
         number_of_gathers = 0
         if(self.if_hive_needs_to_replenish_food()):
             if(self.state == HiveState.MILDAGRESSION):
-                number_of_gathers = math.floor(len(self.list_ants) * .2) 
+                number_of_gathers = math.floor(len(self.list_ants) * .2)
                 self.num_workers_nest -= number_of_gathers
                 number_of_gathers = n.empty(number_of_gathers, dtype=object)
                 return number_of_gathers
@@ -134,6 +134,7 @@ class Hive:
                 if(len(self.list_ants)>=1):
                    
                     number_of_gathers = math.floor(len(self.list_ants) * .05)
+                    print number_of_gathers
                     #Send the last ant out to find food
                     if(number_of_gathers == 0):
                         number_of_gathers = 1
