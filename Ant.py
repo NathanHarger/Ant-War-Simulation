@@ -219,7 +219,8 @@ class ANT:
             if (f != None and not len(f) == 0):
                 return r.choice(f)            
         
-        return (r.randint(-1,1), r.randint(-1,1))
+            return self.random_move_in_bounds(self.my_envi.get_size())
+
 
     def get_neighbour_with_food(self, x,y, grid):
         y = self.outer_y
