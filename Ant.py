@@ -75,7 +75,7 @@ class ANT:
         self.foodLevel -= ENERGY_CRAWL
 
         # Do your job based on what you are assigned
-        location = self.job_switch[self.job.value]()
+        location = self.job_switch[self.job]()
 
         rand_x = location[0]
         rand_y = location[1]
@@ -111,7 +111,7 @@ class ANT:
 
     # JOB.GATHERER move function
     def DoGatherer(self):
-        print self.foodLevel
+        #print self.foodLevel
         if (self.action == ACTION.HOME):
             self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
             if self.foodLevel > 1:
