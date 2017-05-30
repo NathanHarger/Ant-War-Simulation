@@ -59,12 +59,18 @@ class ANT:
         if(job == JOB.GENERICINITIAL):
             if ( chance is 1):
                 self.job = JOB.SCOUT
+                
+            elif (chance == -1):
+                self.job = JOB.WARRIOR
             else:
                 self.job = JOB.GATHERER
         else: 
             self.job = job
+        
+        #self.job = JOB.WARRIOR
 
         
+                
         self.action = ACTION.HOME
         
         self.job_switch = {0 : self.DoGatherer, 1 : self.DoWarrior, 2 : self.DoQueen, 3 : self.DoScout}   
@@ -74,6 +80,14 @@ class ANT:
         self.water = r.uniform(AMT_MIN_INIT, AMT_MIN_INIT + INIT_RANGE)
         self.return_to_hive = False
         self.IsInHive = True
+        
+        # when ant is soldier, this is target hive
+        #can be own hive by design, if target is own hive soldier will defend
+        self.target_hive = r.randint(0, len(self.my_envi.hives) - 1)
+        self.targetX = self.my_envi.hives[self.target_hive].getLocation()[0]
+        self.targetY = self.my_envi.hives[self.target_hive].getLocation()[1]
+        self.prevAction = self.action #sets prevAction
+        
 
     def random_move_in_bounds(self, dim):
         x_moves = [-1, 1]
@@ -174,7 +188,64 @@ class ANT:
 
           
     def DoWarrior(self): 
-        # TODO
+             
+        
+        #if in nest, eat, fill up stores, then go back out to search
+        if (self.action == ACTION.HOME):
+            self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
+            if self.foodLevel > 1:                                         
+                amount_food = self.foodLevel - 1
+                self.foodLevel - amount_food
+                self.my_hive.add_food(amount_food)            
+            self.action = ACTION.SEARCH
+            return (0,0)
+         
+        #if returning, move towards nest each tick       
+        elif (self.action == ACTION.RETURN):
+            if(self.myHiveY == self.outer_y and self.myHiveX == self.outer_x ):       
+                self.action = ACTION.HOME
+            if(self.myHiveY < self.outer_y):
+                 rand_y = -1
+            elif(self.myHiveY > self.outer_y):
+                 rand_y = 1
+            else:
+                rand_y = 0
+            if(self.myHiveX < self.outer_x):
+                 rand_x = -1
+            elif(self.myHiveX > self.outer_x):
+                 rand_x = 1
+            else:
+                rand_x = 0  
+            return (rand_x, rand_y)
+            
+        #if searching, move towards enemy hive
+        #has a chance to defend own hive instead
+        #target based on target_hive
+        elif(self.action == ACTION.SEARCH):
+                       
+            if(self.targetY == self.outer_y and self.targetX == self.outer_x ):       
+                self.action = ACTION.RETURN
+            if(self.targetY < self.outer_y):
+                 rand_y = -1
+            elif(self.targetY > self.outer_y):
+                 rand_y = 1
+            else:
+                rand_y = 0
+            if(self.targetX < self.outer_x):
+                 rand_x = -1
+            elif(self.targetX > self.outer_x):
+                 rand_x = 1
+            else:
+                rand_x = 0  
+            return (rand_x, rand_y)
+            
+        #don't move, restore previous action
+        elif(self.action == ACTION.COMBAT):
+           print ("soldier ant in combat, cell " + str(self.outer_x) + "," + str(self.outer_y))
+           self.action = ACTION.RETURN
+           return (0,0)
+           
+        
         return  self.random_move_in_bounds(self.my_envi.get_size())
 
 

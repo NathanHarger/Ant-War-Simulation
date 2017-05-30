@@ -138,7 +138,7 @@ class viz:
     # variable sim_length, end it.
     def Run_Sim(self, enviornment):
 
-        self.Phase_One()
+        self.Phase_One(enviornment)
         #print enviornment.getHives()
         for i in enviornment.getHives():
             #print i.getFoodLevel()
@@ -170,8 +170,8 @@ class viz:
 
     # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
     # The queen lays eggs based on amount of food in nest.
-    def Phase_One(self):
-
+    def Phase_One(self, enviornment):
+        enviornment.combat()
         # TODO
         return
 
@@ -179,7 +179,7 @@ class viz:
     # Second - move all ants based on caste, current job,
     # and pheromones of neighbor cells.
     def Phase_Two(self,ants,enviornment):
-        enviornment.combat()
+        
         self.ant_movement(ants,enviornment)
         # TODO
         return
@@ -192,8 +192,8 @@ class viz:
         
         enviornment.update_ants()
         
-        #for i in range(len(enviornment.hives)):
-        #    print( "Hive " + str(i) + ": " + str(len(enviornment.hives[i].list_ants)))
+        for i in range(len(enviornment.hives)):
+            print( "Hive " + str(i) + ": " + str(len(enviornment.hives[i].list_ants)))
         
         #if rand < .01:
         # self.running = False
@@ -227,10 +227,10 @@ class viz:
 
 if __name__ == '__main__':
 
-    dim = 50
-    num_ants_per_hive = 20
+    dim = 25
+    num_ants_per_hive = 200
     vizTest = viz(dim,500,500, 1)
-    testEnviorment = des.Desert(dim,2)
+    testEnviorment = des.Desert(dim,3)
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     vizTest.create_stat_labels(testEnviorment)
