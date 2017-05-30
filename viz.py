@@ -6,7 +6,16 @@ import random as r
 import Ant as a
 import HiveClass as hive
 
+
+#==========User Adjusatable===================
 SIM_LENGTH = 200         #How many ticks in a simulation
+DESERT_SIZE = 25        #Size of desert
+NUM_HIVES = 3            #How many hives
+AMT_ANTS_PER_HIVE = 200  #How many ants start in each hive
+#============================================
+
+
+
 DESSICATION_LEVEL = 1  #Level an ant dies of thirst
 STARVATION_LEVEL = 1   #Level an ant dies of starvation
 MAX_FOOD_WHATER = 1    #Maximum level of food and water an ant can carry
@@ -239,11 +248,11 @@ class viz:
 
 if __name__ == '__main__':
 
-    dim = 25
-    num_ants_per_hive = 200
+    dim = DESERT_SIZE
+    num_ants_per_hive = AMT_ANTS_PER_HIVE
     vizTest = viz(dim,500,500, 1)
-    num_hives = 3
-    testEnviorment = des.Desert(dim,num_hives)
+    amt_hives = NUM_HIVES
+    testEnviorment = des.Desert(dim,amt_hives)
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     vizTest.create_stat_labels(testEnviorment)
