@@ -32,7 +32,7 @@ class viz:
         self.__setup_grid__()
         self.delay = delay
         self.running = True
-        self.old_text = ""
+        self.labels = None
 
     # the enviorment is a grid of DesertAgent
     # 0: desert
@@ -41,7 +41,7 @@ class viz:
     # 3: hive
     # function that is called by the tkinter canvas that updates ojects in sim every frame
     def update_frame(self,enviornment):
-
+        print enviornment.get_season()
         for i in range(self.dim):
             for j in range(self.dim):
                 curr_agent = enviornment.getItem(j,i)
@@ -61,16 +61,27 @@ class viz:
                     self.canvas.itemconfig(self.cell[i,j], fill="green")
 
         for i in range(len(enviornment.getHives())):
-            hives = enviornment.getHives()
-            canvas_id = self.canvas.create_text(500, 500 + 15 * i, anchor="s")
-            label_string = "Number of ants in Hive "  + str(i + 1) + " " + str(len(hives[i].getAnts()))
-            canvas_id_food = self.canvas.create_text(500, 600 + 15 * i, anchor="s")
-            self.canvas.delete(self.old_text)
 
-            food_label_string = "Food Level of Hive "  + str(i + 1) + " " + str(hives[i].getFoodLevel())
-            self.canvas.itemconfig(canvas_id, text=label_string)
-            self.canvas.itemconfig(canvas_id_food, text=food_label_string)
-            self.old_text = canvas_id_food
+            hives = enviornment.getHives()
+            label_string = "Number of ants in Hive "  + str(i + 1) + " " + str(len(hives[i].getAnts()))
+
+            food_label_string = "Food Level of Hive "  + str(i + 1) + " " + str(round(hives[i].getFoodLevel(),3))
+            self.canvas.itemconfig(self.labels[2 * i], text=label_string)
+            self.canvas.itemconfig(self.labels[2*i+1], text=food_label_string)
+
+    def  create_labels(self,env):
+        labels = []
+        hives = env.getHives()
+
+        for i in range(len(hives)):
+
+            labels.append( self.canvas.create_text(500, 500 + 15 * i, anchor="s"))
+            labels.append( self.canvas.create_text(500, 530  +15* i, anchor="s"))
+        #print labels
+        self.labels =labels
+
+    def create_stat_labels(self,env):
+        self.create_labels(env)
 
     def get_food_color_intensity(self, greenVal):
         rgb = (0,255-greenVal*100,0)
@@ -217,7 +228,8 @@ if __name__ == '__main__':
     testEnviorment = des.Desert(dim,2)
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
-    
+    vizTest.create_stat_labels(testEnviorment)
+
     for i in hives:
         myAnts = n.empty(num_ants_per_hive, dtype=object)
         vizTest.create_ants(myAnts, i.getLocation(), i, testEnviorment, a.JOB.GENERICINITIAL)
@@ -226,6 +238,7 @@ if __name__ == '__main__':
 
     #print testEnviorment.getHives()
     #print testAnts
+
     vizTest.Run_Sim(testEnviorment)
 
     vizTest.dispViz()
