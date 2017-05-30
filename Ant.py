@@ -111,17 +111,18 @@ class ANT:
 
     # JOB.GATHERER move function
     def DoGatherer(self):
+        print self.foodLevel
         if (self.action == ACTION.HOME):
             self.foodLevel += self.my_hive.eatFood(1.0-self.foodLevel)
-            if self.foodLevel > 1:                                         
+            if self.foodLevel > 1:
                 amount_food = self.foodLevel - 1
                 self.foodLevel - amount_food
-                self.my_hive.add_food(amount_food)            
+                self.my_hive.add_food(amount_food)
             self.action = ACTION.SEARCH
             return (0,0)
 
         elif (self.action == ACTION.RETURN):
-            if(self.myHiveY == self.outer_y and self.myHiveX == self.outer_x ):       
+            if(self.myHiveY == self.outer_y and self.myHiveX == self.outer_x ):
                 self.action = ACTION.HOME
             if(self.myHiveY < self.outer_y):
                  rand_y = -1
@@ -134,7 +135,7 @@ class ANT:
             elif(self.myHiveX > self.outer_x):
                  rand_x = 1
             else:
-                rand_x = 0  
+                rand_x = 0
             return (rand_x, rand_y)
 
         elif(self.action == ACTION.SEARCH):
@@ -147,7 +148,7 @@ class ANT:
                     f = self.get_neighbour_with_food(self.outer_x, self.outer_y, self.my_envi)
                     if (f != None and not len(f) == 0):
                         return r.choice(f)
-                    else:                      
+                    else:
                         if (self.my_envi.getItem(self.targetLocation[0],self.targetLocation[1]).getState() is d.State.FOOD):
                             if(self.targetLocation[1] < self.outer_y):
                                 rand_y = -1
@@ -161,10 +162,10 @@ class ANT:
                             elif(self.targetLocation[0] > self.outer_x):
                                 rand_x = 1
                             else:
-                                rand_x = 0  
+                                rand_x = 0
                             return (rand_x, rand_y)
                         else:
-                            self.targetLocation = self.my_hive.getFoodLoc()                                                                                                     
+                            self.targetLocation = self.my_hive.getFoodLoc()
         
         return self.random_move_in_bounds(self.my_envi.get_size())
            
@@ -214,7 +215,7 @@ class ANT:
             if (f != None and not len(f) == 0):
                 return r.choice(f)               
         
-        return (r.randint(-1,1), r.randint(-1,1))
+        return self.random_move_in_bounds(self.my_envi.get_size())
 
     def get_neighbour_with_food(self, x,y, grid):
         y = self.outer_y
