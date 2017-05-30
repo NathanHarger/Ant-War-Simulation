@@ -71,6 +71,7 @@ class DesertAgent:
                 strength = strength + r.randint(-1, 1) #some randomness
                 strength = strength / (len(hives_combat) - 1)
                 
+                #print ("Hive " + str(i) + " Strength: " + str(strength))
                 
                 #apply strength to all other hives
                 for j in range(len(hives_combat)):

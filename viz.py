@@ -61,7 +61,7 @@ class viz:
 
         for i in range(len(enviornment.getHives())):
             canvas_id = self.canvas.create_text(500, 500 + 15 * i, anchor="s")
-            label_string = "Number of ants in Hive "  + str(i) + " " + str(len(enviornment.getHives()[0].getAnts()))
+            label_string = "Number of ants in Hive "  + str(i) + " " + str(len(enviornment.getHives()[1].getAnts()))
             self.canvas.itemconfig(canvas_id, text=label_string)
 
 
@@ -124,6 +124,7 @@ class viz:
             i.update_nest()
            # print ants
             self.Phase_Two(ants,enviornment)
+            self.Phase_Three(enviornment)
         self.draw_frame(enviornment)
         #self.Phase_Three(enviornment)
         # TODO
@@ -158,7 +159,13 @@ class viz:
     # Kill all dessicated and starving ants. Update desert (add/remove food
     # and moisture based on season, remove hives with no ants, and update season)
     def Phase_Three(self,enviornment):
-        enviornment.update_seasons()
+        
+        #enviornment.update_seasons()
+        enviornment.update_ants()
+        
+        for i in range(len(enviornment.hives)):
+            print( "Hive " + str(i) + ": " + str(len(enviornment.hives[i].list_ants)))
+        
         rand = r.random()
         #if rand < .01:
         # self.running = False

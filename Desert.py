@@ -86,6 +86,15 @@ class Desert:
                 self.grid[rand_y, rand_x].setState(State.FOOD)
                 delta_leaf = delta_leaf - 1
 
+    def update_ants(self):
+        for i in range(len(self.hives)):
+            for j in range(len(self.hives[i].list_ants)):
+                if (j >= len(self.hives[i].list_ants)): break
+                
+                if (self.hives[i].list_ants[j].dead()):
+                    self.hives[i].list_ants = n.delete(self.hives[i].list_ants, j)
+                
+                 
     def combat(self):
         for i in range(self.size):
             for j in range(self.size):

@@ -11,8 +11,8 @@ AMT_MIN_INIT = 0.88  # minimum initial ANT energy and water values
 INIT_RANGE = .12  # range of initial ANT energy and water values
 # MAY_FIGTH = 0.5 #probability of entering combat if not thirsty or hungry
 # MAY_CRAWL = 0.5
-# DESICCATE = 0.6 #level at which desiccation occurs
-# STARVE = 0.6 #level at which starvation occurs
+DESICCATE = 0.6 #level at which desiccation occurs
+STARVE = 0.6 #level at which starvation occurs
 NUMBER_OF_FIGHTS_STARTED = 0
 
 ENERGY_COMBAT = 0.05 #maximum energy used by ant in combat
@@ -355,7 +355,6 @@ class ANT:
         self.energy = self.energy - ENERGY_CRAWL
 
     def dead(self):
-        global DESICCATE,STARVE
         return self.water < DESICCATE or self.energy < STARVE
 
     def migrated(self):
