@@ -33,7 +33,7 @@ season_length_rainy = 1    #Number of time ticks the rainy season lasts
 season_length_dry = 1      #Number of ticks the dry season lasts
 current_season_length = 1  #How many ticks the current season has lasted.
 
-SEASON_LENGTH = 10
+SEASON_LENGTH = 91
 #The desert class will have an n x n sized grid of desert cells.
 #We will simulate two seasons, rainy and dry, with user adjustable 
 #variables to change the length of either, or give them a random length. 
@@ -66,11 +66,17 @@ class Desert:
             self.season_count = SEASON_LENGTH
             self.season = Season.getNextSeason(self.season)
         
-        self.season_event[self.season.value]()
+        if(  self.season_count % 5 == 0 ):
+            self.season_event[self.season.value]()
 
     def DoSprint(self):
         delta_water = r.randint(0, 2)
         self.add_water(delta_water)
+        delta_leaf = r.randint(0, 2)
+        for i in range(delta_leaf):
+            rand_x = r.randint(0, self.size - 1)
+            rand_y = r.randint(0, self.size - 1)
+            self.set_leaves(self.grid, rand_x,rand_y)
      
     def DoSummer(self):
         delta_leaf = r.randint(0, 8)
@@ -79,7 +85,7 @@ class Desert:
         self.remove_water(delta_water) 
 
     def DoFall(self):
-        delta_leaf = r.randint(0, 2)
+        delta_leaf = r.randint(0, 4)
         for i in range(delta_leaf):
             rand_x = r.randint(0, self.size - 1)
             rand_y = r.randint(0, self.size - 1)
@@ -88,16 +94,10 @@ class Desert:
         self.remove_water(delta_water)
 
     def DoWinter(self):
-        if ( self.season == Season.WINTER):
+            delta_water = r.randint(0, 1)
+            self.add_water(delta_water)
             delta_leaf = r.randint(0, 16)
             self.remove_leaves(delta_leaf)    
-            delta_leaf = r.randint(0, 8)
-            self.remove_leaves(delta_leaf)
-
-        if ( self.season == Season.SUMMER):
-            delta_leaf = r.randint(0, 4)
-            self.remove_leaves(delta_leaf)
-
 
     def add_leaves(self, delta_leaf):
         while delta_leaf != 0:
