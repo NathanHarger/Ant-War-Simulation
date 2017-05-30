@@ -244,7 +244,6 @@ if __name__ == '__main__':
         myAnts = n.empty(num_ants_per_hive, dtype=object)
         vizTest.create_ants(myAnts, i.getLocation(), i, testEnviorment, a.JOB.GENERICINITIAL)
         i.setAnts(myAnts)
-        i.set_dispatched_ants(myAnts)
 
     vizTest.Run_Sim(testEnviorment)
 
