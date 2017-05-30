@@ -5,6 +5,7 @@ from enum import Enum
 import Desert as ds
 import DesertAgent as ANT_agent
 import math
+import Ant as a
 
 class HiveState(Enum):
     HEALTHY = 0
@@ -44,6 +45,7 @@ class Hive:
         self.foodLevel = initialFoodLevel
         self.initialFoodLevel = initialFoodLevel
         self.scouted_food_locations = []
+        self.dispatched_list_ants = n.empty(1, dtype=object)
 
     def setFoodLoc(self, x_loc, y_loc):
         if ( (x_loc, y_loc) not in self.scouted_food_locations):
@@ -64,6 +66,12 @@ class Hive:
     def setAnts(self, ants):
         self.list_ants = n.append(self.list_ants, ants)
         self.total_number_ants = len(self.list_ants)
+
+    def set_dispatched_ants(self, ants):
+        self.dispatched_list_ants = n.append(self.dispatched_list_ants, ants)
+    
+    def get_dispatched_ants(self):
+        return self.dispatched_list_ants
         
     def getLocation(self):
         return self.my_location
@@ -161,7 +169,11 @@ class Hive:
             return n.empty(int(math.floor(len(self.list_ants) * .1)), dtype=object)
         if((self.state == HiveState.SEVEREAGRESSION)):
             return n.empty(int(math.floor(len(self.list_ants) * .2)), dtype=object)
-
+    
+    def append_ant_to_list(self, loc, ):
+        loc = self.getLocation()
+        a.ANT(loc[0],loc[1],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
+                                                                                outline = color), myHive, myEnv, job)
     #Add/remove food based on season. (If it is a rainy season, add food, 
     #otherwise remove it). Then, if the current season length is equal to 
     #that season’s length, change seasons and set season length to zero.

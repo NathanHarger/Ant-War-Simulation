@@ -142,18 +142,19 @@ class viz:
         #print enviornment.getHives()
         for i in enviornment.getHives():
             #print i.getFoodLevel()
-            ants = i.getAnts()
+            ants = i.get_dispatched_ants()
+            ants1 = i.getAnts()
             i.update_nest()
             number_of_gathers_to_create = i.dispatch_number_gathers()
             if number_of_gathers_to_create is not None:
              if(len(number_of_gathers_to_create) > 0):
                 self.create_ants(number_of_gathers_to_create, i.getLocation(), i, testEnviorment, a.JOB.GATHERER)
-           
+                
             number_of_soliders_to_create = i.dispatch_number_of_soliders()
             if number_of_soliders_to_create is not None:
                 if(len(number_of_soliders_to_create) > 0):
                     self.create_ants(number_of_soliders_to_create, i.getLocation(), i, testEnviorment, a.JOB.WARRIOR)
-           # print ants
+             # print ants
             self.Phase_Two(ants,enviornment)
         self.draw_frame(enviornment)
         self.Phase_Three(enviornment)
@@ -216,7 +217,11 @@ class viz:
             #print loc
 
             testAnts[i] = a.ANT(loc[0],loc[1],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
-                                                                                outline = color), myHive, myEnv, job)                                                             
+                                                                                outline = color), myHive, myEnv, job)  
+
+            #myHive.dispatched_list_ants()                                                           
+            #myHive.setAnts(testAnts[i])
+            myHive.set_dispatched_ants(testAnts[i])
             myEnv.set_number_ants_in_desert(1);
     def create_hive(self, myHive, location):
         myHive = hive.Hive((location[0], location[1]))
@@ -239,6 +244,7 @@ if __name__ == '__main__':
         myAnts = n.empty(num_ants_per_hive, dtype=object)
         vizTest.create_ants(myAnts, i.getLocation(), i, testEnviorment, a.JOB.GENERICINITIAL)
         i.setAnts(myAnts)
+        i.set_dispatched_ants(myAnts[0])
 
     vizTest.Run_Sim(testEnviorment)
 
