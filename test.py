@@ -48,6 +48,7 @@ class TestAnt(unittest.TestCase):
         vizTest = viz(1, 500, 500, 1)
         vizTest.Run_Sim(TestDesert)
 
+        test_ant.__test_move__(-100,-100)
         # vizTest.dispViz()
 
         print TestDesert

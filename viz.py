@@ -148,6 +148,9 @@ class viz:
     # Second - move all ants based on caste, current job,
     # and pheromones of neighbor cells.
     def Phase_Two(self,ants,enviornment):
+        #execute combat
+        enviornment.combat()
+        
         self.ant_movement(ants,enviornment)
         # TODO
         return
@@ -188,10 +191,10 @@ class viz:
 
 if __name__ == '__main__':
 
-    dim = 50
-    num_ants_per_hive = 20
+    dim = 25
+    num_ants_per_hive = 100
     vizTest = viz(dim,500,500, 1)
-    testEnviorment = des.Desert(dim,1)
+    testEnviorment = des.Desert(dim,2)
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     

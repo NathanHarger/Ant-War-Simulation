@@ -52,10 +52,7 @@ class Hive:
         return self.scouted_food_locations
 
     def getFoodLoc(self):
-        if (len(self.scouted_food_locations) != 0 ):
-            return self.scouted_food_locations.pop()
-        else:
-            return (self.my_location[0], self.my_location[1])
+        return self.scouted_food_locations.pop()
     
     def getAnts(self):
         return self.list_ants
