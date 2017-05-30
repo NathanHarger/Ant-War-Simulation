@@ -45,7 +45,7 @@ class Hive:
         self.foodLevel = initialFoodLevel
         self.initialFoodLevel = initialFoodLevel
         self.scouted_food_locations = []
-        self.dispatched_list_ants = n.empty(1, dtype=object)
+        self.dispatched_list_ants = n.array([])
 
     def setFoodLoc(self, x_loc, y_loc):
         if ( (x_loc, y_loc) not in self.scouted_food_locations):
