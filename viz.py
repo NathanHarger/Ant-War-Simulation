@@ -122,6 +122,13 @@ class viz:
             print i.getFoodLevel()
             ants = i.getAnts()
             i.update_nest()
+            number_of_gathers_to_create = i.dispatch_number_gathers()
+            if(number_of_gathers_to_create > 0):
+                self.create_ants(number_of_gathers_to_create, i.getLocation(), i, testEnviorment, a.JOB.GATHERER)
+           
+            number_of_soliders_to_create = i.dispatch_number_of_soliders()
+            if(number_of_gathers_to_create > 0):
+                self.create_ants(number_of_soliders_to_create, i.getLocation(), i, testEnviorment, a.JOB.WARRIOR)
            # print ants
             self.Phase_Two(ants,enviornment)
         self.draw_frame(enviornment)
@@ -170,7 +177,7 @@ class viz:
 
 
 
-    def create_ants(self, testAnts, loc,myHive, myEnv):
+    def create_ants(self, testAnts, loc,myHive, myEnv, job):
         color = self.get_random_color()
         #print color
         for i in n.arange(n.alen(testAnts)):
@@ -178,13 +185,14 @@ class viz:
             #print loc
 
             testAnts[i] = a.ANT(loc[0],loc[1],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
-                                                                                outline = color), myHive, myEnv)
-                                                                                
+                                                                                outline = color), myHive, myEnv, job)                                                             
 
     def create_hive(self, myHive, location):
         myHive = hive.Hive((location[0], location[1]))
         return myHive
 
+
+    #def add_ant_from_hive(self, ANT_agent, Hive):
 
 if __name__ == '__main__':
 
@@ -197,7 +205,7 @@ if __name__ == '__main__':
     
     for i in hives:
         myAnts = n.empty(num_ants_per_hive, dtype=object)
-        vizTest.create_ants(myAnts, i.getLocation(), i, testEnviorment)
+        vizTest.create_ants(myAnts, i.getLocation(), i, testEnviorment, a.JOB.GENERICINITIAL)
         i.setAnts(myAnts)
         #print i.getAnts()
 

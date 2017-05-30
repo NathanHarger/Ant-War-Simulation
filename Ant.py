@@ -31,6 +31,7 @@ class JOB(Enum):
     WARRIOR = 1         # go out find enemy and kill it
     QUEEN = 2           # stay home reproduce
     SCOUT = 3           # scout ant to find food locations better
+    GENERICINITIAL = 4
 
 class ACTION(Enum):
     RETURN = 0          # ant is coming home
@@ -39,7 +40,7 @@ class ACTION(Enum):
     HOME = 3            # ant is in base  
 
 class ANT:
-    def __init__(self,x,y, i_x, i_y, shape, myHive, myEnvir):
+    def __init__(self,x,y, i_x, i_y, shape, myHive, myEnvir, job):
         self.my_hive = myHive
 
         if not self.my_hive is None:
@@ -54,12 +55,13 @@ class ANT:
         self.inner_y = i_y
 
         chance = r.randint(-1,1)
- 
-        if ( chance is 1):
-            self.job = JOB.SCOUT
-        else:
-            self.job = JOB.GATHERER
-
+        if(job == JOB.GENERICINITIAL):
+            if ( chance is 1):
+                self.job = JOB.SCOUT
+            else:
+                self.job = JOB.GATHERER
+        else: 
+            self.job = job
         self.action = ACTION.HOME
         
         self.job_switch = {0 : self.DoGatherer, 1 : self.DoWarrior, 2 : self.DoQueen, 3 : self.DoScout}   
