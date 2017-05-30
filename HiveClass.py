@@ -2,17 +2,23 @@
 import random as r
 import numpy as n
 from enum import Enum
+import Desert as ds
+import DesertAgent as ANT_agent
+import math
 
 class HiveState(Enum):
     HEALTHY = 0
     QUEENLESS = 1
     DEAD = 2
+    MILDAGRESSION = 3
+    SEVEREAGRESSION = 4
 
 class JOB(Enum):
     GATHERER = 0        # go out find food and bring it home
     WARRIOR = 1         # go out find enemy and kill it
     QUEEN = 2           # stay home reproduce
     OTHER = 3           # NOTE: if you have another job add here and explain
+
 
 #The hive class keeps track of the ants belonging to a single hive. 
 #It has a list of ants belonging to the hive,the location of the mouth of the nest, 
@@ -37,10 +43,11 @@ class Hive:
     desication_level = .01 #Picking random number to start of the hive adaptation
     
     #Initialize the hive with a certain amount of starting ants.
-    def __init__(self, location):
+    def __init__(self, location, initialFoodLevel):
         self.list_ants = n.array([])
         self.my_location = location
-        self.foodLevel = 50
+        self.foodLevel = initialFoodLevel
+        self.initialFoodLevel = initialFoodLevel
         self.scouted_food_locations = []
         #TODO 
 
@@ -106,11 +113,47 @@ class Hive:
         else:
             self.num_soldiers_nest+=1
 
+    def update_aggression_level(self):
+        if(self.foodLevel / len(self.list_ants)< self.desication_level or self.num_queens_nest < 1): 
+            self.state = HiveState.SEVEREAGRESSION
+        if (self.foodLevel / len(self.list_ants)< (self.desication_level  + 2)):
+            self.state = HiveState.MILDAGRESSION
+        else:
+             self.state = HiveState.HEALTHY
+
+    def if_hive_needs_to_replenish_food(self):
+        return (self.foodLevel < self.initialFoodLevel)
+    def dispatch_number_gathers(self):
+        number_of_gathers = 0
+        if(self.if_hive_needs_to_replenish_food()):
+            if(self.state == HiveState.MILDAGRESSION):
+                number_of_gathers = math.floor(len(self.list_ants) * .2) 
+                self.num_workers_nest -= number_of_gathers
+                number_of_gathers = n.empty(number_of_gathers, dtype=object)
+                self.num_workers_nest -= number_of_gathers
+                return number_of_gathers
+            if(self.state == HiveState.SEVEREAGRESSION):
+                number_of_gathers = math.floor(len(self.list_ants) * .4) 
+                self.num_workers_nest -= number_of_gathers
+                number_of_gathers = n.empty(number_of_gathers, dtype=object)
+                self.num_workers_nest -= number_of_gathers
+                return number_of_gathers
+            else:
+                number_of_gathers = math.floor(len(self.list_ants) * .05)
+                self.num_workers_nest -= number_of_gathers
+                number_of_gathers = n.empty(number_of_gathers, dtype=object)
+                return number_of_gathers
+   
+    def dispatch_number_of_soliders(self):
+        if(self.state == HiveState.MILDAGRESSION):
+            return math.floor(len(self.list_ants) * .1) 
+        if((self.state == HiveState.MILDAGRESSION)):
+            return math.floor(len(self.list_ants) * .2) 
+
     #Add/remove food based on season. (If it is a rainy season, add food, 
     #otherwise remove it). Then, if the current season length is equal to 
     #that season’s length, change seasons and set season length to zero.
     def update_nest(self):
-        # TODO
         #1. Food/Water stores depleted by all ants in nest multiplied by starvation/desiccation value
         self.update_hive_food_store()
         #2. Queen lays eggs for if there is food for that egg
@@ -119,5 +162,6 @@ class Hive:
         self.eggs_turn_into_pupae()
         #4. Pupae morphs into ant with random caste (keeping right percentages) if there is food and a nursing worker ant, or dies if either is not true. If there is no queen, it becomes a new queen.
         self.evolution_of_pupae()
-        #5. Create new ant agents based on rules from the Ant behavior section. Up to 8 can be created, one for each neighboring cell.
+        #5. Update agression level to manipulate how to dispatch ants from Hive
+        self.update_aggression_level()
         return 
