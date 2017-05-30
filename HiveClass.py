@@ -34,7 +34,7 @@ class Hive:
     kill_count = 1 #How many opposing ants have been killed by this hive
     amount_dead = 1 #How many ants of this hive have died
     peak_population = 1#The most population this hive has had
-    desication_level = .01 #Picking random number to start of the hive adaptation
+    desication_level = .1 #Picking random number to start of the hive adaptation
     total_number_ants = 0  #Keeps track of total ants in colony
     
     #Initialize the hive with a certain amount of starting ants.
@@ -44,7 +44,6 @@ class Hive:
         self.foodLevel = initialFoodLevel
         self.initialFoodLevel = initialFoodLevel
         self.scouted_food_locations = []
-        #TODO 
 
     def setFoodLoc(self, x_loc, y_loc):
         if ( (x_loc, y_loc) not in self.scouted_food_locations):
@@ -102,15 +101,18 @@ class Hive:
             self.num_eggs+=5
 
     def eggs_turn_into_pupae(self):
-        number_of_eggs_into_pupae = r.randint(0,3)
-        self.num_eggs-=number_of_eggs_into_pupae
-        self.num_pupae+=number_of_eggs_into_pupae
+        if(self.num_eggs > 0):
+            number_of_eggs_into_pupae = r.randint(0,self.num_eggs)
+            self.num_eggs-=number_of_eggs_into_pupae
+            self.num_pupae+=number_of_eggs_into_pupae
 
     def evolution_of_pupae(self): 
         if(r.randint(0,10) > 5):
             self.num_workers_nest+=1
+            self.total_number_ants+=1
         else:
             self.num_soldiers_nest+=1
+            self.total_number_ants+=1
 
     def update_aggression_level(self):
         if(self.foodLevel / len(self.list_ants)< self.desication_level or self.num_queens_nest < 1): 

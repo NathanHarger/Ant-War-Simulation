@@ -50,6 +50,7 @@ class Desert:
         self.size = size
         self.hives = []
         self.grid = self.random_desert_init(num_hives)
+        self.number_ants_in_desert = 0
           
     # called every time step 
     def update_seasons(self):
@@ -203,7 +204,7 @@ class Desert:
         for i in range(self.size):
             for j in range(self.size):
                 self.grid[i,j].runCombat(self)
-
+    
     # set a leaf at a given position
     def set_leaves(self, env, x,y):
         if x + 2 >= self.size or y+2 >= self.size:
@@ -273,3 +274,8 @@ class Desert:
     def getHives(self):
         return self.hives  
 
+    def set_number_ants_in_desert(self, number_to_add):
+        self.number_ants_in_desert += number_to_add
+
+    def get_number_ants_in_desert(self):
+        return self.number_ants_in_desert

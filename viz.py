@@ -33,6 +33,7 @@ class viz:
         self.delay = delay
         self.running = True
         self.labels = None
+        self.number_labels = 3
 
     # the enviorment is a grid of DesertAgent
     # 0: desert
@@ -63,20 +64,23 @@ class viz:
         for i in range(len(enviornment.getHives())):
 
             hives = enviornment.getHives()
+            label_string_desert = "Number of ants in Desert "  + str(enviornment.get_number_ants_in_desert())
             label_string = "Number of ants in Hive "  + str(i + 1) + " " + str(hives[i].get_number_of_ants())
 
             food_label_string = "Food Level of Hive "  + str(i + 1) + " " + str(round(hives[i].getFoodLevel(),3))
             self.canvas.itemconfig(self.labels[2 * i], text=label_string)
             self.canvas.itemconfig(self.labels[2*i+1], text=food_label_string)
+            self.canvas.itemconfig(self.labels[2*i+2], text=label_string_desert)
 
     def  create_labels(self,env):
         labels = []
         hives = env.getHives()
 
-        for i in range(len(hives)):
+        for i in range(self.number_labels):
 
             labels.append( self.canvas.create_text(500, 500 + 15 * i, anchor="s"))
             labels.append( self.canvas.create_text(500, 530  +15* i, anchor="s"))
+            labels.append( self.canvas.create_text(500, 560  +15* i, anchor="s"))
         #print labels
         self.labels =labels
 
@@ -212,7 +216,7 @@ class viz:
 
             testAnts[i] = a.ANT(loc[0],loc[1],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
                                                                                 outline = color), myHive, myEnv, job)                                                             
-
+            myEnv.set_number_ants_in_desert(1);
     def create_hive(self, myHive, location):
         myHive = hive.Hive((location[0], location[1]))
         return myHive
@@ -234,10 +238,6 @@ if __name__ == '__main__':
         myAnts = n.empty(num_ants_per_hive, dtype=object)
         vizTest.create_ants(myAnts, i.getLocation(), i, testEnviorment, a.JOB.GENERICINITIAL)
         i.setAnts(myAnts)
-        #print i.getAnts()
-
-    #print testEnviorment.getHives()
-    #print testAnts
 
     vizTest.Run_Sim(testEnviorment)
 
