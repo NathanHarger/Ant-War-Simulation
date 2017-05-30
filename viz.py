@@ -176,8 +176,8 @@ class viz:
         
         enviornment.update_ants()
         
-        for i in range(len(enviornment.hives)):
-            print( "Hive " + str(i) + ": " + str(len(enviornment.hives[i].list_ants)))
+        #for i in range(len(enviornment.hives)):
+        #    print( "Hive " + str(i) + ": " + str(len(enviornment.hives[i].list_ants)))
         
         #if rand < .01:
         # self.running = False
@@ -211,7 +211,7 @@ class viz:
 
 if __name__ == '__main__':
 
-    dim = 25
+    dim = 50
     num_ants_per_hive = 20
     vizTest = viz(dim,500,500, 1)
     testEnviorment = des.Desert(dim,2)

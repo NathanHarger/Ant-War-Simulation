@@ -196,23 +196,7 @@ class ANT:
 
             f = self.get_neighbour_with_food(self.outer_x, self.outer_y, self.my_envi)
             if (f != None and not len(f) == 0):
-                return r.choice(f)
-
-            chance = r.randint(-1,1)
- 
-            if ( chance is 1):
-                return (r.randint(-1,1), r.randint(-1,1))
-            else: 
-                if(self.myHiveY < self.outer_y):
-                    away_y = 1
-                elif(self.myHiveY >= self.outer_y):
-                    away_y = -1
-
-                if(self.myHiveX < self.outer_x):
-                    away_x = 1
-                elif(self.myHiveX >= self.outer_x):
-                    away_x = -1
-                return (away_x, away_y)                 
+                return r.choice(f)            
         
         return (r.randint(-1,1), r.randint(-1,1))
 
