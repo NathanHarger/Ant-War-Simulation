@@ -169,14 +169,16 @@ class Hive:
     #otherwise remove it). Then, if the current season length is equal to 
     #that season’s length, change seasons and set season length to zero.
     def update_nest(self):
-        #1. Food/Water stores depleted by all ants in nest multiplied by starvation/desiccation value
-        self.update_hive_food_store()
-        #2. Queen lays eggs for if there is food for that egg
-        self.queen_lays_eggs()
-        #3. Eggs morph into pupae
-        self.eggs_turn_into_pupae()
-        #4. Pupae morphs into ant with random caste (keeping right percentages) if there is food and a nursing worker ant, or dies if either is not true. If there is no queen, it becomes a new queen.
-        self.evolution_of_pupae()
-        #5. Update agression level to manipulate how to dispatch ants from Hive
-        self.update_aggression_level()
+        if (len(self.list_ants) > 0):
+            #1. Food/Water stores depleted by all ants in nest multiplied by starvation/desiccation value
+            self.update_hive_food_store()
+            #2. Queen lays eggs for if there is food for that egg
+            self.queen_lays_eggs()
+            #3. Eggs morph into pupae
+            self.eggs_turn_into_pupae()
+            #4. Pupae morphs into ant with random caste (keeping right percentages) if there is food and a nursing worker ant, or dies if either is not true. If there is no queen, it becomes a new queen.
+            self.evolution_of_pupae()
+            #5. Update agression level to manipulate how to dispatch ants from Hive
+            self.update_aggression_level()
+        
         return 

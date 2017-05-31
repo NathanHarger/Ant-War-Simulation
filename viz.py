@@ -48,7 +48,9 @@ class viz:
                 curr_agent = enviornment.getItem(j,i)
                 enviornment_type = curr_agent.getState()
                 #print enviornment_type
-                if enviornment_type is state.DESERT:
+                if (curr_agent.battle):
+                    self.canvas.itemconfig(self.cell[i,j], fill="black")
+                elif enviornment_type is state.DESERT:
                     self.canvas.itemconfig(self.cell[i,j], fill="yellow")
                 elif enviornment_type is  state.FOOD:
                     color = self.get_food_color_intensity(curr_agent.getFood())

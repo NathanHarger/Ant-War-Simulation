@@ -63,7 +63,7 @@ class DesertAgent:
             temp = []
             for j in range(len(desert.hives[i].list_ants)):
                if (desert.hives[i].list_ants[j].outer_x == self.loc[0] 
-               and desert.hives[i].list_ants[j].outer_y == self.loc[0]):
+               and desert.hives[i].list_ants[j].outer_y == self.loc[1]):
                    temp.append(j)  
                    
             if (len(temp) > 0):
