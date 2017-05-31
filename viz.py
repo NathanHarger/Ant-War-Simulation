@@ -8,10 +8,10 @@ import HiveClass as hive
 
 
 #==========User Adjusatable===================
-SIM_LENGTH = 200         #How many ticks in a simulation
-DESERT_SIZE = 25        #Size of desert
-NUM_HIVES = 3            #How many hives
-AMT_ANTS_PER_HIVE = 200  #How many ants start in each hive
+SIM_LENGTH = 20000         #How many ticks in a simulation
+DESERT_SIZE = 15        #Size of desert
+NUM_HIVES = 2           #How many hives
+AMT_ANTS_PER_HIVE = 10  #How many ants start in each hive
 #============================================
 
 
@@ -20,17 +20,18 @@ DESSICATION_LEVEL = 1  #Level an ant dies of thirst
 STARVATION_LEVEL = 1   #Level an ant dies of starvation
 MAX_FOOD_WHATER = 1    #Maximum level of food and water an ant can carry
 MOISTURE_FROM_FOOD = 1 #Moisture gained from eating
-
 # Controls the simulation. Allows you to run sims and change various variables.
 class viz:
-
     def __init__(self, dim, window_width, window_height, delay):
         self.wWidth = window_width
         self.dim = dim
 
         self.root=tk.Tk()
-        self.canvas= tk.Canvas(self.root,width=window_width * 1.2,height=window_height * 1.2)
-        self.canvas.pack()
+        c = tk.Canvas(self.root,width=window_width * 1.2,height=window_height * 1.2)
+        c.pack()
+        canvas = c
+        self.canvas = c
+
         self.size_ratio = (self.wWidth / self.dim) * .8
         self.text_width = window_width * 1.2
         self.text_height = window_height * 1.2
@@ -43,8 +44,8 @@ class viz:
         self.running = True
         self.labels = None
         self.number_labels = 3
-        
         self.tick = 0
+
 
     # the enviorment is a grid of DesertAgent
     # 0: desert
@@ -53,7 +54,7 @@ class viz:
     # 3: hive
     # function that is called by the tkinter canvas that updates ojects in sim every frame
     def update_frame(self,enviornment):
-        print enviornment.get_season()
+        #print enviornment.get_season()
         for i in range(self.dim):
             for j in range(self.dim):
                 curr_agent = enviornment.getItem(j,i)
@@ -111,7 +112,7 @@ class viz:
                                                                self.size_ratio * j+ self.size_ratio, self.size_ratio * i + self.size_ratio, outline="")
         for i in range(self.dim + 10):
             for j in range(self.dim + 10):
-                self.text_cells[i,j] = self.canvas.create_rectangle(0, self.text_width, 0, self.text_height, outline="")    
+                self.text_cells[i,j] = self.canvas.create_rectangle(0, self.text_width, 0, self.text_height, outline="")
 
     def dispViz(self):
         self.root.mainloop()
@@ -150,7 +151,7 @@ class viz:
     # For each time tick, run phase 1-3. When the simulation runs to the
     # variable sim_length, end it.
     def Run_Sim(self, enviornment):
-        print("Tick " + str(self.tick))
+        #print("Tick " + str(self.tick))
         self.tick += 1
 
 
@@ -195,7 +196,7 @@ class viz:
     # Second - move all ants based on caste, current job,
     # and pheromones of neighbor cells.
     def Phase_Two(self,ants,enviornment):
-        
+
         self.ant_movement(ants,enviornment)
         # TODO
         return
@@ -205,22 +206,20 @@ class viz:
     def Phase_Three(self,enviornment):
         enviornment.update_seasons()
         rand = r.random()
-        
-        enviornment.update_ants()
-        
-        
+
+        enviornment.update_ants(self.canvas)
+
+
         #if rand < .01:
         # self.running = False
         # TODO
         return
-      
+
     def get_random_color(self):
         # color changing from
        # http://stackoverflow.com/questions/11340765/default-window-colour-tkinter-and-hex-colour-codes
         rgb = tuple(n.random.randint(0,255, (3)))
         return '#%02x%02x%02x' % rgb
-
-
 
     def create_ants(self, testAnts, loc,myHive, myEnv, job):
         color = myHive.get_color()
@@ -230,33 +229,35 @@ class viz:
             #print loc
 
             testAnts[i] = a.ANT(loc[0],loc[1],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
-                                                                                outline = color), myHive, myEnv, job)                                                             
+                                                                                outline = color), myHive, myEnv, job)
             myEnv.set_number_ants_in_desert(1);
 
     def append_to_hive(self, testAnts, loc,myHive, myEnv, job):
          color = myHive.get_color()
          for i in n.arange(n.alen(testAnts)):
             myHive.setAnts(a.ANT(loc[0],loc[1],0,0, self.canvas.create_rectangle(loc[0]*self.size_ratio ,loc[1] *self.size_ratio + self.size_ratio,(loc[0]*self.size_ratio),loc[1]*self.size_ratio,
-                                                                                outline = color), myHive, myEnv, job))            
-                                                             
+                                                                                outline = color), myHive, myEnv, job))
+
     def create_hive(self, myHive, location):
         myHive = hive.Hive((location[0], location[1]))
         return myHive
 
 
     #def add_ant_from_hive(self, ANT_agent, Hive):
-
+def getCanvas():
+    print viz.canvas
+    return viz.canvas
 if __name__ == '__main__':
 
     dim = DESERT_SIZE
     num_ants_per_hive = AMT_ANTS_PER_HIVE
-    vizTest = viz(dim,500,500, 1)
+    vizTest = viz(dim,500,500, 100)
     amt_hives = NUM_HIVES
     testEnviorment = des.Desert(dim,amt_hives)
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     vizTest.create_stat_labels(testEnviorment)
-
+    print vizTest.canvas
     for i in hives:
         myAnts = n.empty(num_ants_per_hive, dtype=object)
         i.set_color(vizTest.get_random_color())

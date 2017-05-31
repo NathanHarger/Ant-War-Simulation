@@ -111,6 +111,9 @@ class Hive:
             self.num_eggs-=number_of_eggs_into_pupae
             self.num_pupae+=number_of_eggs_into_pupae
 
+    def setListAnts(self, a):
+        self.list_ants = a
+
     def evolution_of_pupae(self): 
         if(r.randint(0,10) > 5):
             self.num_workers_nest+=1
@@ -128,7 +131,7 @@ class Hive:
             print("Aggression level of Hive is Mild")
         else:
              self.state = HiveState.HEALTHY
-             print("Hive is healthy")
+             #print("Hive is healthy")
 
     def if_hive_needs_to_replenish_food(self):
         return (self.foodLevel < self.initialFoodLevel)
@@ -182,7 +185,7 @@ class Hive:
     def update_nest(self):
         if (len(self.list_ants) > 0):
             #1. Food/Water stores depleted by all ants in nest multiplied by starvation/desiccation value
-            self.update_hive_food_store()
+            #self.update_hive_food_store()
             #2. Queen lays eggs for if there is food for that egg
             self.queen_lays_eggs()
             #3. Eggs morph into pupae

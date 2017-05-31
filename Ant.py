@@ -446,7 +446,10 @@ class ANT:
         self.energy = self.energy - ENERGY_CRAWL
 
     def dead(self):
-        return self.water < DESICCATE or self.energy < STARVE
+        return self.foodLevel <= 0 or self.energy < STARVE
+
+    def setShape(self, shape):
+        self.shape = shape
 
     def migrated(self):
         return self.outer_x <= 1
@@ -455,10 +458,10 @@ class ANT:
         return self.IsInHive
 
     def __repr__(self):
-        return str(self.outer_x) + " " + str(self.outer_y) + " (" + str(self.inner_x) + ", " + str(self.inner_y) + " ) "
+        return str(self.outer_x) + " " + str(self.outer_y) + " f: " + str(self.foodLevel)
 
     def __str__(self):
-        return str(self.outer_x) + " " + str(self.outer_y) + " (" + str(self.inner_x) + ", " + str(self.inner_y) + " ) "
+        return str(self.outer_x) + " " + str(self.outer_y) + " f: " + str(self.foodLevel)
 
     def __float__(self):
         return 0.0

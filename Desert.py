@@ -5,6 +5,7 @@ import numpy as n
 from enum import Enum
 from DesertAgent import DesertAgent, State
 from HiveClass import Hive
+import viz
 # this class in in charge of controlling seasons and its effect on the desert agents
 class Season(Enum):
     SPRING = 0
@@ -75,7 +76,7 @@ class Desert:
     # Do the Summer season event
     def DoSummer(self):
         delta_leaf = r.randint(0, 8)
-        self.remove_leaves(delta_leaf)   
+        self.remove_leaves(delta_leaf)
         delta_water = r.randint(0, 10)
         self.remove_water(delta_water) 
 
@@ -113,7 +114,7 @@ class Desert:
             rand_y = r.randint(0, self.size - 1)
 
             if self.grid[rand_y, rand_x].getState() == State.FOOD or self.grid[rand_y, rand_x].getState() == State.DESERT:
-                self.grid[rand_y, rand_x].setState(State.DESERT)
+                self.remove_leaves1(self.grid, rand_x, rand_y)
                 delta_leaf = delta_leaf - 1
 
      # add a water spot on the map at random location   
@@ -192,13 +193,20 @@ class Desert:
             self.set_leaves(env, rand_x,rand_y)
 
     # remove all the dead ants from the map
-    def update_ants(self):
+    def update_ants(self,canvas):
         for i in range(len(self.hives)):
             for j in range(len(self.hives[i].list_ants)):
-                if (j >= len(self.hives[i].list_ants)): break              
+                if (j >= len(self.hives[i].list_ants)): break
+                print "beore:" + str(self.hives[i].list_ants)
                 if (self.hives[i].list_ants[j].dead()):
-                    self.hives[i].list_ants = n.delete(self.hives[i].list_ants, j)
-                
+
+                    canvas.delete(self.hives[i].list_ants[j].getShape())
+                    self.hives[i].setListAnts(n.delete(self.hives[i].list_ants, j))
+                    print "ant " + str(j) + "from " + str(i)+ " died"
+
+                print "after: "  + str(self.hives[i].list_ants)
+
+
     # run the combat in each sell   
     def combat(self):
         for i in range(self.size):
