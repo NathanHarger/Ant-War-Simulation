@@ -256,7 +256,7 @@ class Desert:
             # a hive cannot be placed in water, or ontop an existing hive
             if not test_env[rand_y, rand_x].getState() is 2 and not test_env[rand_y, rand_x].getState() is 3:
                 test_env[rand_y, rand_x].setState(State.HIVE)
-                self.setHive(Hive((rand_x, rand_y), self.size))
+                self.setHive(Hive((rand_x, rand_y),50))
                 num_hives = num_hives - 1
     
     # get the desert agent on the given location           
@@ -278,4 +278,7 @@ class Desert:
         self.number_ants_in_desert += number_to_add
 
     def get_number_ants_in_desert(self):
-        return self.number_ants_in_desert
+        result = 0
+        for i in self.getHives():
+            result += i.get_ant_count()
+        return result

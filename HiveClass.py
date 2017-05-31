@@ -60,7 +60,10 @@ class Hive:
     
     def getAnts(self):
         return self.list_ants
-        
+
+    def get_ant_count(self):
+        return len(self.list_ants)
+
     def setAnts(self, ants):
         self.list_ants = n.append(self.list_ants, ants)
         self.total_number_ants = len(self.list_ants)

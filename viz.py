@@ -65,7 +65,7 @@ class viz:
 
             hives = enviornment.getHives()
             label_string_desert = "Number of ants in Desert "  + str(enviornment.get_number_ants_in_desert())
-            label_string = "Number of ants in Hive "  + str(i + 1) + " " + str(hives[i].get_number_of_ants())
+            label_string = "Number of ants in Hive "  + str(i + 1) + " " + str(len(hives[i].list_ants))
 
             food_label_string = "Food Level of Hive "  + str(i + 1) + " " + str(round(hives[i].getFoodLevel(),3))
             self.canvas.itemconfig(self.labels[2 * i], text=label_string)
@@ -78,9 +78,9 @@ class viz:
 
         for i in range(self.number_labels):
 
-            labels.append( self.canvas.create_text(500, 500 + 15 * i, anchor="s"))
-            labels.append( self.canvas.create_text(500, 530  +15* i, anchor="s"))
-            labels.append( self.canvas.create_text(500, 560  +15* i, anchor="s"))
+            labels.append( self.canvas.create_text(500, 500 + 15 *3* i, anchor="s"))
+            labels.append( self.canvas.create_text(500, 515  +15*3* i, anchor="s"))
+            labels.append( self.canvas.create_text(500, 530  +15* 3* i, anchor="s"))
         #print labels
         self.labels =labels
 
@@ -228,7 +228,7 @@ class viz:
 if __name__ == '__main__':
 
     dim = 25
-    num_ants_per_hive = 200
+    num_ants_per_hive = 2
     vizTest = viz(dim,500,500, 1)
     testEnviorment = des.Desert(dim,3)
     #print testEnviorment.__str__()
