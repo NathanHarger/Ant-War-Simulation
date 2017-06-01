@@ -8,8 +8,8 @@ import HiveClass as hive
 
 
 #==========User Adjusatable===================
-SIM_LENGTH = 20000         #How many ticks in a simulation
-DESERT_SIZE = 15        #Size of desert
+SIM_LENGTH = 5         #How many ticks in a simulation
+DESERT_SIZE = 10        #Size of desert
 NUM_HIVES = 2           #How many hives
 AMT_ANTS_PER_HIVE = 10  #How many ants start in each hive
 #============================================
@@ -20,17 +20,21 @@ DESSICATION_LEVEL = 1  #Level an ant dies of thirst
 STARVATION_LEVEL = 1   #Level an ant dies of starvation
 MAX_FOOD_WHATER = 1    #Maximum level of food and water an ant can carry
 MOISTURE_FROM_FOOD = 1 #Moisture gained from eating
+canvas = None
+
+
 # Controls the simulation. Allows you to run sims and change various variables.
 class viz:
-    def __init__(self, dim, window_width, window_height, delay):
+    def __init__(self, dim, window_width, window_height, delay, sim_length):
+        global SIM_LENGTH
+        SIM_LENGTH = sim_length
         self.wWidth = window_width
         self.dim = dim
 
         self.root=tk.Tk()
-        c = tk.Canvas(self.root,width=window_width * 1.2,height=window_height * 1.2)
-        c.pack()
-        canvas = c
-        self.canvas = c
+        self.canvas = tk.Canvas(self.root,width=window_width * 1.2,height=window_height * 1.2)
+
+        self.canvas.pack()
 
         self.size_ratio = (self.wWidth / self.dim) * .8
         self.text_width = window_width * 1.2
@@ -45,6 +49,9 @@ class viz:
         self.labels = None
         self.number_labels = 3
         self.tick = 0
+
+        self.pop = n.array([])
+        self.food = n.array([])
 
 
     # the enviorment is a grid of DesertAgent
@@ -116,8 +123,12 @@ class viz:
 
     def dispViz(self):
         self.root.mainloop()
+        return (self.pop,self.food)
 
     def draw_frame(self,enviorment):
+        self.food = n.append(self.food, enviorment.hives[0].getFoodLevel())
+        self.pop = n.append(self.pop, enviorment.hives[0].get_ant_count())
+
 
         self.update_frame(enviorment)
 
@@ -164,12 +175,12 @@ class viz:
             number_of_gathers_to_create = i.dispatch_number_gathers()
             if number_of_gathers_to_create is not None:
              if(len(number_of_gathers_to_create) > 0):
-                self.create_ants(number_of_gathers_to_create, i.getLocation(), i, testEnviorment, a.JOB.GATHERER)
-                self.append_to_hive(number_of_gathers_to_create, i.getLocation(), i, testEnviorment, a.JOB.GATHERER)
+                self.create_ants(number_of_gathers_to_create, i.getLocation(), i, enviornment, a.JOB.GATHERER)
+                self.append_to_hive(number_of_gathers_to_create, i.getLocation(), i, enviornment, a.JOB.GATHERER)
             number_of_soliders_to_create = i.dispatch_number_of_soliders()
             if number_of_soliders_to_create is not None:
                 if(len(number_of_soliders_to_create) > 0):
-                    self.create_ants(number_of_soliders_to_create, i.getLocation(), i, testEnviorment, a.JOB.WARRIOR)
+                    self.create_ants(number_of_soliders_to_create, i.getLocation(), i, enviornment, a.JOB.WARRIOR)
            # print ants
             self.Phase_Two(ants,enviornment)
         self.draw_frame(enviornment)
@@ -257,7 +268,7 @@ if __name__ == '__main__':
     #print testEnviorment.__str__()
     hives = testEnviorment.getHives()
     vizTest.create_stat_labels(testEnviorment)
-    print vizTest.canvas
+    #print vizTest.canvas
     for i in hives:
         myAnts = n.empty(num_ants_per_hive, dtype=object)
         i.set_color(vizTest.get_random_color())
