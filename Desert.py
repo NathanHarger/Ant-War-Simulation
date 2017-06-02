@@ -25,7 +25,7 @@ class Season(Enum):
         if season is Season.WINTER:
             return Season.SPRING
         else:
-            return Season(season.value + 1)
+            return season + 1
 
 #SIZE = (50,50)          #A tuple of the x,y coordinates
 #SEASON = Season.SPRING  #Either rainy or dry
@@ -52,6 +52,7 @@ class Desert:
         self.hives = []
         self.grid = self.random_desert_init(num_hives)
         self.number_ants_in_desert = 0
+        self.numberOfAnts = 0
           
     # called every time step 
     def update_seasons(self):
@@ -61,7 +62,7 @@ class Desert:
             self.season = Season.getNextSeason(self.season)
         
         if(  self.season_count % 5 == 0 ):
-            self.season_event[self.season.value]()
+            self.season_event[self.season]()
 
     # Do the Spring season event
     def DoSprint(self):
@@ -197,21 +198,23 @@ class Desert:
         for i in range(len(self.hives)):
             for j in range(len(self.hives[i].list_ants)):
                 if (j >= len(self.hives[i].list_ants)): break
-                print "beore:" + str(self.hives[i].list_ants)
+                #print "beore:" + str(self.hives[i].list_ants)
                 if (self.hives[i].list_ants[j].dead()):
 
                     canvas.delete(self.hives[i].list_ants[j].getShape())
                     self.hives[i].setListAnts(n.delete(self.hives[i].list_ants, j))
-                    print "ant " + str(j) + "from " + str(i)+ " died"
+                 #   print "ant " + str(j) + "from " + str(i)+ " died"
 
-                print "after: "  + str(self.hives[i].list_ants)
+                #print "after: "  + str(self.hives[i].list_ants)
 
 
     # run the combat in each sell   
     def combat(self):
+        total = 0
         for i in range(self.size):
             for j in range(self.size):
-                self.grid[i,j].runCombat(self, (i,j))
+               total +=  self.grid[i,j].runCombat(self, (i,j))
+        return total
     
     # set a leaf at a given position
     def set_leaves(self, env, x,y):

@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
 
     # ==========User Adjusatable===================
-    SIM_LENGTH = 50  # How many ticks in a simulation
+    SIM_LENGTH = 200   # How many ticks in a simulation
     DESERT_SIZE = 10  # Size of desert
     NUM_HIVES = 2  # How many hives
     AMT_ANTS_PER_HIVE = 10  # How many ants start in each hive
@@ -43,17 +43,17 @@ if __name__ == '__main__':
         b1 = n.append(b1, b[0])
         b2 = n.append(b2,b [1])
 
-    b1 = n.reshape(b1, (SIM_LENGTH + 1, 10))
-    b2 =  n.reshape(b2, (SIM_LENGTH + 1, 10))
+    #b1 = n.reshape(b1, (10,SIM_LENGTH + 1))
+    #b2 =  n.reshape(b2, (10,SIM_LENGTH + 1))
 
-    b1 =  n.mean(b1,axis = 0)
-    b2 = n.mean(b2, axis = 0)
-    plt.plot(range(len(b2)), b2)
-    plt.plot(range(len(b1)), b1)
+#    b1 =  n.mean(b1,axis = 0)
+ #   b2 = n.mean(b2, axis = 0)
+    plt.scatter(b2, b1)
+    #plt.plot(range(len(b2)), b1)
 
-    plt.ylabel("Num of ants")
-    plt.xlabel("Time")
-    plt.title("Ant vs Available Food")
+    plt.xlabel("Food")
+    plt.ylabel("Number of Fights")
+    plt.title("Food vs Fights")
     plt.show()
     #print b
 

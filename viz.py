@@ -127,7 +127,7 @@ class viz:
 
     def draw_frame(self,enviorment):
         self.food = n.append(self.food, enviorment.hives[0].getFoodLevel())
-        self.pop = n.append(self.pop, enviorment.hives[0].get_ant_count())
+       # self.pop = n.append(self.pop, enviorment.hives[0]())
 
 
         self.update_frame(enviorment)
@@ -166,7 +166,7 @@ class viz:
         self.tick += 1
 
 
-        self.Phase_One(enviornment)
+        num_com = self.Phase_One(enviornment)
         #print enviornment.getHives()
         for i in enviornment.getHives():
             #print i.getFoodLevel()
@@ -186,7 +186,7 @@ class viz:
         self.draw_frame(enviornment)
         self.Phase_Three(enviornment)
         # TODO
-        return
+        return num_com
 
     def ant_movement(self, ants,env):
         #print ants[1]
@@ -199,7 +199,7 @@ class viz:
     # Ants eat and drink. Eggs turn into pupae. Pupae grow up.
     # The queen lays eggs based on amount of food in nest.
     def Phase_One(self, enviornment):
-        enviornment.combat()
+        self.pop = n.append(self.pop, enviornment.combat())
         # TODO
         return
 
@@ -262,7 +262,7 @@ if __name__ == '__main__':
 
     dim = DESERT_SIZE
     num_ants_per_hive = AMT_ANTS_PER_HIVE
-    vizTest = viz(dim,500,500, 100)
+    vizTest = viz(dim,500,500, 1)
     amt_hives = NUM_HIVES
     testEnviorment = des.Desert(dim,amt_hives)
     #print testEnviorment.__str__()

@@ -112,7 +112,7 @@ class ANT:
         self.foodLevel -= ENERGY_CRAWL
 
         # Do your job based on what you are assigned
-        rand_x, rand_y = self.job_switch[self.job.value]()
+        rand_x, rand_y = self.job_switch[self.job]()
 
         current_spot = self.my_envi.getItem(rand_x,rand_y)
         if current_spot.getState() is d.State.WATER:
@@ -186,7 +186,8 @@ class ANT:
 
            
 
-          
+    def get_job(self):
+        return self.job
     def DoWarrior(self): 
              
         
@@ -313,6 +314,7 @@ class ANT:
 
     def getShape(self):
         return self.shape
+
     def consume():
         #TODO
         return
@@ -392,12 +394,6 @@ class ANT:
         self.water = self.water - WATER_CRAWL
         self.energy = self.energy - ENERGY_CRAWL
 
-
-    def getX(self):
-        return self.outer_x
-
-    def getY(self):
-        return self.outer_y
 
     def getFreeNeighbors(self,grid,padding):
         y = self.outer_y + padding

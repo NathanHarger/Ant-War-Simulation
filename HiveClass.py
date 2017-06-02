@@ -5,7 +5,7 @@ from enum import Enum
 import Desert as ds
 import DesertAgent as ANT_agent
 import math
-
+import Ant
 class HiveState(Enum):
     HEALTHY = 0
     QUEENLESS = 1
@@ -34,7 +34,7 @@ class Hive:
     kill_count = 1 #How many opposing ants have been killed by this hive
     amount_dead = 1 #How many ants of this hive have died
     peak_population = 1#The most population this hive has had
-    desication_level = .01 #Picking random number to start of the hive adaptation
+    desication_level = .1 #Picking random number to start of the hive adaptation
     total_number_ants = 0  #Keeps track of total ants in colony
     color = 0 #Color of ants emerging from the Hive 
 
@@ -141,6 +141,12 @@ class Hive:
     def get_color(self):
         return self.color
 
+    def get_gather_count(self):
+        count = 0
+        for i in  self.list_ants:
+            if i.get_job() is Ant.JOB.GATHERER:
+                count += 1
+        return count
     def dispatch_number_gathers(self):
         number_of_gathers = 0
         if(self.if_hive_needs_to_replenish_food()):
@@ -185,7 +191,7 @@ class Hive:
     def update_nest(self):
         if (len(self.list_ants) > 0):
             #1. Food/Water stores depleted by all ants in nest multiplied by starvation/desiccation value
-            #self.update_hive_food_store()
+            self.update_hive_food_store()
             #2. Queen lays eggs for if there is food for that egg
             self.queen_lays_eggs()
             #3. Eggs morph into pupae

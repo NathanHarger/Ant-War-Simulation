@@ -30,7 +30,6 @@ class DesertAgent:
             self.state = State.DESERT
         #print self.state
 
-
     def getState(self):
         return self.state
 
@@ -72,14 +71,14 @@ class DesertAgent:
         
          #if there are more than 1 hives, do combat 
         if (len(hives_combat) > 1):                   
-            print ("Combat in cell " + str(self.loc[0]) + "," + str(self.loc[1]))
+            # print ("Combat in cell " + str(self.loc[0]) + "," + str(self.loc[1]))
             self.battle = True # battle occuring, for visualization
            
             #calc strength, apply to other hives
             for i in range(len(hives_combat)):
-                if (self.loc[0] == desert.hives[hives_combat[i]].my_location[0]
-                and self.loc[1] == desert.hives[hives_combat[i]].my_location[1]):
-                    print ("Hive attacked: " + str(self.loc[0]) + "," + str(self.loc[1]))
+                #if (self.loc[0] == desert.hives[hives_combat[i]].my_location[0]
+                #and self.loc[1] == desert.hives[hives_combat[i]].my_location[1]):
+                    #print ("Hive attacked: " + str(self.loc[0]) + "," + str(self.loc[1]))
                 
                 
                 strength = len(list_ants_combat[i]) 
@@ -100,8 +99,9 @@ class DesertAgent:
                            
                            desert.hives[hives_combat[j]].kill_count+=1
                            
-                           if (k >= strength): break #stop when strenght runs out
-    
+                        if (k >= strength): break #stop when strenght runs out
+
+        return len(list_ants_combat)
     def getAnt(self):
         return self.ant
 
