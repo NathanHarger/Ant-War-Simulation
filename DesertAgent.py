@@ -36,6 +36,9 @@ class DesertAgent:
 
     def is_food(self):
         return self.state is State.FOOD
+        
+    def is_water(self):
+        return self.state is State.WATER
 
     # set the sate of the spot
     def setState(self, state):

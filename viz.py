@@ -5,16 +5,19 @@ from DesertAgent import State as state
 import random as r
 import Ant as a
 import HiveClass as hive
+import matplotlib.pyplot as plt
 
 
 #==========User Adjusatable===================
-SIM_LENGTH = 20000         #How many ticks in a simulation
-DESERT_SIZE = 15        #Size of desert
-NUM_HIVES = 2           #How many hives
-AMT_ANTS_PER_HIVE = 10  #How many ants start in each hive
+SIM_LENGTH = 364        #How many ticks in a simulation
+DESERT_SIZE = 50        #Size of desert
+NUM_HIVES = 0           #How many hives
+AMT_ANTS_PER_HIVE = 20  #How many ants start in each hive
 #============================================
 
-
+food_count = n.zeros(SIM_LENGTH+1)
+water_count = n.zeros(SIM_LENGTH+1)
+x_int = n.arange(SIM_LENGTH+1)
 
 DESSICATION_LEVEL = 1  #Level an ant dies of thirst
 STARVATION_LEVEL = 1   #Level an ant dies of starvation
@@ -151,6 +154,10 @@ class viz:
     # For each time tick, run phase 1-3. When the simulation runs to the
     # variable sim_length, end it.
     def Run_Sim(self, enviornment):
+        print(self.tick)
+        food_count[self.tick] = enviornment.getFoodCount()
+        water_count[self.tick] = enviornment.getWaterCount()
+        
         #print("Tick " + str(self.tick))
         self.tick += 1
 
@@ -267,3 +274,18 @@ if __name__ == '__main__':
     vizTest.Run_Sim(testEnviorment)
 
     vizTest.dispViz()
+    
+    print(food_count)
+    print(water_count)
+
+    water_count = water_count / 5
+
+    plt.plot(x_int,water_count)
+    plt.title("Change In Gatherer Ants")
+    plt.xlabel("Food Level")
+    plt.ylabel("Gatherer's On Map")
+    plt.show()
+
+#food_count = n.zeros(SIM_LENGTH+1)
+#water_count = n.zeros(SIM_LENGTH+1)
+#x_int = n.arange(SIM_LENGTH+1)

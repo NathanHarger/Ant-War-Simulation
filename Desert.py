@@ -52,7 +52,23 @@ class Desert:
         self.hives = []
         self.grid = self.random_desert_init(num_hives)
         self.number_ants_in_desert = 0
-          
+    
+    def getFoodCount(self):
+        count = 0
+        for i in range(self.size):
+            for j in range(self.size):
+                if ( self.grid[i,j].getState() == State.FOOD):
+                    count += 1 
+        return count 
+
+    def getWaterCount(self):
+        count = 0
+        for i in range(self.size):
+            for j in range(self.size):
+                if ( self.grid[i,j].getState() == State.WATER):
+                    count += 1 
+        return count 
+               
     # called every time step 
     def update_seasons(self):
         self.season_count -= 1
@@ -65,7 +81,7 @@ class Desert:
 
     # Do the Spring season event
     def DoSprint(self):
-        delta_water = r.randint(0, 2)
+        delta_water = r.randint(0, 10)
         self.add_water(delta_water)
         delta_leaf = r.randint(0, 2)
         for i in range(delta_leaf):
@@ -77,7 +93,7 @@ class Desert:
     def DoSummer(self):
         delta_leaf = r.randint(0, 8)
         self.remove_leaves(delta_leaf)
-        delta_water = r.randint(0, 10)
+        delta_water = r.randint(0, 50)
         self.remove_water(delta_water) 
 
     # Do the Fall season event
@@ -87,12 +103,12 @@ class Desert:
             rand_x = r.randint(0, self.size - 1)
             rand_y = r.randint(0, self.size - 1)
             self.set_leaves(self.grid, rand_x,rand_y)
-        delta_water = r.randint(0, 8)
+        delta_water = r.randint(0, 40)
         self.remove_water(delta_water)
 
     # Do the Winter season event
     def DoWinter(self):
-            delta_water = r.randint(0, 1)
+            delta_water = r.randint(0, 5)
             self.add_water(delta_water)
             delta_leaf = r.randint(0, 16)
             self.remove_leaves(delta_leaf)    
@@ -197,14 +213,10 @@ class Desert:
         for i in range(len(self.hives)):
             for j in range(len(self.hives[i].list_ants)):
                 if (j >= len(self.hives[i].list_ants)): break
-                print "beore:" + str(self.hives[i].list_ants)
                 if (self.hives[i].list_ants[j].dead()):
 
                     canvas.delete(self.hives[i].list_ants[j].getShape())
                     self.hives[i].setListAnts(n.delete(self.hives[i].list_ants, j))
-                    print "ant " + str(j) + "from " + str(i)+ " died"
-
-                print "after: "  + str(self.hives[i].list_ants)
 
 
     # run the combat in each sell   
