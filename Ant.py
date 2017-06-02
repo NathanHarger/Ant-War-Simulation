@@ -20,7 +20,7 @@ WATER_COMBAT = 0.05 #maximum water used by ant in combat
 SITTING_ENERGY = .01 #maximum energy used by ant inside of Hive
 SITTING_WATER = .01 #maximum water used by ant inside of Hive
 WATER_CRAWL = .03 #maximum water used by ant when crawling
-ENERGY_CRAWL = .003 #maximum energy used by ant when crawling
+ENERGY_CRAWL = .01 #maximum energy used by ant when crawling
 
 AMT_EAT = .01
 ANT_MAX_FOOD = 2

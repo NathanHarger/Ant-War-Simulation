@@ -8,10 +8,10 @@ import HiveClass as hive
 
 
 #==========User Adjusatable===================
-SIM_LENGTH = 20000         #How many ticks in a simulation
-DESERT_SIZE = 15        #Size of desert
-NUM_HIVES = 2           #How many hives
-AMT_ANTS_PER_HIVE = 10  #How many ants start in each hive
+SIM_LENGTH = 364         #How many ticks in a simulation
+DESERT_SIZE = 50        #Size of desert
+NUM_HIVES = 4           #How many hives
+AMT_ANTS_PER_HIVE = 20  #How many ants start in each hive
 #============================================
 
 
@@ -92,9 +92,9 @@ class viz:
 
         for i in range(self.number_labels):
 
-            labels.append( self.canvas.create_text(500, 500 + 15 *3* i, anchor="s"))
-            labels.append( self.canvas.create_text(500, 515  +15*3* i, anchor="s"))
-            labels.append( self.canvas.create_text(500, 530  +15* 3* i, anchor="s"))
+            labels.append( self.canvas.create_text(1000, 800 + 15 *3* i, anchor="s"))
+            labels.append( self.canvas.create_text(1000, 815  +15*3* i, anchor="s"))
+            labels.append( self.canvas.create_text(1000, 830  +15* 3* i, anchor="s"))
         #print labels
         self.labels =labels
 
@@ -251,7 +251,7 @@ if __name__ == '__main__':
 
     dim = DESERT_SIZE
     num_ants_per_hive = AMT_ANTS_PER_HIVE
-    vizTest = viz(dim,500,500, 100)
+    vizTest = viz(dim,1000,1000, 100)
     amt_hives = NUM_HIVES
     testEnviorment = des.Desert(dim,amt_hives)
     #print testEnviorment.__str__()
